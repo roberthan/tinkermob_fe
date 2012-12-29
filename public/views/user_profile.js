@@ -215,10 +215,8 @@ A.view.userProfile.ListView =  Backbone.Marionette.CollectionView.extend({
     showAddItemView: function(){
         var model = new Backbone.Model();
         model.set('created_on',new Date());
-//        model.set('text','ADD NEW');
         model.set('ordering',-1);
         model.set('img_tile_src','/img/new_idea.png');
-//        debugger;
         this.addItemView(model, this.addNewItemView, -1);
     },
     onRender: function(){
