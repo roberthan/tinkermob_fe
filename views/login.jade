@@ -1,0 +1,46 @@
+!!! 5
+html(lang="en")
+head
+    title Tinkermob Login
+    link(rel='stylesheet', href='/css/login.css')
+    script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js")
+    script(type = "text/javascript", src = "/js/lib/underscore-min.js")
+    script(type = "text/javascript", src = "/js/misc/login.js")
+    script(type = "text/javascript", src = "/views/helpers.js")
+body
+    div.content
+        img.logo_img(height='160px', width='360px')
+        div.text_warning
+        div.other_options
+            div.row
+                span#btn_fb_auth.btn.left Facebook Login
+                    img(src="#{img_path}/fb_icon.png",width='24px', height='24px')
+                span#btn_twitter_auth.btn.right Twitter Login
+                    img(src="#{img_path}/twitter_icon.png",width='24px', height='24px')
+        hr
+        form#form_login.auth_form(action='/login', method='post')
+            div.row
+                input.text_input.txt_email(type='text', name='email', placeholder="Email or Username")
+                input.text_input.txt_password(type='password', name='password', placeholder="Password")
+            div.row
+                //input.btn.btn_login(type='submit', value='Login')
+                span#btn_login_submit.btn.left Login
+                a#btn_join_form_show(href='#join').btn_text.right New User?
+                a#btn_reset_form_show(href='#reset').btn_text.right Forgot Password?
+        form#form_reset_password.auth_form(action='/auth/reset', method='post')
+            div.row
+                input.text_input.txt_reset_email(type='text', name='email', placeholder="Email")
+            div.row
+                span#btn_reset_submit.btn.left Reset Password
+                br
+                a.btn_login_form_show(href='#').btn_text.right Back
+        form#form_join.auth_form(action='/join', method='post')
+            div.row
+                input.text_input.txt_email(type='text', name='email', placeholder="Email")
+                input.text_input.txt_password(type='password', name='password', placeholder="Password")
+                input(type='hidden', name='new_user', value=1)
+            div.row
+                span#btn_join_submit.btn.left Join
+                br
+                a.btn_login_form_show(href='#').btn_text.right Returning User?
+

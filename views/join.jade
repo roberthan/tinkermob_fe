@@ -1,0 +1,28 @@
+!!! 5
+html(lang="en")
+head
+    title Tinkermob Join
+    link(rel='stylesheet', href='/css/login.css')
+    script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js")
+    script(type = "text/javascript", src = "/js/lib/underscore-min.js")
+    script(type = "text/javascript", src = "/js/misc/login.js")
+body
+    div.content
+        img.logo_img(height='160px', width='360px')
+        div.text_warning
+        div.other_options
+            div.row
+                span#btn_fb_auth.btn.left Facebook Join
+                    img(src="#{img_path}/fb_icon.png",width='24px', height='24px')
+                span#btn_twitter_auth.btn.right Twitter Join
+                    img(src="#{img_path}/twitter_icon.png",width='24px', height='24px')
+        hr
+        form#form_login.auth_form(action='/join', method='post')
+            div.row
+                input.text_input.txt_email(type='text', name='email', placeholder="Email or Username")
+                input.text_input.txt_password(type='password', name='password', placeholder="Password")
+            div.row
+                //input.btn.btn_login(type='submit', value='Login')
+                span#btn_login_submit.btn.left Join
+                a(href='/login').btn_text.right Returning User
+

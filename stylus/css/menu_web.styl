@@ -1,0 +1,206 @@
+#navi_bar{
+    /*background-color: #58514d;*/
+    background-image:url('/img/bg_header.png');
+    position: fixed;
+    top: 0px;
+    width: 96%;
+    padding: 8px 2%;
+    margin: 0px;
+    color: #ffffff;
+    z-index: 50;
+    background-repeat:repeat-x;
+    height: 32px;
+}
+
+.navi_left{
+    color: #ffffff;
+    text-decoration: none;
+    width:128px;
+    float left
+}
+.navi_left_title{
+    font-size: 18px;
+    font-weight: 400;
+    margin: 6px;
+    padding-left: 32px;
+}
+.navi_left_img{
+    float:left;
+}
+.navi_middle{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px *3;
+}
+
+.navi_middle_left_label{
+    float left
+    width: 72px;
+    padding: 6px 4px;
+    text-align:right
+    cursor: pointer
+}
+.navi_middle_right_label{
+    float right
+    width: 72px;
+    padding: 6px 4px;
+    cursor: pointer
+}
+
+.navi_right{
+    float right
+    /*width 128px*/
+}
+#selfProfile{
+    float right;
+    text-align:center;
+    cursor: pointer
+    height 32px;
+    min-width: 84px
+}
+#selfProfile .pic{
+    height: 32px
+    width: 32px
+    background-image: url("/img/user_button.png");
+    border:0
+    float:right;
+    margin-left:4px;
+}
+#selfProfile .header_container{
+    height: 24px;
+}
+
+#selfProfile .user_name, #selfProfile .btn_login{
+    float:right;
+    padding-left: 4px;
+    padding-top: 6px;
+    max-width: 264px;
+    min-width: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+}
+
+#selfProfile ul{
+    background:#fff; /* Adding a background makes the dropdown work properly in IE7+. Make this as close to your page's background as possible (i.e. white page == white background). */
+    background:rgba(255,255,255,0); /* But! Let's make the background fully transparent where we can, we don't actually want to see it if we can help it... */
+    background:#221b18;
+    list-style:none;
+    position:absolute;
+    padding: 0;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border-color: #938987;
+    border-style: solid;
+    border-width: 1px;
+    margin: 2px 0
+    left:-9999px;
+}
+#selfProfile ul li{
+    /*padding-top:1px; *//* Introducing a padding between the li and the a give the illusion spaced items */
+    border-top-color: #938987;
+    border-top-style: solid;
+    border-top-width: 1px;
+    float:none;
+    width: 72px;
+    padding: 4px 8px;
+}
+#selfProfile ul li:first-child{
+    border-top:none;
+}
+#selfProfile:hover{
+    background:#333;
+}
+#selfProfile:hover ul{ /* Display the dropdown on hover */
+    left:auto;
+    right: 4px;
+    margin-top: 8px;
+}
+#selfProfile:hover ul li:hover{ /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    background:#333;
+
+}
+#selfProfile .arrow_down {
+    float: right;
+    margin: 14px 6px 0 4px;
+}
+
+#loading_bar{
+    height: 32px;
+    width: 100%;
+    background-color:rgba(255, 255, 255, 0.3);
+    color: white;
+    text-align: center;
+    margin-top: 8px;
+    padding-top: 6px;
+    font-size: 18px;
+    display: none;
+}
+
+
+@keyframes main_toggle {
+    0% {
+        /*left:-100%*/
+        /*-webkit-transform:translate(-100%);*/
+        margin-left: -100%;
+    }
+    100% {
+        /*left:0*/
+        /*-webkit-transform:translate(0);*/
+        margin-left: 0;
+    }
+}
+
+@keyframes main_toggle_rev {
+    0% {
+        /*-webkit-transform:translate(0);*/
+        margin-left: 0;
+        /*margin-left: 0;*/
+        /*left:0*/
+    }
+    100% {
+        /*margin-right: -100%;*/
+        /*-webkit-transform:translate(-100%);*/
+        margin-left: -100%;
+    }
+}
+
+.main_toggle{
+    -webkit-animation:main_toggle .75s;
+    -webkit-animation-fill-mode:forwards;
+}
+.main_toggle_rev{
+    -webkit-animation:main_toggle_rev .75s;
+    -webkit-animation-fill-mode:forwards;
+}
+.main_toggle_browse{
+    margin-left: 0;
+}
+.main_toggle_my_ideas{
+    margin-left: -100%;
+}
+
+#browse, #my_ideas{
+    width:100%;
+    height:100%;
+    position: absolute;
+    /*float:left*/
+}
+#browse{
+    left: 0;
+}
+#my_ideas{
+    left:100%;
+}
+#my_ideas.main_toggle.animation_done{
+    display: none;
+}
+#my_ideas.main_toggle_rev{
+    display: block;
+}
+#browse.main_toggle_rev.animation_done{
+    display: none;
+}
+#browse.main_toggle{
+    display: block;
+}

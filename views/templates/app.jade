@@ -1,0 +1,45 @@
+script#main_app_template(type="text/template")
+    div#menu
+    div#browse
+    div#my_ideas
+    div#modal_box
+
+
+script#user_list_template(type="text/template")
+    div.user_container
+    div.profile_img_container
+        img.profile_img(src!="<%= img_tile_src %>", width='120px')
+    <% if(typeof is_following !== 'undefined'){ %>
+    <% if(is_following){ %>
+    div.btn_follow_pressed
+    <% } else{ %>
+    div.btn_follow
+    <% } %>
+    <% } %>
+    div.text_container
+        <% if(display_name !==''){ %>
+        div.username <%= display_name %>
+        div.username_sidenote (<%= username %>)
+        <% } else{ %>
+        div.username <%= username %>
+        <% } %>
+        div.stats_container
+            <%= count_ideas %> ideas  -  <%= count_followers %> followers
+        div.bio_container <%= bio %>
+    hr
+
+script#static_template(type="text/template")
+    div.overlay-container
+        div.window-container.zoomin
+            h3 Lorem ipsum dolor sit amet
+            p consectetur adipiscing elit. Proin a est vitae nisl sollicitudin dignissim. Pellentesque consectetur justo ac leo sodales egestas fringilla sit amet eros. Aliquam ut ante lorem. Suspendisse potenti. Cras vulputate elementum nunc, tincidunt pellentesque lectus pulvinar a. Donec id dui odio. Nulla tincidunt, elit non lobortis ullamcorper, nisl sapien ultricies nulla, id hendrerit urna metus eu velit.
+            br
+            span.close Close me
+
+script#follow_template(type="text/template")
+    div#input_modal.overlay-container
+        div.window-container.zoomin
+            h3.header  <% if(1){ %> Followers <% } else{ %> Followers <% } %>
+            #follow_items
+            div.btn-container
+                span.btn.btn_cancel Cancel

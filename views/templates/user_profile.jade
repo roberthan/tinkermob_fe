@@ -1,0 +1,87 @@
+script#user_profile_template(type="text/template")
+    div.user_profile_main_container
+        div.user_profile_img_container
+            img.user_profile_img(src!="<%= profile_image %>")
+        div.user_profile_text_container
+            <% if(display_name !==''){ %>
+            div.user_profile_text_container_username <%= display_name %>
+            div.user_profile_text_container_username_sidenote (<%= username %>)
+            <% } else{ %>
+            div.user_profile_text_container_username <%= username %>
+            <% } %>
+            <% if(USER.toString() !== id && USER){ %>
+            div.pg_btn.user_profile_pg_btn_follow Follow
+            <% } %>
+        div.user_profile_bio <%= bio %>
+    div.user_profile_stats_container
+        div.user_profile_stats_container_inner
+            div.ideas_count.user_profile_stats_tile
+                div.user_profile_stats_tile_count <%= count_ideas %>
+                div.text Ideas
+            div.support_ideas_count.user_profile_stats_tile
+                div.user_profile_stats_tile_count <%= count_support_ideas %>
+                div.text Likes
+            div.following_count.user_profile_stats_tile
+                div.user_profile_stats_tile_count <%= count_followings %>
+                div.text Follows
+            div.follower_count.user_profile_stats_tile
+                div.user_profile_stats_tile_count <%= count_followers %>
+                div.text Followers
+        div.ideas_settings_container
+            div.ideas_settings_container_text Sort by
+            select.idea_sort
+                option(value = '', selected='selected') Most Supporters
+                option(value = '-modified_on') Most Recent
+                option(value = 'modified_on') Oldest
+    div#user_ideas
+
+script#settings_template(type="text/template")
+    div#input_modal.overlay-container
+        div.window-container.extra_long.zoomin
+            h3.header Settings
+            div.text_warning
+            form(enctype="multipart/form-data").settings_form.input_form
+                input(name='file', type='file').profile_image.upload_file.left
+                div.short_inputs
+                    input.short_text_input.txt_name.left(type='text', name='name', placeholder="Display Name", value!='<%= display_name %>')
+                    input.short_text_input.txt_location.left(type='text', name='location', placeholder="Location", value!='<%= location_text %>')
+                    input.short_text_input.txt_website.left(type='text', name='website', placeholder="Website", value!='<%= website %>')
+                div.main_inputs
+                    input.text_input.txt_email(type='text', name='email', placeholder="Email", value!='<%= email %>')
+                    input.text_input.txt_username(type='text', name='username', placeholder="Username", value!='<%= username %>')
+                    textarea.textarea_input.textarea_bio(placeholder="Bio") <%= bio %>
+                    input.text_input.txt_password1(type='password', name='password1', placeholder="New Password")
+                    input.text_input.txt_password2(type='password', name='password2', placeholder="Confirm New Password")
+                    hr
+                    div#toggle_fb.toggle_container
+                        div.toggle_label Facebook
+                        div.toggle
+                            img.button(src='#{img_path}/on_off.png', height='32px')
+                        div.toggle_selection_label#toggle_selection_fb Off
+                    hr
+                    div#toggle_twitter.toggle_container
+                        div.toggle_label Twitter
+                        div.toggle
+                            img.button(src='#{img_path}/on_off.png', height='32px')
+                        div.toggle_selection_label#toggle_selection_twitter Off
+                    div#toggle_twitter_push.toggle_container
+                        div.toggle_label Share on Twitter
+                        select#dropdown_twitter_push.dropdown(name='twitter_push')
+                            option(value='2') Ideas and Snapshots
+                            option(value='1') Ideas
+                            option(value='0') Nothing
+                    hr
+                    div#toggle_newsletter.toggle_container
+                        div.toggle_label Weekly Newsletter
+                        div.toggle
+                            img.button(src='#{img_path}/on_off.png', height='32px')
+                        div.toggle_selection_label#toggle_selection_newsletter <% if(newsletter_setting){ %> On <% } else{ %> Off <% } %>
+                    div#toggle_notify.toggle_container
+                        div.toggle_label Notify me when
+                        select#dropdown_notify_on.dropdown(name='notify_on')
+                            option(value='1') When Ideas Gets Updated
+                            option(value='0') Never
+            //progress.upload_progress
+            div.btn-container
+                span.btn.btn_save.left Save
+                span.btn.btn_cancel.right Cancel

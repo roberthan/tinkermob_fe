@@ -1,0 +1,49 @@
+script#idea_tile_template(type="text/template")
+    a.idea_tile_body.link(href!='/idea/<%= id %>')
+        img.idea_tile_body_pic(src!="<%= tile_image %>", width='290px', height='228px')
+        div.idea_tile_body_infobar
+            div.idea_tile_body_infobar_tagline <%= A.view.helper.parseTagLine2(tag_line) %>
+            div.idea_tile_body_infobar_snapshots <%= count_snapshots %>
+    div.idea_tile_details
+        a.idea_tile_details_profile(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
+            img.idea_tile_details_profile_pic(src="#{img_path}/user_icon_frame.png")
+        a.idea_tile_details_owner(href!='/user/<%= username %>')
+            div.idea_tile_details_owner_text  <%= username %>
+        div.idea_tile_details_stats
+            div.idea_tile_details_stats_item
+                div.idea_tile_details_stats_text <%= count_supporters %>
+                img.idea_tile_details_stats_pic(src="#{img_path}/icon_heart.png", height='28px')
+            div.idea_tile_details_stats_item
+                div.idea_tile_details_stats_text <%= count_questions %>
+                img.idea_tile_details_stats_pic(src="#{img_path}/icon_ping.png", height='28px')
+
+script#my_idea_tile_template(type="text/template")
+    a.idea_tile_body.link(href!='/idea/<%= id %>')
+        div.my_idea_tile_details
+            div.my_idea_tile_details_stats_item
+                div.idea_tile_details_stats_text <%= count_supporters %>
+                img.idea_tile_details_stats_pic(src="#{img_path}/icon_heart.png", height='28px')
+            div.my_idea_tile_details_stats_item
+                div.idea_tile_details_stats_text <%= count_questions %>
+                img.idea_tile_details_stats_pic(src="#{img_path}/icon_ping.png", height='28px')
+        img.idea_tile_body_pic(src!="<%= tile_image %>", width='290px')
+        div.idea_tile_body_infobar
+            div.my_idea_tile_body_infobar_tagline <%= A.view.helper.parseTagLine2(tag_line) %>
+            div.idea_tile_body_infobar_snapshots <%= count_snapshots %>
+    div.idea_tile_shadow
+
+script#add_idea_template(type="text/template")
+    div.idea_tile_body.link
+        img.idea_tile_body_pic(src!="/img/new_idea.png", width='290px')
+
+script#ideas_navi_layout_template(type="text/template")
+    div.ideas_settings_container
+        div.ideas_settings_container_text Sort by
+        select.idea_sort
+            option(value = '', selected='selected') Most Supporters
+            option(value = '-modified_on') Most Recent
+            option(value = 'modified_on') Oldest
+    div#ideas_pre_buffer
+    div#ideas
+    div#ideas_post_buffer
+

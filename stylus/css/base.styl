@@ -1,0 +1,96 @@
+body{
+    margin: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 400;
+    height: auto;
+    /*background-image:url('/img/background_tile_2.jpg');*/
+    background-image:url('/img/128x128_tile2.jpg');
+    background-attachment:fixed;
+    overflow-x: hidden;
+}
+#body{
+    padding: 0px;
+    margin: 0px;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.warning{
+    color: red;
+}
+
+.hidden{
+    display: none;
+}
+
+.warning_placeholder::-webkit-input-placeholder{
+    color: red;
+}
+
+.toggle{
+    width: 64px;
+    height: 32px;
+    background-image: url("/img/on_off_bg.png");
+    float:left;
+    margin: 0 8px;
+    cursor: pointer;
+}
+.toggle .button{
+    margin-left: -4px;
+    -webkit-animation-fill-mode: forwards;
+    /*-webkit-animation-duration: 1s;*/
+    /*-webkit-animation: animate_toggle 1s;*/
+}
+
+
+@keyframes animate_toggle {
+	0% {
+		left:0;
+	}
+	100% {
+        left:36px;
+	}
+}
+
+@keyframes animate_toggle_rev {
+	0% {
+		left: 36px;
+	}
+	100% {
+        left: 0;
+    }
+}
+
+.toggle_animate{
+    -webkit-animation:animate_toggle .75s;
+    -webkit-animation-fill-mode:forwards;
+}
+.toggle_animate_rev{
+    -webkit-animation:animate_toggle_rev .75s;
+    -webkit-animation-fill-mode:forwards;
+}
+
+.toggle_on{
+    left:36px
+}
+.toggle_off{
+    left:0
+}
+
+#ideas_pre_buffer{
+    width: 100%;
+    /*height: 50px;*/
+}
+.arrow_down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid white;
+}
+

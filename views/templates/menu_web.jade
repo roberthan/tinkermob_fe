@@ -1,0 +1,37 @@
+script#menu_web_template(type="text/template")
+    div#navi_bar
+        a.navi_left(href="/")
+            img.navi_left_img(src='#{img_path}/icon.png', height='32px')
+            div.navi_left_title TinkerMob
+        div.navi_right
+            div#temp_stats
+            div#selfProfile
+                <% if(USER){ %>
+                div.header_container.btn_my_ideas()
+                    div.arrow_down
+                    div.pic
+                    div.user_name#selfprofile_user_name TESTINGTESTINGTESTINGT
+                ul
+                    li.btn_my_ideas My Ideas
+                    li.btn_settings Settings
+                    li.btn_logout Logout
+                    li.btn_about About
+                <% } else{ %>
+                div.header_container
+                    div.arrow_down
+                    div.btn_login Login
+                ul
+                    li.btn_join Join
+                    li.btn_about About
+                <% } %>
+        div.navi_middle
+            <% if(USER){ %>
+            div.navi_middle_left_label.browse Browse
+            div.navi_middle_toggle.toggle
+              img.button(src='#{img_path}/on_off.png', height='32px')
+            div.navi_middle_right_label.my_ideas My Ideas
+            <% } %>
+    div#loading_bar Loading ...
+
+script#menu_self_profile_template(type="text/template")
+    div.username <%= username %>

@@ -1,0 +1,107 @@
+username_color = #ffdabf
+#user_profile_view{
+    margin-top: 80px;
+    width: 100%;
+    color:white;
+}
+
+#user_ideas{
+    padding-top: 16px;
+}
+
+.user_profile_main_container{
+    margin: 0 auto;
+    width: 552px;
+    /*height: 148px;*/
+    padding: 16px;
+}
+
+.user_profile_img_container{
+    float: left;
+    margin: 0 16px;
+}
+.user_profile_img{
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    max-width: 150px;
+    max-height: 124px;
+}
+
+.user_profile_text_container{
+    min-height: 48px;
+    max-width: 100%;
+    overflow:hidden;
+}
+
+.user_profile_bio{
+    height: 72px;
+    padding: 0 0 8px 8px;
+    overflow: hidden;
+
+    word-wrap: break-word;
+}
+
+.fixed.user_profile_stats_container{
+    position: fixed;
+    z-index: 100;
+    top: 48px;
+}
+.user_profile_stats_container{
+    height: 80px;
+    clear: both;
+    /*width: (8px + 96px ) * 4;*/
+    /*margin: 0 auto;*/
+    width: 100%;
+    background-color: #8b4513;
+}
+
+.user_profile_stats_container_inner{
+    width: (8px + 96px ) * 4;
+    margin: 0 auto;
+}
+
+.user_profile_text_container_username{
+    padding-left: 8px;
+    display: inline;
+    color: username_color;
+    font-size:22px;
+}
+.user_profile_text_container_username_sidenote{
+    padding-left: 8px;
+    display: inline;
+    COLOR: white;
+    font-size:18px;
+    cursor: pointer;
+}
+
+.user_profile_pg_btn_follow,
+.user_profile_pg_btn_follow_pressed{
+    width: 128px;
+    height: 32px;
+    /*background-image: url("/img/pg_btn_edit.png");*/
+    background-size: 100%;
+    cursor: pointer;
+    display: inline;
+}
+
+.user_profile_stats_tile.btn_pressed{
+    background-image: url("/img/btn_profile_stat_depressed.png");
+}
+
+.user_profile_stats_tile{
+    float: left;
+    background-image: url("/img/btn_profile_stat.png");
+    background-repeat: no-repeat;
+    width: 96px;
+    height: 82px;
+    margin: 4px 4px;
+    color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.user_profile_stats_tile_count{
+    padding-top: 20px;
+    font-size: 16px;
+    font-weight: 400;
+}

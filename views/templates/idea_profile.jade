@@ -1,0 +1,76 @@
+script#idea_profile_template(type="text/template")
+    div.idea_profile_main#idea_details
+    div.idea_profile_btn_container
+        div.idea_profile_snapshots_settings_container
+            div.idea_profile_snapshots_settings_text.left Sort by
+            select.snapshot_sort
+                option(value = 'ordering', selected='selected') User Defined
+                option(value = '-modified_on') Most Recent
+                option(value = 'modified_on') Oldest
+        div.idea_profile_questions_settings_container
+            div.idea_profile_questions_settings_text.left Sort by
+            select.question_sort
+                option(value = '', selected='selected') Most Helpful
+                option(value = '-modified_on') Most Recent
+                option(value = 'modified_on') Oldest
+        div.idea_profile_mode_selector_container
+            <% if(USER){ %>
+            div.idea_profile_mode_selector.left
+                div.btn_support
+            <% } %>
+            div.idea_profile_mode_selector.right
+                div.btn_share
+            div.idea_profile_tab_selector_container
+                div.btn_snapshots.btn_tab
+                    div.btn_tab_text Snapshots
+                        div.btn_tab_count <%= count_snapshots %>
+                div.btn_questions.btn_tab
+                    div.btn_tab_text Q&A
+                        div.btn_tab_count <%= count_questions %>
+
+    div#idea_profile_snapshots
+    div#idea_profile_questions
+    div.share_panel
+
+script#idea_details_template(type="text/template")
+    div.idea_profile_img_container
+        img.idea_profile_img_container_pic(src!="<%= tile_image %>", width='100px')
+    div.idea_profile_text_container
+        <% if(user===USER){ %>
+        div.pg_btn.idea_profile_pg_btn_edit.right
+        <% } %>
+        p.idea_profile_text_container_text <%= A.view.helper.parseTagLine(tag_line) %>
+    div.idea_profile_meta_container
+        div.idea_profile_meta_created_on <%= A.view.helper.parseDate(created_on) %>
+        div.idea_profile_meta_user_profile.owner
+            div.idea_profile_meta_user_username
+                a.text(href!='/user/<%= username %>') <%= username %>
+            div.idea_profile_meta_user_pic_container
+                img.idea_profile_meta_user_pic(src="#{img_path}/user_button.png",width='32px', height='32px')
+
+script#new_idea_template(type="text/template")
+    div#input_modal.overlay-container
+        div.window-container.zoomin
+            h3.header  <% if(typeof revision !== 'undefined'){ %> Edit Idea <% } else{ %> New Idea <% } %>
+            form.new_idea_form.input_form
+                textarea.textarea_input.textarea_tag_line(placeholder='Tagline') <%= tag_line %>
+                br
+                div.char_count
+                    div.count <%= tag_line.length %>
+                    div.text  / 140 chars
+            div.btn-container
+                span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>
+                span.btn.btn_cancel.right Cancel
+
+script#share_panel_template(type="text/template")
+    div.mini_panel.overlay-container
+        div.window-container.zoomin
+            //script(type="text/javascript", src="http://www.reddit.com/static/button/button3.js")
+            ul.share_services
+                li.share_btn.share_reddit
+                    a(href!="http://www.reddit.com/r/DIY/submit?title=<%= tag_line %>", target="_new")
+                        img(src="http://www.reddit.com/static/spreddit5.gif",alt="submit to reddit", border="0")
+                        span Share on Reddit
+                li.share_btn.share_fb Share on Facebook
+                li.share_btn.share_twitter Share on Twitter
+                li.share_btn.share_pinterest Share on Pinterest

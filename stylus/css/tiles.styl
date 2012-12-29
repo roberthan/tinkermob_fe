@@ -1,0 +1,179 @@
+tile_width=290px
+tile_height=290px
+info_height = 48px
+detail_height = 64px
+username_color = #ffdabf
+#ideas{
+    margin-top: 80px;
+    padding-top: 16px;
+}
+
+.idea_tiles a{
+    text-decoration:none;
+}
+
+.idea_tile{
+    float: left;
+    width:tile_width;
+    height: tile_height;
+    padding: 24px;
+ }
+.my_idea_tile{
+    float: left;
+    width:tile_width;
+    height: tile_height - info_height ;
+    padding: 24px 24px 0 24px;
+ }
+
+.idea_tile_body{
+    position: relative;
+    padding: 0px;
+}
+
+.idea_tile_body_infobar{
+    /*background-color: #3a3431;*/
+    background-color: #000000;
+    height: info_height;
+    position: absolute;
+    margin-top: - info_height;
+    opacity:0.7;
+    width:tile_width;
+    left:0
+}
+
+.no_image .idea_tile_body_infobar{
+    height: tile_height - info_height - 12;
+    margin-top: - tile_height + info_height + 12;
+    opacity:0.6;
+}
+
+.idea_tile_body_infobar_tagline,
+.my_idea_tile_body_infobar_tagline{
+    padding: 12px 8px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    float: left;
+    width: (4 * tile_width / 5) - 2 * 8px;
+    font-size: 20px;
+    opacity:1;
+    color: #ffffff;
+    height: 20px;
+}
+
+.no_image .idea_tile_body_infobar_tagline,
+.no_image .my_idea_tile_body_infobar_tagline{
+    font-size: 28px;
+    white-space: normal;
+    padding: 24px 36px;
+    /*height: tile_height - info_height - 12;*/
+    height: 152px;
+}
+.idea_tile_body_infobar_snapshots{
+    /*margin: 10px 4px;*/
+    overflow: hidden;
+    /*float: right;*/
+    position: absolute;
+    right: 8px;
+    bottom: 12px;
+    width: (tile_width / 5)- 2 * 7px;
+    font-size: 20px;
+    background-color: #615d5a;
+    text-align: center;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    color: #ffffff;
+}
+.idea_tile_details{
+    background-image:url('/img/shadow.png');
+    background-repeat:no-repeat;
+    height detail_height
+    /*padding: 8px;*/
+}
+.idea_tile_details_profile{
+    float: left
+    width: detail_height - 16
+    height detail_height - 16
+    margin 8px 12px
+    border-radius: 50%;
+    background-size: 100%;
+}
+
+.idea_tile_details_profile_pic{
+    margin: -8px 0 0 -8px;
+    width:64px;
+    height:64px;
+}
+
+.idea_tile_details_owner{
+    width: (tile_width * 3/ 4)
+    height (detail_height/2)
+    float: left;
+}
+.idea_tile_details_owner_text{
+    padding: 8px 0;
+    color username_color;
+    font-size: 14px;
+    font-weight: 500;
+}
+.idea_tile_details_stats{
+    width: (tile_width * 3/ 4)
+    float: left;
+    height (detail_height/2)
+}
+
+.idea_tile_details_stats_item{
+    width: (tile_width / 4)
+    height (detail_height/2)
+    float: left;
+}
+.idea_tile_details_stats_pic{
+    float: left;
+    padding: 0 4px;
+}
+.idea_tile_details_stats_text{
+    float: left;
+    color: white;
+    padding: 4px 0;
+}
+
+.my_idea_tile_details{
+    position: absolute;
+    z-index: 10;
+    right:8px;
+    top:-208px;
+    background-color: #000000;
+    opacity:0.7;
+    padding: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+.no_image .my_idea_tile_body_infobar_tagline{
+    /*padding: 24px 48px 24px 18px;*/
+    width:176px;
+}
+
+.idea_tile_shadow{
+    width: tile_width
+    height: 24px;
+    background-image:url('/img/shadow.png');
+    background-repeat:no-repeat;
+}
+
+.ideas_settings_container{
+    /*position: fixed;*/
+    float: right;
+    width: 200px;
+    color: #ffffff;
+    font-size: 18px;
+    right: 7%;
+    padding-top: 16px;
+}
+
+.ideas_settings_container_text{
+    padding-right: 4px;
+    float: left;
+}

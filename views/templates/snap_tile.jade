@@ -1,0 +1,53 @@
+script#snapshot_tile_template(type="text/template")
+    div.snapshot_tile.link
+        <% if(user === USER){ %>
+        div.snapshot_tile_resize
+            div.arrow_right.btn_x_scale
+            div.arrow_down.btn_y_scale
+            div.snapshot_tile_resize_text resize
+        div.snapshot_tile_dnd
+            div.arrow_left.btn_mv_to_end.left
+            div.arrow_right.btn_mv_to_front.right
+            div.snapshot_tile_dnd_text Drag me
+        div.snapshot_tile_profile
+            div.pg_btn.pg_btn_profile.left
+            div.snapshot_tile_profile_text Idea Pic
+        <% } %>
+        img.snapshot_tile_pic(style!="background-image:url('<%= tile_image %>')")
+        //img.snapshot_tile_pic(src!="<%= tile_image %>")
+        //, width='290px', height='228px'
+        div.snapshot_tile_infobar
+            div.snapshot_tile_infobar_text <%= text %>
+            <% if(user===USER){ %>
+            div.pg_btn.pg_btn_edit.right
+            <% } %>
+            //img.shadow(src="#{img_path}/shadow.png", width='290px')
+
+script#add_snapshot_tile_template(type="text/template")
+    div.snapshot_tile.link
+        img.snapshot_tile_pic(src!="/img/new_idea.png", width='290px', height='230px')
+
+script#new_snapshot_template(type="text/template")
+     div#input_modal.overlay-container
+        div.window-container.zoomin
+            h3.header <% if(typeof revision !== 'undefined'){ %> Edit Snapshot <% } else{ %> New Snapshot <% } %>
+            form(enctype="multipart/form-data").new_snapshot_form.input_form
+                input(name='file', type='file').upload_file
+                br
+                textarea.textarea_input.textarea_details(placeholder='Details (optional)') <%= text %>
+                div.toggle_delete.toggle_container
+                    div.toggle_label Delete Snapshot
+                    div.toggle
+                        img.button(src='#{img_path}/on_off.png', height='32px')
+                    div.toggle_selection_label.toggle_selection_delete
+            //progress.upload_progress
+            div.btn-container
+                span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>
+                span.btn.btn_cancel.right Cancel
+
+script#snap_detail_template(type="text/template")
+    div.overlay-container
+        div.window-container.zoomin
+            img.pic(src!="<%= original_image %>")
+            div.infobar <%= text %>
+            span.close Close me

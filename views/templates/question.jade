@@ -1,0 +1,65 @@
+script#question_template(type="text/template")
+    div.qa_profile_pic_container
+        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    <% if(USER){ %>
+    div.qa_rank_vote
+        div.btn_rank.up_rank
+        div.btn_rank.down_rank
+    <% } %>
+    div.qa_meta_container
+        div.qa_meta_username
+            a  <%= username %>
+        <% if(is_owner===true){ %>
+        div.qa_meta_is_owner (owner)
+        <% } %>
+        div.qa_meta_created_on <%= A.view.helper.parseDate(created_on) %>
+        div.qa_meta_ranking <% if(rank>0){ %> +<% } %><%= rank %>
+    br
+    div.qa_text_container
+        p.qa_text <%=  text %>
+    div.qa_answers
+    <% if(count_answers>1){ %>
+    div.qa_show_more
+        img.qa_show_more_pic(src="#{img_path}/show_more.png",width='18px', height='12px')
+        span  Show All <%= count_answers %> Answers
+    <% } else { %>
+    div.qa_show_more
+        img.qa_show_more_pic(src="#{img_path}/show_more.png",width='18px', height='12px')
+        span  Answer This
+    <% } %>
+
+script#answer_template(type="text/template")
+    div.qa_profile_pic_container
+        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    <% if(USER){ %>
+    div.qa_rank_vote
+        div.btn_rank.up_rank
+        div.btn_rank.down_rank
+    <% } %>
+    div.qa_meta_container
+        div.qa_meta_username
+            a  <%= username %>
+        <% if(is_owner===true){ %>
+        div.qa_meta_is_owner (owner)
+        <% } %>
+        div.qa_meta_created_on <%= A.view.helper.parseDate(created_on) %>
+        div.qa_meta_ranking <% if(rank>0){ %> +<% } %><%= rank %>
+    br
+    div.qa_text_container
+        p.qa_text <%=  text %>
+
+script#add_question_template(type="text/template")
+    div.qa_profile_pic_container
+        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    div.qa_meta_container
+        form.new_question_form.input_form
+            textarea.textarea_input.textarea_question(placeholder = 'Ask a question')
+            span.pg_btn.pg_btn_add.right
+
+script#add_answer_template(type="text/template")
+    div.qa_profile_pic_container
+        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    div.qa_meta_container
+        form.new_question_form.input_form
+            textarea.textarea_input.textarea_question(placeholder = 'Answer?')
+            span.pg_btn.pg_btn_add.right
