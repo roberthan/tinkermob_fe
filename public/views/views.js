@@ -29,6 +29,8 @@ A.view.MenuWeb = Backbone.Marionette.Layout.extend({
     },
     events: {
         'click .navi_left': 'navigateHome',
+        'click .btn_next': 'navigateNext',
+        'click .btn_prev': 'navigatePrev',
         'click .btn_about': 'navigateAbout',
         'click .btn_login': 'navigateLogin',
         'click .btn_logout': 'navigateLogout',
@@ -82,6 +84,14 @@ A.view.MenuWeb = Backbone.Marionette.Layout.extend({
         app.vent.trigger('navigate:home');
         e.preventDefault();
     },
+    navigateNext: function(e){
+        app.vent.trigger('navigate:Next');
+        e.preventDefault();
+    },
+    navigatePrev: function(e){
+        app.vent.trigger('navigate:Prev');
+        e.preventDefault();
+    },
     navigateAbout: function(e){
         app.vent.trigger('navigate:about');
         e.preventDefault();
@@ -94,7 +104,6 @@ A.view.MenuWeb = Backbone.Marionette.Layout.extend({
     navigateLogout: function(e){
         app.vent.trigger('navigate:logout');
         e.preventDefault();
-//        e.stopPropagation();
     },
     navigateJoin: function(e){
         app.vent.trigger('navigate:join');

@@ -60,6 +60,8 @@ A.view.ideasNavi.IdeasView =  Backbone.Marionette.CollectionView.extend({
     itemView : A.view.ideasNavi.IdeaView,
     initialize: function(){
         this.collection.bind('change', this.render,this);
+        app.vent.bind('navigate:Next',this.nextPage, this);
+        $('.btn_next').show();
 //        this.backCacheCollection=new A.model.BackCacheIdeas();
 //        this.forwardCacheCollection=new A.model.ForwardCacheIdeas();
     },
@@ -90,16 +92,19 @@ A.view.ideasNavi.IdeasView =  Backbone.Marionette.CollectionView.extend({
     onRender: function(){
         var self = this;
         self.tiles_per_row=2;
-        app.vent.bind('page:onBottom',this.onBottom, this);
+
     },
-    onBottom: function(){
-        console.log(this);
+    nextPage: function(){
         if(this.collection.nextPage()===false){
-            app.vent.unbind('page:onBottom');
+//            app.vent.unbind('page:onBottom');
+            $('.btn_next').hide();
+        }
+        else{
+
         }
     },
     onClose: function(){
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindNextPrev();
     }
 //    ,
 //    cleanUp: function(){

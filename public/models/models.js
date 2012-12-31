@@ -84,6 +84,7 @@ A.view = A.view || {};
                 //self.trigger("fetched");
                 if(success) { success(self, resp); }
             };
+            console.log(options)
             return Backbone.Collection.prototype.fetch.call(this, options);
         },
         parse: function(resp) {
@@ -146,7 +147,8 @@ A.view = A.view || {};
                 return false;
             }
             this.offset = this.offset + l;
-            return this.fetch({add: true});
+            return this.fetch();
+//            return this.fetch({add: true});
         },
         previousPage: function() {
             if (!this.pageInfo().prev) {

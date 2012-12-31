@@ -72,17 +72,17 @@ app.addInitializer(function(){
     app.vent.bind('navigate:home', app.controller.home);
     app.vent.bind('navigate:following', app.controller.follow);
     app.vent.bind('navigate:follower', app.controller.follow);
-    $('#body').infiniteScroll({
-        threshold: 250,
-        onEnd: function() {
-//            console.log('No more results!');
-        },
-        onBottom: function(callback) {
-            app.vent.trigger('page:onBottom');
-            console.log('on bottom')
-            callback(true);
-        }
-    });
+//    $('#body').infiniteScroll({
+//        threshold: 250,
+//        onEnd: function() {
+////            console.log('No more results!');
+//        },
+//        onBottom: function(callback) {
+//            app.vent.trigger('page:onBottom');
+//            console.log('on bottom')
+//            callback(true);
+//        }
+//    });
 //    A.timer = new Backbone.syncTimer();
 });
 

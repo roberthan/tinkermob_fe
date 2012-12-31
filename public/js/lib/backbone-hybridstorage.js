@@ -229,7 +229,7 @@ var vent = _.extend({}, Backbone.Events);
                 model.collection.SYNC_STATE='syncing';
             }
 //            var old_success=options.success;
-            options.add = true;
+//            options.add = true;
          //   options.success=function(){};
             options.complete=function(data, request_timestamp){
                 if(data.statusCode === 200){

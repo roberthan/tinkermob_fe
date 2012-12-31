@@ -108,5 +108,9 @@ A.view.helper = {
         app.tinker.owner.set('count_followings', temp);
         //TODO delete itself on save
         return following
+    },
+    unbindNextPrev: function(){
+        app.vent.unbind('navigate:Next');
+        app.vent.unbind('navigate:Prev');
     }
 }
