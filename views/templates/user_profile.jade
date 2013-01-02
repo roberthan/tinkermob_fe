@@ -14,6 +14,12 @@ script#user_profile_template(type="text/template")
             <% } %>
         div.user_profile_bio <%= bio %>
     div.user_profile_stats_container
+        div.ideas_settings
+            div.ideas_settings_container_text Sort by
+            select.idea_sort
+                option(value = '', selected='selected') Most Supporters
+                option(value = '-modified_on') Most Recent
+                option(value = 'modified_on') Oldest
         div.user_profile_stats_container_inner
             div.ideas_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_ideas %>
@@ -27,12 +33,7 @@ script#user_profile_template(type="text/template")
             div.follower_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_followers %>
                 div.text Followers
-        div.ideas_settings_container
-            div.ideas_settings_container_text Sort by
-            select.idea_sort
-                option(value = '', selected='selected') Most Supporters
-                option(value = '-modified_on') Most Recent
-                option(value = 'modified_on') Oldest
+
     div#user_ideas
 
 script#settings_template(type="text/template")

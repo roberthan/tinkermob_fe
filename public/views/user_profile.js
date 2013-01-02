@@ -132,7 +132,7 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
 });
 
 A.view.userProfile.IdeaView = Backbone.Marionette.ItemView.extend({//Backbone.dragAndDrop.extend({
-    tagName: 'div',
+    tagName: 'li',
     className: 'my_idea_tile',
     template: '#my_idea_tile_template',
 //    attributes:{'data-x_scale':"1",'data-y_scale':"1"},//,el: this.model.get('id'),
@@ -166,7 +166,7 @@ A.view.userProfile.IdeaView = Backbone.Marionette.ItemView.extend({//Backbone.dr
 
 A.view.userProfile.addIdeaView = Backbone.Marionette.ItemView.extend({
     template: '#add_idea_template',
-    tagName: 'div',
+    tagName: 'li',
     id: 'add_idea',
     className: 'my_idea_tile',
     events: {
@@ -181,7 +181,8 @@ A.view.userProfile.addIdeaView = Backbone.Marionette.ItemView.extend({
     }
 });
 
-A.view.userProfile.ListView =  Backbone.Marionette.CollectionView.extend({
+A.view.userProfile.ListView =  Backbone.Marionette.PaginatedCollectionView.extend({
+    tagName: 'ul',
     itemView : A.view.userProfile.IdeaView,
     addNewItemView: A.view.userProfile.addIdeaView,
     className: 'idea_tiles infinite_grid',
@@ -189,26 +190,28 @@ A.view.userProfile.ListView =  Backbone.Marionette.CollectionView.extend({
         'sort_collection':'sortCollection'
     },
     initialize: function(){
-        this.collection.bind('change', this.render,this);
+//        this.collection.bind('change', this.render,this);
+        this.initializePaginated();
     },
     sortCollection: function(e,field_name){
         this.collection.sort_by(field_name);
         switch(field_name){
             case "-modified_on":
                 this.collection.comparator = this.collection.newestComparator;
-                this.collection.reset();
-                this.collection.sort();
+                this.collection.reset({silent:true});
+                this.collection.sort({silent:true});
                 break;
             case "modified_on":
                 this.collection.comparator = this.collection.oldestComparator;
-                this.collection.reset();
-                this.collection.sort();
+                this.collection.reset({silent:true});
+                this.collection.sort({silent:true});
                 break;
             default:
-                delete this.collection.comparator;
-                this.collection.reset();
-                this.collection.fetch();
-                this.render();
+//                delete this.collection.comparator;
+                this.collection.comparator = this.collection.defaultComparator;
+                this.collection.reset({silent:true});
+                this.collection.fetch({silent:true});
+//                this.render();
                 break;
         }
     },
@@ -220,7 +223,6 @@ A.view.userProfile.ListView =  Backbone.Marionette.CollectionView.extend({
         this.addItemView(model, this.addNewItemView, -1);
     },
     onRender: function(){
-        app.vent.bind('page:onBottom',this.onBottom, this);
         if(USER === this.collection.user){
             this.showAddItemView();
         }
@@ -228,13 +230,6 @@ A.view.userProfile.ListView =  Backbone.Marionette.CollectionView.extend({
     onClose: function(){
         console.log('off:sub_navigate:newIdea');
         app.vent.unbind('sub_navigate:newIdea');
-        app.vent.unbind('page:onBottom');
-    },
-    onBottom: function(){
-//        console.log('fired');
-        if(this.collection.nextPage()===false){
-            app.vent.unbind('page:onBottom');
-        }
     },
     appendHtml: function(collectionView, itemView, index){
         if(index < 0){

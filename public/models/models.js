@@ -84,7 +84,6 @@ A.view = A.view || {};
                 //self.trigger("fetched");
                 if(success) { success(self, resp); }
             };
-            console.log(options)
             return Backbone.Collection.prototype.fetch.call(this, options);
         },
         parse: function(resp) {
@@ -138,7 +137,6 @@ A.view = A.view || {};
             if (this.offset + this.limit < info.total) {
                 info.next = this.offset + this.limit;
             }
-
             return info;
         },
         nextPage: function(limit) {
@@ -147,15 +145,27 @@ A.view = A.view || {};
                 return false;
             }
             this.offset = this.offset + l;
-            return this.fetch();
-//            return this.fetch({add: true});
+            return this.fetch({add: true});
         },
-        previousPage: function() {
+        previousPage: function(limit) {
+            var l = limit || this.limit;
             if (!this.pageInfo().prev) {
                 return false;
             }
-            this.offset = (this.offset - this.limit) || 0;
-            return this.fetch();
+            this.offset = (this.offset - l) || 0;
+            return this.fetch({add: true, append_to_front:true});
+        },
+        hasNext: function() {
+            if (!this.pageInfo().next) {
+                return false;
+            }
+            return true;
+        },
+        hasPrevious: function() {
+            if (!this.pageInfo().prev) {
+                return false;
+            }
+            return true;
         },
         filtrate: function (options) {
             options = options || {};
@@ -169,7 +179,7 @@ A.view = A.view || {};
             return this.fetch();
         },
         getNeedSync: function(){
-            console.log('syncing');
+//            console.log('syncing');
             var target = this.where({isSynced: 0});
             target.forEach(function(each){
                 each.save();

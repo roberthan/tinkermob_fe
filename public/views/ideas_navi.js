@@ -20,7 +20,7 @@ A.view.ideasNavi.Layout = Backbone.Marionette.Layout.extend({
 });
 
 A.view.ideasNavi.IdeaView = Backbone.Marionette.ItemView.extend({//Backbone.dragAndDrop.extend({
-    tagName: 'div',
+    tagName: 'li',
     className: 'idea_tile',
     template: '#idea_tile_template',
     events: {
@@ -55,15 +55,13 @@ A.view.ideasNavi.IdeaView = Backbone.Marionette.ItemView.extend({//Backbone.drag
     }
 });
 
-A.view.ideasNavi.IdeasView =  Backbone.Marionette.CollectionView.extend({
+A.view.ideasNavi.IdeasView =  Backbone.Marionette.PaginatedCollectionView.extend({
+    tagName: 'ul',
     className: 'idea_tiles infinite_grid',
     itemView : A.view.ideasNavi.IdeaView,
     initialize: function(){
-        this.collection.bind('change', this.render,this);
-        app.vent.bind('navigate:Next',this.nextPage, this);
-        $('.btn_next').show();
-//        this.backCacheCollection=new A.model.BackCacheIdeas();
-//        this.forwardCacheCollection=new A.model.ForwardCacheIdeas();
+        this.initializePaginated();
+        this.collection.bind('change', this.render, this);
     },
     events: {
         'sort_collection':'sortCollection'
@@ -73,55 +71,23 @@ A.view.ideasNavi.IdeasView =  Backbone.Marionette.CollectionView.extend({
         switch(field_name){
             case "-modified_on":
                 this.collection.comparator = this.collection.newestComparator;
-                this.collection.reset();
-                this.collection.sort();
+                this.collection.reset({silent:true});
+                this.collection.sort({silent:true});
                 break;
             case "modified_on":
                 this.collection.comparator = this.collection.oldestComparator;
-                this.collection.reset();
-                this.collection.sort();
+                this.collection.reset({silent:true});
+                this.collection.sort({silent:true});
                 break;
             default:
-                delete this.collection.comparator;
-                this.collection.reset();
-                this.collection.fetch();
-                this.render();
+//                delete this.collection.comparator;
+                this.collection.comparator = this.collection.defaultComparator;
+                this.collection.reset({silent:true});
+                this.collection.fetch({silent:true});
+//                this.render();
                 break;
         }
     },
-    onRender: function(){
-        var self = this;
-        self.tiles_per_row=2;
-
-    },
-    nextPage: function(){
-        if(this.collection.nextPage()===false){
-//            app.vent.unbind('page:onBottom');
-            $('.btn_next').hide();
-        }
-        else{
-
-        }
-    },
-    onClose: function(){
-        A.view.helper.unbindNextPrev();
+    onDomRefresh: function(){
     }
-//    ,
-//    cleanUp: function(){
-//        var self = this;
-//        self.tiles_per_row=(Math.floor( $('#ideas').outerWidth()/$('.idea_tile').outerWidth()));
-//        self.tiles_height=($('.idea_tile').outerHeight());
-//        var col =self.collection;
-//        if(col.length>=(12*self.tiles_per_row) && self.scroll_down === true){
-//            self.scroll_down = false;
-//            var removed;
-//            var diff =col.length-(12*self.tiles_per_row);
-//            for(var i = 0, j = diff; i < j; i += 1){
-//                removed=col.shift();
-//                self.backCacheCollection.push(JSON.stringify(removed));
-//            }
-//            $("#ideas_pre_buffer").height(self.backCacheCollection/self.tiles_per_row*self.tiles_height);
-//        }
-//        $('#temp_stats').text(self.backCacheCollection.length+':'+col.length);
-//    }
 });

@@ -74,14 +74,23 @@ var vent = _.extend({}, Backbone.Events);
             return model;
         },
         onSync: function(model, data, request_timestamp, options){
+            $('#loading_bar').hide();
+            if(typeof data.responseText ==='string'){
+                try {
+                    data.responseText=JSON.parse(data.responseText);
+                } catch (e) {
+                    data.responseText = {}
+                }
+            }
             options = options || {};
-            console.log('ajax success - '+ request_timestamp);
-            switch(data.statusCode){
+//            console.log('ajax success - '+ request_timestamp);
+//            switch(data.statusCode){
+            switch(data.status){
                 case 201://create success
                     if(_.has(data,'body')){
-                        data.body.isSynced=1;
-//                        data.body.isCreatedOnServer=1;
-                        model.set(data.body);
+                        data.responseText.isSynced=1;
+//                        data.responseText.isCreatedOnServer=1;
+                        model.set(data.responseText);
                         model.save({},{noAjax:true});
                         if(model.get('destroy')===true){
                             model.destroy({noAjax:true});
@@ -96,10 +105,26 @@ var vent = _.extend({}, Backbone.Events);
                     break;
                 case 202://update success
                     if(_.has(data,'body')){
-                        data.body.isSynced=1;
-                        model.set(data.body);
+                        data.responseText.isSynced=1;
+                        model.set(data.responseText);
                         model.save({},{noAjax:true});
-                        console.log(model)
+//                        console.log(model)
+                        if(model.get('destroy')===true){
+                            model.destroy({noAjax:true});
+                        }
+                        if(model.noCache === true){
+                            this.localStorage().removeItem(this.name+"-"+model.id);
+                            this.records = _.reject(this.records, function(record_id){return record_id == model.id.toString();});
+                            this.save();
+                        }
+                    }
+                    break;
+                case 204://update success
+                    if(_.has(data,'body')){
+                        data.responseText.isSynced=1;
+                        model.set(data.responseText);
+                        model.save({},{noAjax:true});
+//                        console.log(model)
                         if(model.get('destroy')===true){
                             model.destroy({noAjax:true});
                         }
@@ -123,12 +148,15 @@ var vent = _.extend({}, Backbone.Events);
                     //put data into array
                     var new_data=[];
                     var final_data=[];
-                    if(!_.isArray(data.body.objects)){
-                        new_data.push(JSON.parse(data.body));
+//                    data.responseText = data.responseText || data.responseText
+                    console.log(data.responseText)
+                    if(!_.isArray(data.responseText.objects)){
+//                        new_data.push(JSON.parse(data.responseText));
+                        new_data.push(data.responseText);
                     }
                     else{
-                        new_data=data.body.objects;
-                        console.log('check '+new_data);
+                        new_data=data.responseText.objects;
+//                        console.log('check '+new_data);
                     }
                     //check if it's already loaded
                     new_data.forEach(function(object, index){
@@ -149,18 +177,21 @@ var vent = _.extend({}, Backbone.Events);
                         else{
                             model.collection.SYNC_STATE='ready';
                         }
+
                         if(_.has(model,'collection')){//if model is not a collection
+//                            final_data[0].retrieval_date=Date.now();
                             model.set(final_data[0]);
                         }
                         else{
-//                            console.log(final_data[0].objects)
 //                            model.set(final_data[0]);
-//                            var temp = {}
-//                            temp.objects=final_data[0].objects;
-//                            temp.meta = data.body.meta || {};
-//                            console.log(data.body.meta)
-//                            options.success(temp);
-                            options.success(final_data[0]);
+                            var temp = {}
+                            temp.objects=final_data
+                            temp.meta = data.responseText.meta || {};
+                            console.log(data.responseText.meta)
+                            options.success(temp);
+//                            if(typeof final_data[0] !== 'undefined'){
+//                                options.success(final_data);
+//                            }
                         }
 //                        console.log(JSON.stringify(final_data));
 //                        console.log(model);
@@ -228,13 +259,14 @@ var vent = _.extend({}, Backbone.Events);
             else{
                 model.collection.SYNC_STATE='syncing';
             }
-//            var old_success=options.success;
-//            options.add = true;
          //   options.success=function(){};
             options.complete=function(data, request_timestamp){
-                if(data.statusCode === 200){
+                if(data.status === 200){
                     options.existing = existing;
                     self.onSync(model,data, request_timestamp,options);
+                }
+                else{
+                    //TODO Error messages
                 }
             }
             //socket.io
@@ -286,10 +318,10 @@ var vent = _.extend({}, Backbone.Events);
     };
     //original
     Backbone.ajaxSync = Backbone.sync;
+//    Backbone.djangoSync = Backbone.sync;
 
-    //web socket
+    //web socket or ajax
     Backbone.djangoSync =function(method, model, options ){
-        var socket = Backbone.socket || Backbone.startSocket();
         var data = {};
          data.url= options.url || model.url();
         //adds slash for django
@@ -305,22 +337,48 @@ var vent = _.extend({}, Backbone.Events);
                 data.body = model || {};
             }
         }
-//        console.log('data body: '+JSON.stringify(data.body));
-        console.log('emit- '+method +' data_url: ' +data.url);
+        Backbone.ajaxSync(method,model,options);
+                console.log('data body: '+JSON.stringify(data.body));
+
+//        console.log('emit- '+method +' data_url: ' +data.url);
         $('#loading_bar').show();
-        socket.emit(method, JSON.stringify(data));
         var request_timestamp = new Date().getTime();
-        vent.on(method+':'+data.url,function(data) {
-            options.complete(data, request_timestamp);//success(data);
-        });
+//        vent.on(method+':'+data.url,function(data) {
+//            options.complete(data, request_timestamp);//success(data);
+//        });
     }
+//    Backbone.djangoSync =function(method, model, options ){
+//        var socket = Backbone.socket || Backbone.startSocket();
+//        var data = {};
+//         data.url= options.url || model.url();
+//        //adds slash for django
+//        if(data.url.indexOf('?')===-1){
+//            data.url=(data.url.charAt(data.url.length - 1) == '/' ? data.url:data.url+'/');
+//        }
+//        if(method !== 'read'){
+//            //class the model's specific django data reduction function
+//            if(typeof model.djangoSerial !== 'undefined'){
+//                data.body = model.djangoSerial();
+//            }
+//            else{
+//                data.body = model || {};
+//            }
+//        }
+////        console.log('data body: '+JSON.stringify(data.body));
+//        console.log('emit- '+method +' data_url: ' +data.url);
+//        $('#loading_bar').show();
+//        socket.emit(method, JSON.stringify(data));
+//        var request_timestamp = new Date().getTime();
+//        vent.on(method+':'+data.url,function(data) {
+//            options.complete(data, request_timestamp);//success(data);
+//        });
+//    }
 
     Backbone.startSocket= function(){
         Backbone.socket = io.connect(DOMAIN);
         //bound socket response listener
         Backbone.socket.on('success', function(data){
 //           console.log('trigger: ' + data.method+'-'+JSON.stringify(data));
-            $('#loading_bar').hide();
            vent.trigger(data.method+':'+data.url,data);
         });
         Backbone.socket.on('revised', function(data){

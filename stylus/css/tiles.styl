@@ -17,12 +17,14 @@ username_color = #ffdabf
     width:tile_width;
     height: tile_height;
     padding: 24px;
- }
+    list-style-type: none;
+}
 .my_idea_tile{
     float: left;
     width:tile_width;
     height: tile_height - info_height ;
     padding: 24px 24px 0 24px;
+    list-style-type: none;
  }
 
 .idea_tile_body{
@@ -164,9 +166,18 @@ username_color = #ffdabf
 }
 
 .ideas_settings_container{
+    height: 64px;
+    clear: both;
+    width: 100%;
+    background-color: saddleBrown;
+    position: fixed;
+    top: 48px;
+    z-index: 100;
+}
+.ideas_settings{
     /*position: fixed;*/
     float: right;
-    width: 200px;
+    width: 190px;
     color: #ffffff;
     font-size: 18px;
     right: 7%;

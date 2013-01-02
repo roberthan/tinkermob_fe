@@ -23,6 +23,7 @@ A.view = A.view || {};
             created_on: new Date().getTime(),
             modified_on: new Date().getTime(),
             isSynced: 1,
+            username:'loading',
             ordering: 0,//A.model.Idea.getOrder()
             horizontal_size:1,
             vertical_size: 1
@@ -54,9 +55,9 @@ A.view = A.view || {};
     A.model.Ideas = Backbone.PaginatedCollection.extend({
         urlRoot: IDEA_URL,
         model: A.model.Idea,
-//        comparator : function(model) {
-//            return model.get('-count_supporters');
-//        },
+        comparator : function(model) {
+            return -1*model.get('count_supporters')*model.get('created_on');
+        },
         localStorage: new Backbone.LocalStorage("Ideas-backbone"),
         initialize: function(){
             this.initializePaginatedCollection();
@@ -66,7 +67,7 @@ A.view = A.view || {};
 //            this.syncOn();
         },
         defaultComparator: function(item) {
-            return item.get("-count_supporters");
+            return (-1*model.get('count_supporters'));
         },
         newestComparator: function(item) {
             return item.get("-modified_on");
@@ -74,9 +75,6 @@ A.view = A.view || {};
         oldestComparator: function(item) {
             return item.get("modified_on");
         },
-//        gAdd: function(model){
-////            vent.trigger("ideas_add", model);
-//        },
         getOrFetch: function(id, options){
             // Helper function to use this collection as a cache for models on the server
             var model = this.get(id);
@@ -121,15 +119,5 @@ A.view = A.view || {};
 //            console.log(highest_order);
 //            return (highest_order.ordering + 1);
 //        }
-    });
-    A.model.BackCacheIdeas = Backbone.Collection.extend({
-        model: A.model.Idea,
-        initialize: function(){
-        }
-    });
-    A.model.ForwardCacheIdeas = Backbone.Collection.extend({
-        model: A.model.Idea,
-        initialize: function(){
-        }
     });
 })();

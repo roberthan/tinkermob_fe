@@ -251,7 +251,7 @@ app.get('/api/*', function(req, res){
 //            resData.url=data.url;
 //            resData.method = 'read';
             if(_.has(response,'statusCode')){
-                resData.statusCode=response.statusCode;
+                resData.status=response.statusCode;
                 if(response.statusCode <= 300 && response.statusCode >= 200){
                     res.send(resData);
                 }
@@ -260,9 +260,52 @@ app.get('/api/*', function(req, res){
                 }
             }
             else {
-                res.send(body)
+                res.send(body);
 //                console.log('oops: '+response.statusCode)
                 console.log(error)
+            }
+        }
+    );
+});
+app.post('/api/*', function(req, res){
+    var auth_header = '';
+    if(typeof req.user === 'object'){
+        auth_header='?userid='+req.user.user+'&api_key='+req.user.api_key;
+    }
+    request(
+        { method: 'POST'
+            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(req.url,auth_header)
+            , json: req.body
+        }
+        , function (error, response, body) {
+            if(_.isUndefined(response)){
+                console.log(error);
+                res.status(500).send(body);
+            }
+            else{
+                res.status(response.statusCode).send(body);
+            }
+        }
+    );
+});
+app.put('/api/*', function(req, res){
+    var auth_header = '';
+    if(typeof req.user === 'object'){
+        auth_header='?userid='+req.user.user+'&api_key='+req.user.api_key;
+    }
+    request(
+        {
+            method: 'PUT'
+            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(req.url,auth_header)
+            , json: req.body
+        }
+        , function (error, response, body) {
+            if(_.isUndefined(response)){
+                console.log(error)
+                res.status(500).send(body);
+            }
+            else{
+                res.status(response.statusCode).send(body);
             }
         }
     );
@@ -468,11 +511,11 @@ io.sockets.on('connection', function (socket) {
             }
             , function (error, response, body) {
                 var resData={};
-                resData.body=body;
+                resData.responseText=body;
                 resData.url=data.url;
                 resData.method = 'create';
                 if(!_.isUndefined(response)){
-                    resData.statusCode=response.statusCode;
+                    resData.status=response.statusCode;
                     if(response.statusCode === 201){
                         if(_.has(auth,'username')){
                             pubClient.publish(auth.username+':'+socket.id,JSON.stringify(resData));
@@ -498,20 +541,21 @@ io.sockets.on('connection', function (socket) {
         if(auth.auth_header!=='?'){
             data = JSON.parse(data);
             request(
-                { method: 'PUT'
+                {
+                    method: 'PUT'
                     , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(data.url,auth.auth_header)
                     , json: data.body
                 }
                 , function (error, response, body) {
                     var resData={};
-                    resData.body=body;
+                    resData.responseText=body;
                     resData.url=data.url;
                     resData.method = 'update';
                     if(!_.isUndefined(error)){
                         resData.error = error;
                     }
                     if(!_.isUndefined(response)){
-                        resData.statusCode=response.statusCode;
+                        resData.status=response.statusCode;
                         if(response.statusCode === 202){
                             if(_.has(auth,'username')){
                                 pubClient.publish(auth.username+':'+socket.id,JSON.stringify(resData));
@@ -544,17 +588,17 @@ io.sockets.on('connection', function (socket) {
             }
             , function (error, response, body) {
                 var resData={};
-                resData.body=body;
+                resData.responseText=body;
                 resData.url=data.url;
                 resData.method = 'read';
 //                console.log('oops: '+response.statusCode)
                 if(!_.isUndefined(response)){
-                    resData.statusCode=response.statusCode;
+                    resData.status=response.statusCode;
                     if(response.statusCode === 200){
 //                        socket.emit('revised', response);
 //                        socket.emit('success', resData);
                         if(response.statusCode >= 200){
-                            resData.body= body.replace('api_key='+auth.api_key,'');
+                            resData.responseText= body.replace('api_key='+auth.api_key,'');
                         }
                     }
                     else{

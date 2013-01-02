@@ -178,11 +178,119 @@ A.view.menu.SelfProfile = Backbone.Marionette.ItemView.extend({//Backbone.dragAn
     },
     initialize: function(){
 //        this.model.bind('change', this.render, this);
-//        this.initializeDragnDrop();
     }
 //    ,
 //    navigate: function(e){
 //        app.vent.trigger('navigate:ideaProfile', this.model);
 //        e.preventDefault();
+//    }
+});
+
+Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionView.extend({
+    initializePaginated: function(){
+        app.vent.bind('navigate:Next',this.nextPage, this);
+        app.vent.bind('navigate:Prev',this.prevPage, this);
+        $('.btn_next').show();
+        this.on("collection:before:close", function(){
+            A.view.helper.unbindNextPrev();
+        });
+        this.initial_page = true;
+        this.is_previous = false;
+//        this.on("before:item:added", function(viewInstance){
+//            var to_be_removed = this.collection.length-16;
+//            if(to_be_removed>0){
+//                if(this.is_previous){
+//                    this.collection.remove(this.collection.last(1));
+//                }
+//                else{
+//                    this.collection.remove(this.collection.first(1));
+//                }
+//                console.log('removed');
+//                console.log(this.collection.length);
+//            }
+//        });
+    },
+    clearOld: function(is_previous){
+        var to_be_removed = this.collection.length-8;
+//        console.log(to_be_removed)
+        if(to_be_removed>0){
+            if(is_previous){
+                this.collection.remove(this.collection.last(to_be_removed));
+            }
+            else{
+                this.collection.remove(this.collection.first(to_be_removed));
+            }
+        }
+//        console.log(this.collection.length)
+//        if(this.masonry_enabled){
+//            $('#snap_list').masonry('reload');
+//        }
+    },
+    nextPage: function(){
+        //remove old items from previous pages
+//        this.collection.reset();
+//        this.clearOld(false);
+        if(this.collection.hasNext()){
+            this.clearOld(false);
+            if(this.is_previous){
+                this.collection.nextPage(16)
+            }
+            else{
+                this.collection.nextPage()
+            }
+        }
+        else{
+            $('.btn_next').hide();
+        }
+        if(this.collection.hasPrevious()){
+            $('.btn_prev').show();
+        }
+        this.is_previous = false;
+    },
+    prevPage: function(){
+        if(this.collection.hasPrevious()){
+            this.clearOld(true);
+            if(this.is_previous){
+                this.collection.previousPage();
+            }
+            else{
+                this.collection.previousPage(16);
+            }
+        }
+        else{
+            $('.btn_prev').hide();
+        }
+        if(this.collection.hasNext()){
+            $('.btn_next').show();
+        }
+        this.is_previous = true;
+    },
+    appendHtml: function(collectionView, itemView, index){
+//        console.log(this.collection.pluck('count_supporters'))
+        if(index <= 0){
+            collectionView.$el.prepend(itemView.el);
+        }
+        else if(typeof index !== "undefined" && collectionView.$el.find("li").length>1){
+            collectionView.$el.find("li:nth-child("+index+")").after(itemView.el)
+        }
+        else{
+            collectionView.$el.append(itemView.el);
+        }
+    }
+//    addChildView: function(item, collection, options){
+//        this.closeEmptyView();
+//        var ItemView = this.getItemView(item);
+//
+//        var index;
+//        if(options && options.index ){
+//            index = options.index;
+//            if(typeof options.append_to_front !== 'undefined'){
+//                index = 0;
+//            }
+//        } else {
+//            index = 0;
+//        }
+//        console.log(options)
+//        return this.addItemView(item, ItemView, index);
 //    }
 });

@@ -72,17 +72,17 @@ app.addInitializer(function(){
     app.vent.bind('navigate:home', app.controller.home);
     app.vent.bind('navigate:following', app.controller.follow);
     app.vent.bind('navigate:follower', app.controller.follow);
-//    $('#body').infiniteScroll({
-//        threshold: 250,
-//        onEnd: function() {
-////            console.log('No more results!');
-//        },
-//        onBottom: function(callback) {
-//            app.vent.trigger('page:onBottom');
-//            console.log('on bottom')
-//            callback(true);
-//        }
-//    });
+    $('#body').infiniteScroll({
+        threshold: 250,
+        onEnd: function() {
+//            console.log('No more results!');
+        },
+        onBottom: function(callback) {
+            app.vent.trigger('page:onBottom');
+            console.log('on bottom')
+            callback(true);
+        }
+    });
 //    A.timer = new Backbone.syncTimer();
 });
 
@@ -190,8 +190,9 @@ app.controller = {
                     snapshots.filtrate({filter:{'idea':this.model.id},
                         success: function(snapshots,res){
 //                            debugger;
-                            console.log(snapshots.SYNC_STATE);
-                            if(snapshots.SYNC_STATE==="ready" && typeof self.snapshots != 'undefined' ){
+//                            console.log(snapshots);
+                            if(snapshots.length>0){
+//                            if(snapshots.SYNC_STATE!=="syncing" && typeof self.snapshots != 'undefined' ){
                                 self.snapshots.show(snapshotView);
                             }
                         }});

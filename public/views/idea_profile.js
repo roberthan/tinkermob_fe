@@ -60,7 +60,6 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     navigateTag: function(e){
         var temp = $(e.target).text().split('#');
         if(temp.length> 1){
-//            console.log(temp);
             app.vent.trigger('navigate:tag', temp[1]);
         }
         e.preventDefault();
@@ -322,7 +321,7 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
 
 A.view.ideaProfile.addSnapshotView = Backbone.Marionette.ItemView.extend({
     template: '#add_snapshot_tile_template',
-    tagName: 'div',
+    tagName: 'li',
     id: 'add_snapshot',
     className: 'snap_tile',
     events: {
@@ -336,7 +335,7 @@ A.view.ideaProfile.addSnapshotView = Backbone.Marionette.ItemView.extend({
     }
 });
 
-A.view.ideaProfile.SnapListView = Backbone.Marionette.CollectionView.extend({
+A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.extend({
     itemView : A.view.ideaProfile.SnapshotView,
     addNewItemView:A.view.ideaProfile.addSnapshotView,
     className:'animated infinite_grid',
@@ -348,72 +347,37 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.CollectionView.extend({
             this.$el.find(".dnd-container").hide();
             $('#snap_list').addClass('animated');
         }
-        app.vent.unbind('page:onBottom');
-        app.vent.bind('page:onBottom',this.onBottom, this);
     },
-    onBottom: function(){
-        if(this.collection.nextPage()===false){
-            app.vent.unbind('page:onBottom');
-        }
-    },
+//    onBottom: function(){
+//        if(this.collection.nextPage()===false){
+//            app.vent.unbind('page:onBottom');
+//        }
+//    },
     initialize: function(){
         this.masonry_enabled = false;
+        this.initializePaginated();
+        this.on("item:removed", function(viewInstance){
+            if(this.masonry_enabled && $('#snap_list li').length>0){
+                $('#snap_list').masonry('reload');
+            }
+        });
     },
     events: {
       'sort_collection':'sortCollection'
     },
     onDomRefresh: function(){
-        // manipulate the `el` here. it's already
-        // been rendered, and is full of the view's
-        // HTML, ready to go.
-    },
-    sortCollection: function(e,field_name){
-        this.collection.sort_by(field_name);
-        switch(field_name){
-            case "-modified_on":
-                this.collection.comparator = this.collection.newestComparator;
-                $('#snap_list').sortable( "disable" );
-                break;
-            case "modified_on":
-                this.collection.comparator = this.collection.oldestComparator;
-                $('#snap_list').sortable( "disable" );
-                break;
-            default:
-                this.collection.comparator = this.collection.defaultComparator;
-                $('#snap_list').sortable( "enable" );
-                break;
-        }
-        this.collection.sort();
-        if(this.masonry_enabled){
+        console.log('dom refreshed')
+        if(this.masonry_enabled && $('#snap_list li').length>0){
             $('#snap_list').masonry('reload');
         }
-    },
-    showAddItemView: function(obj){
-        if(this.$el.find('#add_snapshot').length<1){
-            var model = new A.model.Snapshot;
-            model.set('text','',{silent: true});
-            model.set('ordering',-1,{silent: true});
-            model.set('img_tile_src','/img/new_idea.png',{silent: true});
-            model.set('idea',obj.idea_id,{silent: true});
-            model.set('user',USER,{silent: true});
-            model.set('snaps_col',obj.collection,{silent: true});
-            this.addItemView(model, this.addNewItemView, -1);
-        }
-    },
-    onClose: function(){
-        $("#snap_list").sortable("destroy");
-//        app.vent.off('navigate:newSnapshot');
-    },
-    onShow: function(){
-        var self = this;
+        else{
+            var self = this;
             $('#snap_list').masonry({
                 itemSelector : '.snap_tile',
                 columnWidth : 306
             });
             self.masonry_enabled = true;
             $("#snap_list").sortable({
-//                delay: 300,
-//                distance: 15,
                 items: "> li",
                 forcePlaceholderSize: true,
                 handle: ".snapshot_tile_dnd",
@@ -444,22 +408,126 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.CollectionView.extend({
                     self.collection.sort();
                     self.render();
                     $('#snap_list').delay(500).masonry('reload');
-
                 }
             });
+        }
+    },
+    sortCollection: function(e,field_name){
+        this.collection.sort_by(field_name);
+        switch(field_name){
+            case "-modified_on":
+                this.collection.comparator = this.collection.newestComparator;
+                $('#snap_list').sortable( "disable" );
+                break;
+            case "modified_on":
+                this.collection.comparator = this.collection.oldestComparator;
+                $('#snap_list').sortable( "disable" );
+                break;
+            default:
+                this.collection.comparator = this.collection.defaultComparator;
+                $('#snap_list').sortable( "enable" );
+                break;
+        }
+        this.collection.sort();
+//        if(this.masonry_enabled){
+//            $('#snap_list').masonry('reload');
+//        }
+    },
+    showAddItemView: function(obj){
+        if(this.$el.find('#add_snapshot').length<1){
+            var model = new A.model.Snapshot;
+            model.set('text','',{silent: true});
+            model.set('ordering',-1,{silent: true});
+            model.set('img_tile_src','/img/new_idea.png',{silent: true});
+            model.set('idea',obj.idea_id,{silent: true});
+            model.set('user',USER,{silent: true});
+            model.set('snaps_col',obj.collection,{silent: true});
+            this.addItemView(model, this.addNewItemView, -1);
+        }
+    },
+    onClose: function(){
+        $("#snap_list").sortable("destroy");
+        this.off("item:removed");
+//        app.vent.off('navigate:newSnapshot');
+    },
+    onShow: function(){
+//        var self = this;
+//            $('#snap_list').masonry({
+//                itemSelector : '.snap_tile',
+//                columnWidth : 306
+//            });
+//            self.masonry_enabled = true;
+//            $("#snap_list").sortable({
+//                items: "> li",
+//                forcePlaceholderSize: true,
+//                handle: ".snapshot_tile_dnd",
+////                beforeStop: function( event, ui ) {
+////                },
+//                change: function( event, ui ) {
+//                    $('#snap_list').addClass('animated');
+//                    //-4 for the borders
+//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
+//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
+//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
+//                    $(ui.placeholder).css('visibility','visible');
+//                    $('#snap_list').masonry('reload');
+//                },
+////                start: function( event, ui ) {
+////                    $('#snap_list').removeClass('animated');
+////                },
+////                sort: function( event, ui ) {
+////                },
+//                stop: function( event, ui ) {
+//                    $('#snap_list').removeClass('animated');
+//                },
+//                update: function( event, ui ) {
+//                    $('#snap_list li').each(function(index, item){
+//                        $(this).trigger('dnd_refresh', index);
+//                    });
+//                    ui.item.trigger('dnd_save');
+//                    self.collection.sort();
+//                    self.render();
+//                    $('#snap_list').delay(500).masonry('reload');
+//                }
+//            });
     },
     appendHtml: function(collectionView, itemView, index){
+//        console.log(index)
         if(index < 0){
             collectionView.$el.prepend(itemView.el);
         }
-        else{
+        else if(typeof index !== "undefined" && collectionView.$el.find("li").length>1){
+//            if(false){
             if(this.masonry_enabled){
-                collectionView.$el.append(itemView.el).masonry('appended', itemView.$el);
+//                console.log(this.collection.length +' - ' +index)
+                if((index)>7){
+                    collectionView.$el.append(itemView.el).masonry('appended', itemView.$el);
+                }
+                else{
+//                    collectionView.$el.prepend(itemView.el)
+                    collectionView.$el.find("li:nth-child(1)").after(itemView.el);
+                    $('#snap_list').masonry('reload');
+                }
             }
             else{
-                collectionView.$el.append(itemView.el);
+                collectionView.$el.find("li:nth-child("+index+")").after(itemView.el)
             }
         }
+        else{
+            collectionView.$el.append(itemView.el);
+        }
+//        if(index < 0){
+//            collectionView.$el.prepend(itemView.el);
+//        }
+//        else{
+////            if(this.masonry_enabled){
+////                collectionView.$el.append(itemView.el).masonry('reset');
+////                collectionView.$el.append(itemView.el).masonry('appended', itemView.$el);
+////            }
+////            else{
+//                collectionView.$el.append(itemView.el);
+////            }
+//        }
     }
 });
 
@@ -786,12 +854,12 @@ A.view.ideaProfile.addAnswerView = Backbone.Marionette.ItemView.extend({
     },
     newAnswer: function(){
         var text = this.$el.find('.textarea_question').val();
-        console.log(this.obj);
+//        console.log(this.obj);
         if(text){
             this.model.set('text',text,{silent: true});
             this.model.set('user',USER,{silent: true});
             this.model.set('username',USERNAME,{silent: true});
-            console.log('new input');
+//            console.log('new input');
             this.model.ans.add(this.model,{index: 0});
             this.model.save();
             this.$el.find('.textarea_question').val('');
