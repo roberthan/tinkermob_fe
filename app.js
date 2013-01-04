@@ -501,6 +501,9 @@ io.sockets.on('connection', function (socket) {
             subClient.end();
         });
     }
+    socket.on('marco', function(data) {
+        socket.emit('polo',data);
+    });
     socket.on('create', function (data) {
         data = JSON.parse(data);
         request(

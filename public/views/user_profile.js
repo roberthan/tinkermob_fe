@@ -15,6 +15,7 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
         'click .follower_count': 'showFollower',
         'click .support_ideas_count': 'showSupportIdeas',
         'click .ideas_count': 'showIdeas',
+        'click .btn_add_idea': 'addIdea',
         'change .idea_sort': 'sortIdeas',
         'click .user_profile_pg_btn_follow': 'follow',
         'click .user_profile_pg_btn_follow_pressed': 'unFollow'
@@ -112,6 +113,11 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
         if(typeof this.ideas.currentView !== 'undefined'){
             this.ideas.currentView.$el.trigger('sort_collection', this.$el.find('.idea_sort :selected').val());
         }
+    },
+    addIdea: function(e){
+        if(typeof this.ideas.currentView !== 'undefined'){
+            this.ideas.currentView.$el.trigger('add_idea');
+        }
     }
     ,onRender: function(){
         this.showIdeas();
@@ -121,11 +127,13 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
     },
     setFixed: function(){
         if(!this.$el.find('.user_profile_stats_container').hasClass('fixed')){
+            this.$el.find('.user_profile_main_container').addClass('fixed');
             this.$el.find('.user_profile_stats_container').addClass('fixed');
         }
     },
     unSetFixed: function(){
         if(this.$el.find('.user_profile_stats_container').hasClass('fixed')){
+            this.$el.find('.user_profile_main_container').removeClass('fixed');
             this.$el.find('.user_profile_stats_container').removeClass('fixed');
         }
     }
@@ -187,7 +195,8 @@ A.view.userProfile.ListView =  Backbone.Marionette.PaginatedCollectionView.exten
     addNewItemView: A.view.userProfile.addIdeaView,
     className: 'idea_tiles infinite_grid',
     events: {
-        'sort_collection':'sortCollection'
+        'sort_collection':'sortCollection',
+        'add_idea':'addIdea'
     },
     initialize: function(){
 //        this.collection.bind('change', this.render,this);
@@ -222,6 +231,9 @@ A.view.userProfile.ListView =  Backbone.Marionette.PaginatedCollectionView.exten
         model.set('img_tile_src','/img/new_idea.png');
         this.addItemView(model, this.addNewItemView, -1);
     },
+    addIdea: function(){
+        app.vent.trigger('navigate:newIdea');
+    },
     onRender: function(){
         if(USER === this.collection.user){
             this.showAddItemView();
@@ -230,13 +242,14 @@ A.view.userProfile.ListView =  Backbone.Marionette.PaginatedCollectionView.exten
     onClose: function(){
         console.log('off:sub_navigate:newIdea');
         app.vent.unbind('sub_navigate:newIdea');
-    },
-    appendHtml: function(collectionView, itemView, index){
-        if(index < 0){
-            collectionView.$el.prepend(itemView.el);
-        }
-        else{
-            collectionView.$el.append(itemView.el);
-        }
     }
+//    ,
+//    appendHtml: function(collectionView, itemView, index){
+//        if(index < 0){
+//            collectionView.$el.prepend(itemView.el);
+//        }
+//        else{
+//            collectionView.$el.append(itemView.el);
+//        }
+//    }
 });

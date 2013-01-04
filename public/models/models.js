@@ -153,6 +153,7 @@ A.view = A.view || {};
                 return false;
             }
             this.offset = (this.offset - l) || 0;
+            this.offset = Math.max(this.offset,0);
             return this.fetch({add: true, append_to_front:true});
         },
         hasNext: function() {

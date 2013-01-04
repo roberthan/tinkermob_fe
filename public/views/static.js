@@ -100,7 +100,6 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
                 self.$el.find('.upload_progress').attr({value:e.loaded,max:e.total});
             }
         }
-
         var snapshot = this.model;
         snapshot.set('text',text);
         if(this.imageValid===true){
@@ -144,7 +143,9 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
         if(typeof this.model.collection==='undefined'){
             var snaps = this.model.get('snaps_col');
             snapshot.unset('snaps_col');
+            console.log(snaps.length)
             snaps.add(snapshot);
+            console.log(snaps.length)
         }
         snapshot.save();
         if(this.imageValid!==true){

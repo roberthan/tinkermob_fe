@@ -23,10 +23,17 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         'click .btn_support': 'supportIdea',
         'click .btn_support_pressed': 'unSupportIdea',
         'click .btn_share': 'shareIdea',
+        'click .btn_add_snapshot': 'addSnapshot',
         'change .snapshot_sort': 'sortSnapshots',
         'change .question_sort': 'sortQuestions',
         'click .link_tag': 'navigateTag'
 //        ,'click #toggle_edit_mode': 'editMode'
+    },
+    addSnapshot: function(e){
+        if(typeof this.snapshots.currentView !== 'undefined'){
+            console.log(this.snapshots.currentView.$el)
+            this.snapshots.currentView.$el.trigger('add_snapshot');
+        }
     },
     sortSnapshots: function(e){
         if(typeof this.snapshots.currentView !== 'undefined'){
@@ -118,11 +125,13 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     setFixed: function(){
         if(!this.$el.find('.idea_profile_btn_container').hasClass('fixed')){
             this.$el.find('.idea_profile_btn_container').addClass('fixed');
+            this.$el.find('.idea_profile_main').addClass('fixed');
         }
     },
     unSetFixed: function(){
         if(this.$el.find('.idea_profile_btn_container').hasClass('fixed')){
             this.$el.find('.idea_profile_btn_container').removeClass('fixed');
+            this.$el.find('.idea_profile_main').removeClass('fixed');
         }
     },
     onClose: function(){
@@ -235,9 +244,11 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
         e.stopPropagation();
     },
     dndSave: function(e){
+        console.log('tri')
         this.model.save();
     },
     dndRefresh: function(e,new_ordering){
+        console.log('triq')
         this.model.set({ordering:new_ordering},{slient:true});
     },
     setIdeaImage: function(e){
@@ -348,90 +359,97 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             $('#snap_list').addClass('animated');
         }
     },
-//    onBottom: function(){
-//        if(this.collection.nextPage()===false){
-//            app.vent.unbind('page:onBottom');
-//        }
-//    },
     initialize: function(){
         this.masonry_enabled = false;
-        this.initializePaginated();
+        var self = this;
         this.on("item:removed", function(viewInstance){
             if(this.masonry_enabled && $('#snap_list li').length>0){
-                $('#snap_list').masonry('reload');
+                self.$el.masonry('reload');
             }
         });
+        this.collection.bind('change', this.render,this);
+        this.initializePaginated();
     },
     events: {
-      'sort_collection':'sortCollection'
+      'sort_collection':'sortCollection',
+      'add_snapshot':'addSnapshot'
     },
     onDomRefresh: function(){
         console.log('dom refreshed')
-        if(this.masonry_enabled && $('#snap_list li').length>0){
-            $('#snap_list').masonry('reload');
+        if(this.masonry_enabled && this.$el.find('li').length>0){
+            this.$el.masonry('reload');
         }
-        else{
-            var self = this;
-            $('#snap_list').masonry({
-                itemSelector : '.snap_tile',
-                columnWidth : 306
-            });
-            self.masonry_enabled = true;
-            $("#snap_list").sortable({
-                items: "> li",
-                forcePlaceholderSize: true,
-                handle: ".snapshot_tile_dnd",
-//                beforeStop: function( event, ui ) {
+//        else{
+//            var self = this;
+//            this.$el.masonry({
+//                itemSelector : '.snap_tile',
+//                columnWidth : 306
+//            });
+//            self.masonry_enabled = true;
+//            this.$el.sortable({
+//                items: "> li",
+//                forcePlaceholderSize: true,
+//                handle: ".snapshot_tile_dnd",
+////                beforeStop: function( event, ui ) {
+////                },
+//                change: function( event, ui ) {
+//                    self.$el.find('#snap_list').addClass('animated');
+//                    //-4 for the borders
+//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
+//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
+//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
+//                    $(ui.placeholder).css('visibility','visible');
+//                    self.$el.masonry('reload');
 //                },
-                change: function( event, ui ) {
-                    $('#snap_list').addClass('animated');
-                    //-4 for the borders
-                    $(ui.placeholder).width($(ui.placeholder).width()-4);
-                    $(ui.placeholder).height($(ui.placeholder).height()-4);
-                    $(ui.placeholder).css('border','2px dotted #FFDABF');
-                    $(ui.placeholder).css('visibility','visible');
-                    $('#snap_list').masonry('reload');
-                },
-//                start: function( event, ui ) {
-//                    $('#snap_list').removeClass('animated');
+////                start: function( event, ui ) {
+////                    $('#snap_list').removeClass('animated');
+////                },
+////                sort: function( event, ui ) {
+////                },
+//                stop: function( event, ui ) {
+//                    self.$el.removeClass('animated');
 //                },
-//                sort: function( event, ui ) {
-//                },
-                stop: function( event, ui ) {
-                    $('#snap_list').removeClass('animated');
-                },
-                update: function( event, ui ) {
-                    $('#snap_list li').each(function(index, item){
-                        $(this).trigger('dnd_refresh', index);
-                    });
-                    ui.item.trigger('dnd_save');
-                    self.collection.sort();
-                    self.render();
-                    $('#snap_list').delay(500).masonry('reload');
-                }
-            });
-        }
+//                update: function( event, ui ) {
+//                    self.$el.find('li').each(function(index, item){
+//                        $(this).trigger('dnd_refresh', index);
+//                    });
+//                    ui.item.trigger('dnd_save');
+//                    self.collection.sort();
+//                    self.render();
+//                    self.$el.delay(500).masonry('reload');
+//                }
+//            });
+//        }
     },
     sortCollection: function(e,field_name){
         this.collection.sort_by(field_name);
         switch(field_name){
             case "-modified_on":
                 this.collection.comparator = this.collection.newestComparator;
-                $('#snap_list').sortable( "disable" );
+                this.$el.sortable( "disable" );
                 break;
             case "modified_on":
                 this.collection.comparator = this.collection.oldestComparator;
-                $('#snap_list').sortable( "disable" );
+                this.$el.sortable( "disable" );
                 break;
             default:
                 this.collection.comparator = this.collection.defaultComparator;
-                $('#snap_list').sortable( "enable" );
+                this.$el.sortable( "enable" );
                 break;
         }
         this.collection.sort();
 //        if(this.masonry_enabled){
 //            $('#snap_list').masonry('reload');
 //        }
+    },
+    addSnapshot: function(){
+        var model = new A.model.Snapshot;
+            model.set('text','',{silent: true});
+            model.set('img_tile_src','/img/new_idea.png',{silent: true});
+            model.set('idea',this.collection.idea.id,{silent: true});
+            model.set('user',USER,{silent: true});
+        model.set('snaps_col',this.collection,{silent: true});
+        app.vent.trigger('navigate:newSnapshot', model);
     },
     showAddItemView: function(obj){
         if(this.$el.find('#add_snapshot').length<1){
@@ -441,55 +459,67 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             model.set('img_tile_src','/img/new_idea.png',{silent: true});
             model.set('idea',obj.idea_id,{silent: true});
             model.set('user',USER,{silent: true});
-            model.set('snaps_col',obj.collection,{silent: true});
+//            console.log(JSON.stringify(model));
+//            console.log(this.collection);
+            model.set('snaps_col',this.collection,{silent: true});
             this.addItemView(model, this.addNewItemView, -1);
         }
     },
     onClose: function(){
-        $("#snap_list").sortable("destroy");
+        this.$el.sortable("destroy");
         this.off("item:removed");
 //        app.vent.off('navigate:newSnapshot');
     },
-    onShow: function(){
-//        var self = this;
-//            $('#snap_list').masonry({
-//                itemSelector : '.snap_tile',
-//                columnWidth : 306
-//            });
-//            self.masonry_enabled = true;
-//            $("#snap_list").sortable({
-//                items: "> li",
-//                forcePlaceholderSize: true,
-//                handle: ".snapshot_tile_dnd",
-////                beforeStop: function( event, ui ) {
-////                },
-//                change: function( event, ui ) {
-//                    $('#snap_list').addClass('animated');
-//                    //-4 for the borders
-//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
-//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
-//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
-//                    $(ui.placeholder).css('visibility','visible');
-//                    $('#snap_list').masonry('reload');
+    onShow: function(view){
+//        if(this.masonry_enabled && $('#snap_list li').length>0){
+//            $('#snap_list').masonry('reload');
+//        }
+//        else{
+            var self = this;
+//        debugger;
+        this.$el.masonry({
+                itemSelector : '.snap_tile',
+                columnWidth : 306
+            });
+            self.masonry_enabled = true;
+        this.$el.sortable({
+                items: "> li",
+                forcePlaceholderSize: true,
+                handle: ".snapshot_tile_dnd",
+//                beforeStop: function( event, ui ) {
 //                },
-////                start: function( event, ui ) {
-////                    $('#snap_list').removeClass('animated');
-////                },
-////                sort: function( event, ui ) {
-////                },
-//                stop: function( event, ui ) {
+                change: function( event, ui ) {
+                    self.$el.addClass('animated');
+                    //-4 for the borders
+                    $(ui.placeholder).width($(ui.placeholder).width()-4);
+                    $(ui.placeholder).height($(ui.placeholder).height()-4);
+                    $(ui.placeholder).css('border','2px dotted #FFDABF');
+                    $(ui.placeholder).css('visibility','visible');
+                    self.$el.masonry('reload');
+                },
+//                start: function( event, ui ) {
 //                    $('#snap_list').removeClass('animated');
 //                },
-//                update: function( event, ui ) {
-//                    $('#snap_list li').each(function(index, item){
-//                        $(this).trigger('dnd_refresh', index);
-//                    });
-//                    ui.item.trigger('dnd_save');
-//                    self.collection.sort();
-//                    self.render();
-//                    $('#snap_list').delay(500).masonry('reload');
-//                }
-//            });
+//                sort: function( event, ui ) {
+//                },
+                stop: function( event, ui ) {
+                   self.$el.removeClass('animated');
+                },
+                update: function( event, ui ) {
+//                    console.log(self.$el.find('li'))
+                    console.log(ui.item)
+
+                    self.$el.find('li').each(function(index, item){
+                        $(this).trigger('dnd_refresh', index);
+                    });
+//                    debugger;
+                    $(ui.item).trigger('dnd_save');
+                    self.collection.sort();
+                    self.render();
+                    self.$el.delay(500).masonry('reload');
+                }
+            });
+//        }
     },
     appendHtml: function(collectionView, itemView, index){
 //        console.log(index)
@@ -506,7 +536,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
                 else{
 //                    collectionView.$el.prepend(itemView.el)
                     collectionView.$el.find("li:nth-child(1)").after(itemView.el);
-                    $('#snap_list').masonry('reload');
+                   collectionView.$el.masonry('reload');
                 }
             }
             else{
@@ -516,18 +546,6 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
         else{
             collectionView.$el.append(itemView.el);
         }
-//        if(index < 0){
-//            collectionView.$el.prepend(itemView.el);
-//        }
-//        else{
-////            if(this.masonry_enabled){
-////                collectionView.$el.append(itemView.el).masonry('reset');
-////                collectionView.$el.append(itemView.el).masonry('appended', itemView.$el);
-////            }
-////            else{
-//                collectionView.$el.append(itemView.el);
-////            }
-//        }
     }
 });
 

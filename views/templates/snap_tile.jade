@@ -35,11 +35,13 @@ script#new_snapshot_template(type="text/template")
                 input(name='file', type='file').upload_file
                 br
                 textarea.textarea_input.textarea_details(placeholder='Details (optional)') <%= text %>
+                <% if(typeof revision !== 'undefined'){ %>
                 div.toggle_delete.toggle_container
                     div.toggle_label Delete Snapshot
                     div.toggle
                         img.button(src='#{img_path}/on_off.png', height='32px')
                     div.toggle_selection_label.toggle_selection_delete
+                <% } %>
             //progress.upload_progress
             div.btn-container
                 span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>

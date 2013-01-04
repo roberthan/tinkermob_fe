@@ -57,6 +57,7 @@ app.addInitializer(function(){
         app.vent.bind('navigate:settings', app.controller.settings);
         app.vent.bind('navigate:newIdea', app.controller.newIdea);
         app.vent.bind('navigate:newSnapshot', app.controller.newSnapshot);
+        Backbone.startSocket();
     }
     else{
         app.vent.bind('navigate:login', app.controller.login);
@@ -179,6 +180,7 @@ app.controller = {
                     var snapshots;
                     var self = this;
                     snapshots = new A.model.Snapshots();
+                    snapshots.idea = model
                     var questions;
                     questions = new A.model.Questions();
                     questions.filtrate({filter:{'idea':this.model.id}});
@@ -191,8 +193,8 @@ app.controller = {
                         success: function(snapshots,res){
 //                            debugger;
 //                            console.log(snapshots);
-                            if(snapshots.length>0){
-//                            if(snapshots.SYNC_STATE!=="syncing" && typeof self.snapshots != 'undefined' ){
+//                            if(snapshots.length>0){
+                            if(snapshots.SYNC_STATE==="ready" && typeof self.snapshots != 'undefined' ){
                                 self.snapshots.show(snapshotView);
                             }
                         }});

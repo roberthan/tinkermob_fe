@@ -1,6 +1,10 @@
 script#idea_profile_template(type="text/template")
     div.idea_profile_main#idea_details
     div.idea_profile_btn_container
+        <% if(USER === user){ %>
+        div.idea_profile_add_snapshot.btn_add_snapshot
+            div.idea_profile_add_snapshot_pic + Snapshot
+        <% } %>
         div.idea_profile_snapshots_settings_container
             div.idea_profile_snapshots_settings_text.left Sort by
             select.snapshot_sort

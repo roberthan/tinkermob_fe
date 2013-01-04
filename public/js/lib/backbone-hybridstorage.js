@@ -149,7 +149,7 @@ var vent = _.extend({}, Backbone.Events);
                     var new_data=[];
                     var final_data=[];
 //                    data.responseText = data.responseText || data.responseText
-                    console.log(data.responseText)
+//                    console.log(data.responseText)
                     if(!_.isArray(data.responseText.objects)){
 //                        new_data.push(JSON.parse(data.responseText));
                         new_data.push(data.responseText);
@@ -187,7 +187,6 @@ var vent = _.extend({}, Backbone.Events);
                             var temp = {}
                             temp.objects=final_data
                             temp.meta = data.responseText.meta || {};
-                            console.log(data.responseText.meta)
                             options.success(temp);
 //                            if(typeof final_data[0] !== 'undefined'){
 //                                options.success(final_data);
@@ -206,7 +205,6 @@ var vent = _.extend({}, Backbone.Events);
         },
         // Retrieve a model from `this.data` by id.
         find: function(model, options) {
-            console.log('find one');
             var objects=[];
             if(options.useCache === true){
                 objects.push(JSON.parse(this.localStorage().getItem(this.name+"-"+model.id)));
@@ -318,16 +316,43 @@ var vent = _.extend({}, Backbone.Events);
     };
     //original
     Backbone.ajaxSync = Backbone.sync;
-//    Backbone.djangoSync = Backbone.sync;
-
+    Backbone.sync_connection='ajax';
     //web socket or ajax
     Backbone.djangoSync =function(method, model, options ){
-        var data = {};
-         data.url= options.url || model.url();
         //adds slash for django
-        if(data.url.indexOf('?')===-1){
-            data.url=(data.url.charAt(data.url.length - 1) == '/' ? data.url:data.url+'/');
+        var url = options.url || model.url();
+        if(url.indexOf('?')===-1){
+            if(url.charAt(url.length - 1) !== '/'){
+                options.url=url+'/';
+            }
+            else{
+                options.url=url;
+            }
         }
+        if(method !== 'read'){
+            //class the model's specific django data reduction function
+            if(typeof model.djangoSerial !== 'undefined'){
+                options.data = JSON.stringify(model.djangoSerial());
+                options.contentType = 'application/json'
+            }
+        }
+        switch(Backbone.sync_connection){
+            case "socket_io":
+                Backbone.socketSync(method,model,options);
+                break;
+            default:
+                Backbone.ajaxSync(method,model,options);
+                break;
+        }
+//        Backbone.socketSync(method,model,options);
+//        console.log('emit- '+method +' data_url: ' +options.url);
+//        console.log(options.data);
+        $('#loading_bar').show();
+    }
+    Backbone.socketSync =function(method, model, options ){
+        var socket = Backbone.socket || Backbone.startSocket();
+        var data = {};
+        data.url= options.url;
         if(method !== 'read'){
             //class the model's specific django data reduction function
             if(typeof model.djangoSerial !== 'undefined'){
@@ -337,16 +362,13 @@ var vent = _.extend({}, Backbone.Events);
                 data.body = model || {};
             }
         }
-        Backbone.ajaxSync(method,model,options);
-                console.log('data body: '+JSON.stringify(data.body));
-
-//        console.log('emit- '+method +' data_url: ' +data.url);
-        $('#loading_bar').show();
+        socket.emit(method, JSON.stringify(data));
         var request_timestamp = new Date().getTime();
-//        vent.on(method+':'+data.url,function(data) {
-//            options.complete(data, request_timestamp);//success(data);
-//        });
+        vent.on(method+':'+data.url,function(data) {
+            options.complete(data, request_timestamp);//success(data);
+        });
     }
+// OLD Connection code w/ socket io only, for reference
 //    Backbone.djangoSync =function(method, model, options ){
 //        var socket = Backbone.socket || Backbone.startSocket();
 //        var data = {};
@@ -386,13 +408,24 @@ var vent = _.extend({}, Backbone.Events);
            vent.trigger(data.method+':'+data.url,data);
         });
         Backbone.socket.on('reconnect', function(){
-//            alert('connection reconnected');
+            console.log('connection reconnected');
             vent.trigger("ajaxSync");
 // console.log("Connection " + socket.id + " terminated.");
         });
-//        Backbone.socket.on('disconnect', function(){
-//            alert('connection terminated');
-//        });
+        Backbone.socket.on('disconnect', function(){
+            console.log('connection terminated');
+            Backbone.sync_connection='ajax';
+        });
+        var test_data = Date.now();
+        console.log('test connection');
+        Backbone.socket.emit('marco',test_data);
+        //check if not mobile
+        Backbone.socket.on('polo', function(data){
+            if(data===test_data){
+                console.log('upgrade to');
+//                Backbone.sync_connection='socket_io';
+            }
+        });
         return Backbone.socket;
     }
 

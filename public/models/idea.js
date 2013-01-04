@@ -49,6 +49,10 @@ A.view = A.view || {};
             delete json.count_snapshots;
             delete json.is_supporter;
             delete json.username;
+            delete json.icon_image;
+            delete json.original_image;
+            delete json.user_icon_image;
+            delete json.tile_image;
             return json;
         }
     });
@@ -67,7 +71,7 @@ A.view = A.view || {};
 //            this.syncOn();
         },
         defaultComparator: function(item) {
-            return (-1*model.get('count_supporters'));
+            return (-1*item.get('count_supporters'));
         },
         newestComparator: function(item) {
             return item.get("-modified_on");

@@ -188,15 +188,31 @@ A.view.menu.SelfProfile = Backbone.Marionette.ItemView.extend({//Backbone.dragAn
 
 Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionView.extend({
     initializePaginated: function(){
-        app.vent.bind('navigate:Next',this.nextPage, this);
-        app.vent.bind('navigate:Prev',this.prevPage, this);
+        var self= this;
+        this.on("render", function(){
+            A.view.helper.unbindNextPrev();
+            app.vent.bind('navigate:Next',this.nextPage, self);
+            app.vent.bind('navigate:Prev',this.prevPage, self);
+            if(this.collection.hasPrevious()){
+                $('.btn_prev').show();
+            }
+            if(this.collection.hasNext()){
+                $('.btn_next').show();
+            }
+        });
         $('.btn_next').show();
         this.on("collection:before:close", function(){
             A.view.helper.unbindNextPrev();
         });
         this.initial_page = true;
         this.is_previous = false;
-//        this.on("before:item:added", function(viewInstance){
+        this.on("after:item:added", function(viewInstance){
+            if(this.collection.hasPrevious()){
+                $('.btn_prev').show();
+            }
+            if(this.collection.hasNext()){
+                $('.btn_next').show();
+            }
 //            var to_be_removed = this.collection.length-16;
 //            if(to_be_removed>0){
 //                if(this.is_previous){
@@ -208,7 +224,7 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
 //                console.log('removed');
 //                console.log(this.collection.length);
 //            }
-//        });
+        });
     },
     clearOld: function(is_previous){
         var to_be_removed = this.collection.length-8;
@@ -233,18 +249,17 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
         if(this.collection.hasNext()){
             this.clearOld(false);
             if(this.is_previous){
-                this.collection.nextPage(16)
+                this.collection.nextPage(16);
+                $('.btn_prev').show();
             }
             else{
-                this.collection.nextPage()
+                this.collection.nextPage();
             }
-        }
-        else{
-            $('.btn_next').hide();
         }
         if(this.collection.hasPrevious()){
             $('.btn_prev').show();
         }
+        $('.btn_next').hide();
         this.is_previous = false;
     },
     prevPage: function(){
@@ -255,23 +270,21 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
             }
             else{
                 this.collection.previousPage(16);
+                $('.btn_next').show();
             }
-        }
-        else{
-            $('.btn_prev').hide();
         }
         if(this.collection.hasNext()){
             $('.btn_next').show();
         }
+        $('.btn_prev').hide();
         this.is_previous = true;
     },
     appendHtml: function(collectionView, itemView, index){
-//        console.log(this.collection.pluck('count_supporters'))
         if(index <= 0){
             collectionView.$el.prepend(itemView.el);
         }
         else if(typeof index !== "undefined" && collectionView.$el.find("li").length>1){
-            collectionView.$el.find("li:nth-child("+index+")").after(itemView.el)
+            collectionView.$el.find("li:nth-child("+index+")").after(itemView.el);
         }
         else{
             collectionView.$el.append(itemView.el);

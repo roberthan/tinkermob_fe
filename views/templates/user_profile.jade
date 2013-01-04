@@ -14,6 +14,10 @@ script#user_profile_template(type="text/template")
             <% } %>
         div.user_profile_bio <%= bio %>
     div.user_profile_stats_container
+        <% if(USER.toString() === id){ %>
+        div.user_profile_add_idea.btn_add_idea
+            div.user_profile_add_idea_pic + Idea
+        <% } %>
         div.ideas_settings
             div.ideas_settings_container_text Sort by
             select.idea_sort
@@ -33,7 +37,6 @@ script#user_profile_template(type="text/template")
             div.follower_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_followers %>
                 div.text Followers
-
     div#user_ideas
 
 script#settings_template(type="text/template")
