@@ -7,6 +7,7 @@
     left: 0;
     top: 0;
     background: radial-gradient(center, ellipse cover,  rgba(127,127,127,0) 0%,rgba(127,127,127,0.9) 100%);
+    z-index: 50;
 }
 
 .window-container {
@@ -69,4 +70,31 @@
 .window-container-visible {
     transform:  scale(1);
     opacity: 1;
+}
+
+/*dnd_snapshots*/
+.dnd_snapshot_list{
+    list-style: none;
+    padding: 0 16px;
+}
+.dnd_snapshot_item{
+text-align: left;
+    margin: 8px 2%;
+    width: 96%;
+    height: 48px;
+    border: 1px solid #daa520;
+}
+.dnd_snapshot_dnd_container{
+    float: left;
+    cursor: pointer;
+    padding: 4px;
+}
+.dnd_snapshot_img_container{
+    float: left;
+    padding: 0 4px;
+}
+.dnd_snapshot_text_container{
+    float: left;
+    padding:8px 4px;
+
 }

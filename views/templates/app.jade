@@ -42,3 +42,18 @@ script#follow_template(type="text/template")
             #follow_items
             div.btn-container
                 span.btn.btn_cancel Cancel
+
+script#dnd_order_snapshot_template(type="text/template")
+    div#input_modal.overlay-container
+        div.window-container.zoomin
+            h3.header  Snapshots
+            #dnd_snapshot_list_container
+            div.btn-container
+                span.btn.btn_cancel Cancel
+
+script#dnd_snapshot_item_template(type="text/template")
+    div.dnd_snapshot_dnd_container Drag Here
+    div.dnd_snapshot_img_container
+        img.dnd_snapshot_img(src!="<%= tile_image %>", width='48px')
+    div.dnd_snapshot_text_container <%= text %>
+

@@ -57,6 +57,7 @@ app.addInitializer(function(){
         app.vent.bind('navigate:settings', app.controller.settings);
         app.vent.bind('navigate:newIdea', app.controller.newIdea);
         app.vent.bind('navigate:newSnapshot', app.controller.newSnapshot);
+        app.vent.bind('navigate:dndOrder', app.controller.dndOrder);
         Backbone.startSocket();
     }
     else{
@@ -418,8 +419,16 @@ app.controller = {
         var layout = new A.view.static.follow({follows_col:follows});
         app.mainApp.modal_box.show(layout);
 //        type = $(this).attr('data-type');
-        var path = '/about'+'?p='+window.location.pathname;
-        app.router.navigate(path);
+//        var path = '/about'+'?p='+window.location.pathname;
+//        app.router.navigate(path);
+    },
+    dndOrder: function(collection){
+        console.log(collection);
+        var layout = new A.view.static.dndOrder({collection:collection});
+        app.mainApp.modal_box.show(layout);
+//        type = $(this).attr('data-type');
+//        var path = '/about'+'?p='+window.location.pathname;
+//        app.router.navigate(path);
     }
 };
 

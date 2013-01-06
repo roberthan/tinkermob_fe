@@ -24,6 +24,7 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         'click .btn_support_pressed': 'unSupportIdea',
         'click .btn_share': 'shareIdea',
         'click .btn_add_snapshot': 'addSnapshot',
+        'click .btn_dnd_order': 'dndOrder',
         'change .snapshot_sort': 'sortSnapshots',
         'change .question_sort': 'sortQuestions',
         'click .link_tag': 'navigateTag'
@@ -31,8 +32,12 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     },
     addSnapshot: function(e){
         if(typeof this.snapshots.currentView !== 'undefined'){
-            console.log(this.snapshots.currentView.$el)
             this.snapshots.currentView.$el.trigger('add_snapshot');
+        }
+    },
+    dndOrder: function(e){
+        if(typeof this.snapshots.currentView !== 'undefined' && this.model.get('user')===USER){
+            this.snapshots.currentView.$el.trigger('dnd_order');
         }
     },
     sortSnapshots: function(e){
@@ -356,7 +361,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
         //check comparator, hide drag container if it's not enabled
         if(this.collection.comparator == this.collection.newestComparator||this.collection.comparator == this.collection.oldestComparator){
             this.$el.find(".dnd-container").hide();
-            $('#snap_list').addClass('animated');
+//            $('#snap_list').addClass('animated');
         }
     },
     initialize: function(){
@@ -372,7 +377,11 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
     },
     events: {
       'sort_collection':'sortCollection',
-      'add_snapshot':'addSnapshot'
+      'add_snapshot':'addSnapshot',
+      'dnd_order':'dndOrder'
+    },
+    dndOrder: function(e){
+        app.vent.trigger('navigate:dndOrder', this.collection);
     },
     onDomRefresh: function(){
         console.log('dom refreshed')
@@ -466,7 +475,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
         }
     },
     onClose: function(){
-        this.$el.sortable("destroy");
+//        this.$el.sortable("destroy");
         this.off("item:removed");
 //        app.vent.off('navigate:newSnapshot');
     },
@@ -482,44 +491,43 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
                 columnWidth : 306
             });
             self.masonry_enabled = true;
-        this.$el.sortable({
-                items: "> li",
-                forcePlaceholderSize: true,
-                handle: ".snapshot_tile_dnd",
-//                beforeStop: function( event, ui ) {
+//        this.$el.sortable({
+//                items: "> li",
+//                forcePlaceholderSize: true,
+//                handle: ".snapshot_tile_dnd",
+////                beforeStop: function( event, ui ) {
+////                },
+//                change: function( event, ui ) {
+//                    self.$el.addClass('animated');
+//                    //-4 for the borders
+//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
+//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
+//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
+//                    $(ui.placeholder).css('visibility','visible');
+//                    self.$el.masonry('reload');
 //                },
-                change: function( event, ui ) {
-                    self.$el.addClass('animated');
-                    //-4 for the borders
-                    $(ui.placeholder).width($(ui.placeholder).width()-4);
-                    $(ui.placeholder).height($(ui.placeholder).height()-4);
-                    $(ui.placeholder).css('border','2px dotted #FFDABF');
-                    $(ui.placeholder).css('visibility','visible');
-                    self.$el.masonry('reload');
-                },
-//                start: function( event, ui ) {
-//                    $('#snap_list').removeClass('animated');
+////                start: function( event, ui ) {
+////                    $('#snap_list').removeClass('animated');
+////                },
+////                sort: function( event, ui ) {
+////                },
+//                stop: function( event, ui ) {
+//                   self.$el.removeClass('animated');
 //                },
-//                sort: function( event, ui ) {
-//                },
-                stop: function( event, ui ) {
-                   self.$el.removeClass('animated');
-                },
-                update: function( event, ui ) {
-//                    console.log(self.$el.find('li'))
-                    console.log(ui.item)
-
-                    self.$el.find('li').each(function(index, item){
-                        $(this).trigger('dnd_refresh', index);
-                    });
-//                    debugger;
-                    $(ui.item).trigger('dnd_save');
-                    self.collection.sort();
-                    self.render();
-                    self.$el.delay(500).masonry('reload');
-                }
-            });
-//        }
+//                update: function( event, ui ) {
+////                    console.log(self.$el.find('li'))
+//                    console.log(ui.item)
+//
+//                    self.$el.find('li').each(function(index, item){
+//                        $(this).trigger('dnd_refresh', index);
+//                    });
+////                    debugger;
+//                    $(ui.item).trigger('dnd_save');
+//                    self.collection.sort();
+//                    self.render();
+//                    self.$el.delay(500).masonry('reload');
+//                }
+//            });
     },
     appendHtml: function(collectionView, itemView, index){
 //        console.log(index)
@@ -527,16 +535,16 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             collectionView.$el.prepend(itemView.el);
         }
         else if(typeof index !== "undefined" && collectionView.$el.find("li").length>1){
-//            if(false){
+    //            if(false){
             if(this.masonry_enabled){
-//                console.log(this.collection.length +' - ' +index)
+    //                console.log(this.collection.length +' - ' +index)
                 if((index)>7){
                     collectionView.$el.append(itemView.el).masonry('appended', itemView.$el);
                 }
                 else{
-//                    collectionView.$el.prepend(itemView.el)
+    //                    collectionView.$el.prepend(itemView.el)
                     collectionView.$el.find("li:nth-child(1)").after(itemView.el);
-                   collectionView.$el.masonry('reload');
+                    collectionView.$el.masonry('reload');
                 }
             }
             else{

@@ -438,10 +438,7 @@ A.view.static.follow = Backbone.Marionette.Layout.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        var path = gup('p');
-        if(typeof path !== 'undefined'){
-            app.router.navigate(path);
-        }
+        A.view.helper.setPrevURL(app.router);
         this.close();
     }
 });
@@ -491,4 +488,168 @@ A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
 A.view.static.UserListView =  Backbone.Marionette.CollectionView.extend({
     id: 'user_list',
     itemView : A.view.static.userDetailView
+});
+
+A.view.static.follow = Backbone.Marionette.Layout.extend({
+    template: "#follow_template",
+    regions: {
+        follows: "#follow_items"
+//        ,supporters: "#supporters"
+    },
+    events:{
+        'click .btn_cancel': 'closeModal'
+    },
+    initialize: function(options){
+        this.follows_col = options.follows_col;
+    },
+    onRender: function(){
+        this.$el.find('.overlay-container').fadeIn(function() {
+//        $('.overlay-container').fadeIn(function() {
+            window.setTimeout(function(){
+                $('.window-container').addClass('window-container-visible');
+            }, 100);
+        });
+        var list_view = new A.view.static.UserListView({collection:this.follows_col});
+        this.follows.show(list_view);
+    },
+    closeModal: function(){
+        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        A.view.helper.setPrevURL(app.router);
+        this.close();
+    }
+});
+
+A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
+    tagName: 'div',
+//    className: 'user_detail',
+    template: '#user_list_template',
+    events:{
+        'click .btn_follow': 'follow',
+        'click .btn_follow_pressed': 'unFollow'
+    },
+    initialize: function(){
+        this.model.bind('change', this.render, this);
+    },
+    follow: function(){
+        this.$el.find('.btn_follow').removeClass('btn_follow').addClass('btn_follow_pressed');
+        A.view.helper.setFollow(1,this.model).save();
+    },
+    unFollow: function(){
+        this.$el.find('.btn_follow_pressed').removeClass('btn_follow_pressed').addClass('btn_follow');
+        A.view.helper.setFollow(0,this.model).save();
+    }
+    //moved to helper
+//    setFollow: function(is_active){
+//        if(typeof is_active === 'undefined'){
+//            is_active = 1;
+//        }
+//        var following = new A.model.supportFollowing();
+//        following.set('user', this.model.get('user'));
+//        following.set('is_active', is_active);
+//        this.model.set('is_following',is_active,{silent: true});
+//        app.follows_col.add(following ,{silent: true});
+//        var temp = app.tinker.owner.get('count_followings');
+//        if(is_active === 1){
+//           temp = temp +1;
+//        }
+//        else{
+//            temp = temp - 1;
+//        }
+//        app.tinker.owner.set('count_followings', temp);
+//        //TODO delete itself on save
+//        return following
+//    }
+});
+
+A.view.static.UserListView =  Backbone.Marionette.CollectionView.extend({
+    id: 'user_list',
+    itemView : A.view.static.userDetailView
+});
+
+A.view.static.dndOrder = Backbone.Marionette.Layout.extend({
+    template: "#dnd_order_snapshot_template",
+    regions: {
+        snapshots: "#dnd_snapshot_list_container"
+    },
+    events:{
+        'click .btn_cancel': 'closeModal'
+    },
+    initialize: function(options){
+        this.col = options.collection;
+    },
+    onRender: function(){
+        this.$el.find('.overlay-container').fadeIn(function() {
+//        $('.overlay-container').fadeIn(function() {
+            window.setTimeout(function(){
+                $('.window-container').addClass('window-container-visible');
+            }, 100);
+        });
+        var list_view = new A.view.static.OrderSnapListView({collection:this.col});
+        this.snapshots.show(list_view);
+    },
+    closeModal: function(){
+        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        A.view.helper.setPrevURL(app.router);
+        this.close();
+    }
+});
+
+A.view.static.OrderSnapView = Backbone.Marionette.ItemView.extend({
+    tagName: 'li',
+    className:"dnd_snapshot_item",
+    template: '#dnd_snapshot_item_template',
+    events:{
+//        'click .btn_follow': 'follow',
+//        'click .btn_follow_pressed': 'unFollow'
+    },
+    initialize: function(){
+        this.model.bind('change', this.render, this);
+    }
+});
+
+A.view.static.OrderSnapListView =  Backbone.Marionette.CollectionView.extend({
+//    id: 'user_list',
+    tagName: 'ul',
+    className:"dnd_snapshot_list",
+    itemView : A.view.static.OrderSnapView,
+    onClose: function(){
+//        this.$el.sortable("destroy");
+//        this.off("item:removed");
+    },
+    onShow: function(view){
+        var self = this;
+        this.$el.sortable({
+                items: "> li",
+            scroll:false,
+                forcePlaceholderSize: true,
+                handle: ".dnd_snapshot_dnd_container",
+//                beforeStop: function( event, ui ) {
+//                },
+                change: function( event, ui ) {
+//                    self.$el.addClass('animated');
+//                    //-4 for the borders
+//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
+//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
+//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
+//                    $(ui.placeholder).css('visibility','visible');
+//                    self.$el.masonry('reload');
+                },
+                start: function( event, ui ) {
+                },
+                sort: function( event, ui ) {
+                },
+                stop: function( event, ui ) {
+                },
+                update: function( event, ui ) {
+//                    console.log(self.$el.find('li'))
+                    console.log(ui.item)
+//
+                    self.$el.find('li').each(function(index, item){
+                        $(this).trigger('dnd_refresh', index);
+                    });
+////                    debugger;
+//                    $(ui.item).trigger('dnd_save');
+                }
+            });
+    }
 });

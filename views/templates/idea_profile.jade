@@ -11,6 +11,9 @@ script#idea_profile_template(type="text/template")
                 option(value = 'ordering', selected='selected') User Defined
                 option(value = '-modified_on') Most Recent
                 option(value = 'modified_on') Oldest
+            <% if(USER === user){ %>
+            div.idea_profile_snapshots_dnd_order.btn_dnd_order Edit Order
+            <% } %>
         div.idea_profile_questions_settings_container
             div.idea_profile_questions_settings_text.left Sort by
             select.question_sort
