@@ -85,6 +85,16 @@ app.addInitializer(function(){
             callback(true);
         }
     });
+    $(window).bind('scroll', function(){
+        var y_scroll_pos = $(window).scrollTop();//window.pageYOffset;
+        var scroll_pos_test = 190;             // set to whatever you want it to be
+        if(y_scroll_pos > scroll_pos_test) {
+            app.vent.trigger('page:set_fixed');
+        }
+        else if(y_scroll_pos <= scroll_pos_test) {
+            app.vent.trigger('page:unset_fixed');
+        }
+    });
 //    A.timer = new Backbone.syncTimer();
 });
 
@@ -119,7 +129,6 @@ app.control_helper = {
             app.STATE = 'my_ideas';
         }
         else{
-//            debugger
             this.slideToMyIdeas();
             app.mainApp.my_ideas.show(view);
 
@@ -192,19 +201,15 @@ app.controller = {
                     });
                     snapshots.filtrate({filter:{'idea':this.model.id},
                         success: function(snapshots,res){
-//                            debugger;
-//                            console.log(snapshots);
-//                            if(snapshots.length>0){
                             if(snapshots.SYNC_STATE==="ready" && typeof self.snapshots != 'undefined' ){
                                 self.snapshots.show(snapshotView);
                             }
                         }});
                     snapshotView.on("render", function(){
                         if(USER===model.get('user')){
-                            this.showAddItemView({collection:this.collection, idea_id:model.id});
+                            this.showAddItemView(model.id);
                         }
                     });
-//                    console.log(this.model.get('snapshots'));
                     var questionView = new A.view.ideaProfile.QuestListView({
                         collection: this.model.get('questions')
                     });
@@ -423,7 +428,6 @@ app.controller = {
 //        app.router.navigate(path);
     },
     dndOrder: function(collection){
-        console.log(collection);
         var layout = new A.view.static.dndOrder({collection:collection});
         app.mainApp.modal_box.show(layout);
 //        type = $(this).attr('data-type');

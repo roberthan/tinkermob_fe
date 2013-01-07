@@ -120,7 +120,6 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
 //                beforeSend: beforeSendHandler,
                 success: function(req, status, jqXHR){
 //                    console.log(jqXHR.responseText);
-                    console.log(jqXHR.responseText);
                     if(status==='success'){
                         var data = JSON.parse(jqXHR.responseText)[0];
                         if(_.has(data,'original_image')){
@@ -143,12 +142,11 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
         if(typeof this.model.collection==='undefined'){
             var snaps = this.model.get('snaps_col');
             snapshot.unset('snaps_col');
-            console.log(snaps.length)
             snaps.add(snapshot);
-            console.log(snaps.length)
         }
         snapshot.save();
         if(this.imageValid!==true){
+            this.model.collection.trigger('new_item_added', this.model.get('idea'))
             self.closeModal();
         }
     },
@@ -514,7 +512,7 @@ A.view.static.follow = Backbone.Marionette.Layout.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        A.view.helper.setPrevURL(app.router);
+//        A.view.helper.setPrevURL(app.router);
         this.close();
     }
 });
@@ -589,7 +587,8 @@ A.view.static.dndOrder = Backbone.Marionette.Layout.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        A.view.helper.setPrevURL(app.router);
+        this.col.trigger('re_order');
+//        A.view.helper.setPrevURL(app.router);
         this.close();
     }
 });
@@ -599,11 +598,20 @@ A.view.static.OrderSnapView = Backbone.Marionette.ItemView.extend({
     className:"dnd_snapshot_item",
     template: '#dnd_snapshot_item_template',
     events:{
+        'dnd_refresh' : 'dndRefresh',
+        'dnd_save' : 'dndSave'
 //        'click .btn_follow': 'follow',
 //        'click .btn_follow_pressed': 'unFollow'
     },
     initialize: function(){
         this.model.bind('change', this.render, this);
+    },
+    dndSave: function(e){
+        this.model.save();
+    },
+    dndRefresh: function(e,new_ordering){
+//        console.log("save " + new_ordering);
+        this.model.set({ordering:new_ordering},{slient:true});
     }
 });
 
@@ -612,6 +620,9 @@ A.view.static.OrderSnapListView =  Backbone.Marionette.CollectionView.extend({
     tagName: 'ul',
     className:"dnd_snapshot_list",
     itemView : A.view.static.OrderSnapView,
+    initialize: function(){
+//        this.model.bind('change', this.render, this);
+    },
     onClose: function(){
 //        this.$el.sortable("destroy");
 //        this.off("item:removed");
@@ -626,13 +637,6 @@ A.view.static.OrderSnapListView =  Backbone.Marionette.CollectionView.extend({
 //                beforeStop: function( event, ui ) {
 //                },
                 change: function( event, ui ) {
-//                    self.$el.addClass('animated');
-//                    //-4 for the borders
-//                    $(ui.placeholder).width($(ui.placeholder).width()-4);
-//                    $(ui.placeholder).height($(ui.placeholder).height()-4);
-//                    $(ui.placeholder).css('border','2px dotted #FFDABF');
-//                    $(ui.placeholder).css('visibility','visible');
-//                    self.$el.masonry('reload');
                 },
                 start: function( event, ui ) {
                 },
@@ -641,14 +645,11 @@ A.view.static.OrderSnapListView =  Backbone.Marionette.CollectionView.extend({
                 stop: function( event, ui ) {
                 },
                 update: function( event, ui ) {
-//                    console.log(self.$el.find('li'))
-                    console.log(ui.item)
-//
+                     var min_spacer = Math.min.apply(null, self.collection.pluck('ordering'))
                     self.$el.find('li').each(function(index, item){
-                        $(this).trigger('dnd_refresh', index);
+                        $(this).trigger('dnd_refresh', min_spacer+index);
                     });
-////                    debugger;
-//                    $(ui.item).trigger('dnd_save');
+                    $(ui.item).trigger('dnd_save');
                 }
             });
     }

@@ -64,16 +64,17 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
         this.$el.find('.ideas_count').addClass('btn_pressed');
         this.model.bind('change', this.render, this);
         var self = this;
-        $(window).bind('scroll', function(){
-            var y_scroll_pos = $(window).scrollTop();//window.pageYOffset;
-            var scroll_pos_test = 190;             // set to whatever you want it to be
-            if(y_scroll_pos > scroll_pos_test) {
-                self.setFixed();
-            }
-            else if(y_scroll_pos <= scroll_pos_test) {
-                self.unSetFixed();
-            }
-        });
+//        $(window).bind('scroll', function(){
+//            var y_scroll_pos = $(window).scrollTop();//window.pageYOffset;
+//            var scroll_pos_test = 190;             // set to whatever you want it to be
+//            if(y_scroll_pos > scroll_pos_test) {
+//                self.setFixed();
+//                console.log('s')
+//            }
+//            else if(y_scroll_pos <= scroll_pos_test) {
+//                self.unSetFixed();
+//            }
+//        });
     },
     follow: function(){
         this.$el.find('.user_profile_pg_btn_follow').removeClass('user_profile_pg_btn_follow').addClass('user_profile_pg_btn_follow_pressed');
@@ -121,9 +122,14 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
     }
     ,onRender: function(){
         this.showIdeas();
+//        app.vent.off('page:set_fixed');
+//        app.vent.off('page:unset_fixed');
+        app.vent.on('page:set_fixed',this.setFixed, this);
+        app.vent.on('page:unset_fixed',this.unSetFixed, this);
     },
     onClose: function(){
-        $(window).unbind('scroll');
+        app.vent.off('page:set_fixed', null, this);
+        app.vent.off('page:unset_fixed', null, this);
     },
     setFixed: function(){
         if(!this.$el.find('.user_profile_stats_container').hasClass('fixed')){

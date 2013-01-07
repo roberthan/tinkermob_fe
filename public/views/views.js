@@ -243,13 +243,10 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
 //        }
     },
     nextPage: function(){
-        //remove old items from previous pages
-//        this.collection.reset();
-//        this.clearOld(false);
         if(this.collection.hasNext()){
             this.clearOld(false);
             if(this.is_previous){
-                this.collection.nextPage(16);
+                this.collection.nextPage(8);
                 $('.btn_prev').show();
             }
             else{
@@ -269,7 +266,7 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
                 this.collection.previousPage();
             }
             else{
-                this.collection.previousPage(16);
+                this.collection.previousPage(8);
                 $('.btn_next').show();
             }
         }

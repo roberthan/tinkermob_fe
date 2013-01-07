@@ -9,15 +9,8 @@ script#user_profile_template(type="text/template")
             <% } else{ %>
             div.user_profile_text_container_username <%= username %>
             <% } %>
-            <% if(USER.toString() !== id && USER){ %>
-            div.pg_btn.user_profile_pg_btn_follow Follow
-            <% } %>
         div.user_profile_bio <%= bio %>
     div.user_profile_stats_container
-        <% if(USER.toString() === id){ %>
-        div.user_profile_add_idea.btn_add_idea
-            div.user_profile_add_idea_pic + Idea
-        <% } %>
         div.ideas_settings
             div.ideas_settings_container_text Sort by
             select.idea_sort
@@ -25,6 +18,16 @@ script#user_profile_template(type="text/template")
                 option(value = '-modified_on') Most Recent
                 option(value = 'modified_on') Oldest
         div.user_profile_stats_container_inner
+            <% if(USER.toString() === id){ %>
+            div.user_profile_add_idea.btn_add_idea
+                div.user_profile_add_idea_pic
+            <% } else{ %>
+            <% if(is_following && USER){ %>
+            div.user_profile_pg_btn_follow_pressed
+            <% } else if(USER){ %>
+            div.user_profile_pg_btn_follow
+            <% } %>
+            <% } %>
             div.ideas_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_ideas %>
                 div.text Ideas
@@ -37,6 +40,7 @@ script#user_profile_template(type="text/template")
             div.follower_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_followers %>
                 div.text Followers
+
     div#user_ideas
 
 script#settings_template(type="text/template")

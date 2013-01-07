@@ -28,6 +28,7 @@ A.view = A.view || {};
             count_followers: 'loading',
             count_support_ideas: 'loading',
             newsletter_setting: '1',
+            is_following: 0,
 //            created_on: new Date().getTime(),
 //            modified_on: new Date().getTime(),
             isSynced: 1
