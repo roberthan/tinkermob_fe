@@ -426,7 +426,9 @@ arrow_size = 18px
 .idea_profile_btn_container{
     width: 90%;
     padding: 0 5%;
-    background-color: #8b4513;
+    background-image: url("/img/bg_sub_header.jpg");
+    background-repeat:no-repeat;
+    background-size: 100%;
     text-align:center;
 }
 
@@ -445,16 +447,18 @@ arrow_size = 18px
 }
 
 .idea_profile_add_snapshot_pic{
-    background-image: url("/img/btn_add_icon.png");
+    background-image: url("/img/btn_add.png");
     background-repeat: no-repeat;
     width: 56px;
     height: 56px;
 }
-
+.idea_profile_add_snapshot_pic:active{
+    background-image: url("/img/btn_add_pressed.png");
+}
 .idea_profile_mode_selector{
     width: 64px;
     height: 64px;
-    margin: 0 4px;
+    margin: 4px;
     cursor: pointer;
 }
 .idea_profile_mode_selector .btn_support{
@@ -462,6 +466,9 @@ arrow_size = 18px
     height: 56px;
     background-image: url("/img/btn_support.png");
     background-repeat: no-repeat;
+}
+.idea_profile_mode_selector .btn_support:active{
+    background-image: url("/img/btn_support_pressed.png");
 }
 .idea_profile_mode_selector .btn_support_pressed{
     width: 100%;
@@ -475,6 +482,11 @@ arrow_size = 18px
     background-image: url("/img/btn_share.png");
     background-repeat: no-repeat;
 }
+
+.idea_profile_mode_selector .btn_share:active{
+    background-image: url("/img/btn_share_pressed.png");
+}
+
 .idea_profile_mode_selector .btn_share_pressed{
     width: 100%;
     height: 100%;
@@ -494,11 +506,17 @@ arrow_size = 18px
 }
 
 .pg_btn_add{
-    width: 64px;
-    height: 64px;
-    background-image: url("/img/pg_btn_temp.png");
-    cursor: pointer;
+    width: 56px;
+    height: 56px;
+    background-image: url("/img/btn_add.png");
+    cursor: pointer
+    margin-top:8px;
 }
+
+.pg_btn_add:active{
+    background-image: url("/img/btn_add_pressed.png");
+}
+
 
 .idea_profile_pg_btn_edit{
     width: 32px;
@@ -549,8 +567,8 @@ arrow_size = 18px
     height: 24px;
     width: 176px;
     /*margin: 0 auto;*/
-    padding-top 16px;
-    color: white;
+    padding-top: 16px;
+    /*color: white;*/
     float: right;
 }
 .idea_profile_snapshots_settings_text,
