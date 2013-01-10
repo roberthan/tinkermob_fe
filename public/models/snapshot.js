@@ -31,7 +31,7 @@ A.view = A.view || {};
         urlRoot: SNAP_URL,
         model: A.model.Snapshot,
         comparator : function(model) {
-            return model.get('ordering');
+            return model.get('ordering')//*model.get('created_on');
         },
         localStorage: new Backbone.LocalStorage("Snapshots-backbone"),
         initialize: function(){

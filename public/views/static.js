@@ -149,6 +149,9 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
             this.model.collection.trigger('new_item_added', this.model.get('idea'))
             self.closeModal();
         }
+        if(this.model.get('is_active')===0){
+            this.model.collection.remove(this.model);
+        }
     },
     deleteSnapshot: function(e){
         var obj=this.$el.find('.toggle_delete');
@@ -523,7 +526,9 @@ A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
     template: '#user_list_template',
     events:{
         'click .btn_follow': 'follow',
-        'click .btn_follow_pressed': 'unFollow'
+        'click .btn_follow_pressed': 'unFollow',
+        'click .username': 'navigateUser',
+        'click .profile_img_container': 'navigateUser'
     },
     initialize: function(){
         this.model.bind('change', this.render, this);
@@ -535,6 +540,10 @@ A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
     unFollow: function(){
         this.$el.find('.btn_follow_pressed').removeClass('btn_follow_pressed').addClass('btn_follow');
         A.view.helper.setFollow(0,this.model).save();
+    },
+    navigateUser: function(e){
+        app.vent.trigger('navigate:userProfile', this.model.get('username'));
+        e.preventDefault();
     }
     //moved to helper
 //    setFollow: function(is_active){
@@ -630,7 +639,7 @@ A.view.static.OrderSnapListView =  Backbone.Marionette.CollectionView.extend({
     onShow: function(view){
         var self = this;
         this.$el.sortable({
-                items: "> li",
+//                items: "> li",
             scroll:false,
                 forcePlaceholderSize: true,
                 handle: ".dnd_snapshot_dnd_container",

@@ -65,12 +65,14 @@ A.view.MenuWeb = Backbone.Marionette.Layout.extend({
             stop: function( event, ui ) {
                 if(ui.position.left>18){
                     $(this).addClass('toggle_on').removeClass('toggle_off');
-                    main.addClass('main_toggle_my_ideas').removeClass('main_toggle_browse');
+                    main.addClass('main_toggle_rev').removeClass('main_toggle');
+//                    main.addClass('main_toggle_my_ideas').removeClass('main_toggle_browse');
                     app.vent.trigger('navigate:my_ideas');
                 }
                 else{
                     $(this).addClass('toggle_off').removeClass('toggle_on');
-                    main.addClass('main_toggle_browse').removeClass('main_toggle_my_ideas');
+                    main.addClass('main_toggle').removeClass('main_toggle_rev');
+//                    main.addClass('main_toggle_browse').removeClass('main_toggle_my_ideas');
                     app.vent.trigger('navigate:browse');
                 }
                 $(this).css('left','');
@@ -266,7 +268,7 @@ Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionVie
                 this.collection.previousPage();
             }
             else{
-                this.collection.previousPage(8);
+                this.collection.previousPage(16);
                 $('.btn_next').show();
             }
         }

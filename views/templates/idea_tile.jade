@@ -1,6 +1,6 @@
 script#idea_tile_template(type="text/template")
     a.idea_tile_body.link(href!='/idea/<%= id %>')
-        img.idea_tile_body_pic(src!="<%= tile_image %>", width='290px', height='228px')
+        img.idea_tile_body_pic(style!="background-image:url('<%= tile_image %>')")
         div.idea_tile_body_infobar
             div.idea_tile_body_infobar_tagline <%= A.view.helper.parseTagLine2(tag_line) %>
             div.idea_tile_body_infobar_snapshots <%= count_snapshots %>

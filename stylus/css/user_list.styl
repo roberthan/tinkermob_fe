@@ -9,6 +9,7 @@
 #user_list .profile_img_container{
     float: left;
     padding: 8px;
+    cursor: pointer;
 }
 
 #user_list .text_container{
@@ -16,9 +17,12 @@
     padding: 8px;
 }
 
+#user_list .username_sidenote{
+    /*float: right;*/
+}
 #user_list .username{
     font-size: 26px;
-
+    cursor: pointer;
 }
 #user_list .stats_container{
     color: #e4a268;
@@ -45,4 +49,10 @@
 
 #user_list .btn_follow_pressed{
     background-image: url("/img/btn_unfollow.png");
+}
+
+#follow_items{
+    max-height: 480px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

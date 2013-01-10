@@ -8,7 +8,7 @@ script#idea_profile_template(type="text/template")
                 option(value = '-modified_on') Most Recent
                 option(value = 'modified_on') Oldest
             <% if(USER === user){ %>
-            div.idea_profile_snapshots_dnd_order.btn_dnd_order Edit Order
+            a.idea_profile_snapshots_dnd_order.btn_dnd_order Edit Ordering
             <% } %>
         div.idea_profile_questions_settings_container
             div.idea_profile_questions_settings_text.left Sort by
@@ -40,7 +40,7 @@ script#idea_profile_template(type="text/template")
 
 script#idea_details_template(type="text/template")
     div.idea_profile_img_container
-        img.idea_profile_img_container_pic(src!="<%= tile_image %>", width='100px')
+        img.idea_profile_img_container_pic(style!="background-image:url('<%= tile_image %>')")
     div.idea_profile_text_container
         <% if(user===USER){ %>
         div.pg_btn.idea_profile_pg_btn_edit.right

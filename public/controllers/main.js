@@ -102,7 +102,7 @@ app.control_helper = {
     viewToBrowse: function(view){
         if(app.STATE !=='browse'){
             if(typeof app.mainApp.my_ideas.currentView !== 'undefined'){
-                app.mainApp.my_ideas.currentView.$el.hide();
+//                app.mainApp.my_ideas.currentView.$el.hide();
                 app.mainApp.my_ideas.url = window.location.pathname;
             }
             this.slideToBrowse();

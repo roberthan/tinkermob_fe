@@ -82,19 +82,32 @@ text-align: left;
     margin: 8px 2%;
     width: 96%;
     height: 36px;
-    border: 1px solid #daa520;
+    border: 1px dashed #daa520;
 }
 .dnd_snapshot_dnd_container{
-    float: left;
+    float: right;
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
+    color: gray;
+}
+.dnd_snapshot_img_container img{
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin: 2px;
 }
 .dnd_snapshot_img_container{
     float: left;
-    padding: 0 4px;
+    padding: 0;
 }
 .dnd_snapshot_text_container{
     float: left;
-    padding:8px 4px;
+    padding:8px;
+    overflow: hidden;
+    width: 50%;
+    white-space: nowrap;
+}
 
+#dnd_snapshot_list_container{
+    max-height: 480px;
+    overflow-y: auto;
 }

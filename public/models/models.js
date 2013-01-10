@@ -72,6 +72,7 @@ A.view = A.view || {};
             _.bindAll(this, 'parse', 'url', 'pageInfo', 'nextPage', 'previousPage', 'filtrate', 'sort_by');
             typeof(options) != 'undefined' || (options = {});
             typeof(this.limit) != 'undefined' || (this.limit = 8);
+            typeof(this.default_limit) != 'undefined' || (this.default_limit = 8);
             typeof(this.offset) != 'undefined' || (this.offset = 0);
             typeof(this.filter_options) != 'undefined' || (this.filter_options = {});
             typeof(this.sort_field) != 'undefined' || (this.sort_field = '');
@@ -140,20 +141,24 @@ A.view = A.view || {};
             return info;
         },
         nextPage: function(limit) {
-            var l = limit || this.limit;
+            var l = limit || this.default_limit;
             if (!this.pageInfo().next) {
                 return false;
             }
-            this.offset = this.offset + l;
+            this.offset = this.offset+l;
+            this.limit = l;
             return this.fetch({add: true});
         },
         previousPage: function(limit) {
-            var l = limit || this.limit;
+            var l = limit || this.default_limit;
             if (!this.pageInfo().prev) {
                 return false;
             }
+//            this.offset = (this.offset - l) || 0;
             this.offset = (this.offset - l) || 0;
+//            this.offset = Math.max(this.offset,0);
             this.offset = Math.max(this.offset,0);
+            this.limit = l;
             return this.fetch({add: true, append_to_front:true});
         },
         hasNext: function() {
