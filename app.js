@@ -23,7 +23,15 @@ var express = require('express'),
 var parseCookie = require('connect').utils.parseCookie;
 var FACEBOOK_APP_ID = "375972762439949"
 var FACEBOOK_APP_SECRET = "e8c0ba9548d4bb0e78d8e0e1679768e0";
-var API_SERVER_URL = "http://api.tinkermob.com";
+if(process.env.TINKERMOB_FE_PROD==='TRUE'){
+    var API_SERVER_URL = "http://api.tinkermob.com";
+    var MEDIA_URL = "http://api.tinkermob.com";
+}
+else{
+    var API_SERVER_URL = "http://api-beta.tinkermob.com";
+    var MEDIA_URL = "http://api-beta.tinkermob.com";
+}
+var STATIC_MEDIA_URL = '/img';
 //var API_SERVER_URL = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000";
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -192,7 +200,7 @@ app.get('/auth/facebook/callback',
         failureRedirect: '/login#fail' }));
 
 app.get('/login', function(req, res){
-    res.render('login', {img_path:'/img'});
+    res.render('login', {img_path:STATIC_MEDIA_URL, media_url:MEDIA_URL});
 });
 
 //app.get('/tes', function(req, res){
@@ -383,53 +391,53 @@ app.post('/auth/reset', function(req, res){
 
 app.get('/', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user:req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:'/img' });
+        res.render('index', { user:req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 app.get('/idea/*', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:'/img' });
+        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 
 app.get('/tag/*', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:'/img' });
+        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 app.get('/user/*', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user: req.user.user,username:req.user.username,auth_key: req.user.auth_key,  img_path:'/img' });
+        res.render('index', { user: req.user.user,username:req.user.username,auth_key: req.user.auth_key,  img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 
 app.get('/my-ideas', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:'/img' });
+        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 
 app.get('/settings', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:'/img'});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
     }
     else{
-        res.render('index', { user: req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:'/img' });
+        res.render('index', { user: req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
     }
 });
 
