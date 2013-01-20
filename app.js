@@ -23,7 +23,8 @@ var express = require('express'),
 var parseCookie = require('connect').utils.parseCookie;
 var FACEBOOK_APP_ID = "375972762439949"
 var FACEBOOK_APP_SECRET = "e8c0ba9548d4bb0e78d8e0e1679768e0";
-
+var API_SERVER_URL = "http://api.tinkermob.com";
+//var API_SERVER_URL = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000";
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session.  Typically,
@@ -63,11 +64,14 @@ passport.use(new FacebookStrategy({
         request(
             {
                 method: 'POST'
-                , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/api/v1/social/"+auth.auth_header
+                , uri: API_SERVER_URL+"/api/v1/social/"+auth.auth_header
                 , json: profile
             }
             , function (error, response, body) {
                 console.log(response.statusCode);
+                if(typeof response==='undefined'){
+                    return done(null, false, { message: 'Server Error' });
+                }
                 if(response.statusCode === 200 || response.statusCode === 201 || response.statusCode === 202){
                     console.log(body)
                     return done(null, body);
@@ -87,14 +91,14 @@ passport.use(new LocalStrategy({
     },
     function(req, username, password, done) {
         var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
-        var url = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/auth";
+        var url = API_SERVER_URL+"/auth";
         var method = 'GET'
         var headers = {
             "Authorization" : auth
         }
         var form = {};
         if(req.body.new_user==='1'){
-            url = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/auth/join";
+            url = API_SERVER_URL+"/auth/join";
             method = 'POST';
             headers = {};
             form = {
@@ -103,7 +107,7 @@ passport.use(new LocalStrategy({
             }
         }
         else if(typeof req.query.uid !=='undefined'){
-            url = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/password/"+username+'-'+password+'/';
+            url = API_SERVER_URL+"/password/"+username+'-'+password+'/';
             method = 'GET';
             headers = {};
             form = {}
@@ -116,6 +120,9 @@ passport.use(new LocalStrategy({
                 form : form
             }
             , function (error, response, body) {
+                if(typeof response==='undefined'){
+                    return done(null, false, { message: 'Server Error' });
+                }
                 if(response.statusCode === 200){
                     var body_object = JSON.parse(body);
                     return done(null, body_object);
@@ -203,7 +210,7 @@ app.get('/login', function(req, res){
 //    request(
 //        {
 //            method: 'POST'
-//            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/api/v1/social/"+auth.auth_header
+//            , uri: API_SERVER_URL+"/api/v1/social/"+auth.auth_header
 //            , json: profile
 //        }
 //        , function (error, response, body) {
@@ -241,7 +248,7 @@ app.get('/api/*', function(req, res){
     }
     request(
         { method: 'GET'
-            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(req.url,auth_header)
+            , uri: API_SERVER_URL+cleanUri(req.url,auth_header)
       //      , json: data.body
             ,headers: {}
         }
@@ -274,7 +281,7 @@ app.post('/api/*', function(req, res){
     }
     request(
         { method: 'POST'
-            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(req.url,auth_header)
+            , uri: API_SERVER_URL+cleanUri(req.url,auth_header)
             , json: req.body
         }
         , function (error, response, body) {
@@ -296,7 +303,7 @@ app.put('/api/*', function(req, res){
     request(
         {
             method: 'PUT'
-            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(req.url,auth_header)
+            , uri: API_SERVER_URL+cleanUri(req.url,auth_header)
             , json: req.body
         }
         , function (error, response, body) {
@@ -313,7 +320,7 @@ app.put('/api/*', function(req, res){
 app.get('/auth/*', function(req, res){
     request(
         { method: 'GET'
-            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+req.url
+            , uri: API_SERVER_URL+req.url
       //      , json: data.body
         }
         , function (error, response, body) {
@@ -331,7 +338,7 @@ app.get('/auth/*', function(req, res){
 app.post('/auth/reset', function(req, res){
     request(
         { method: 'POST'
-            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/password/reset/",
+            , uri: "API_SERVER_URL/password/reset/",
             form: {email:req.body.email}
         }
         , function (error, response, body) {
@@ -349,7 +356,7 @@ app.post('/auth/reset', function(req, res){
 //    request(
 //        {
 //            method: 'GET'
-//            , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/auth",
+//            , uri: "API_SERVER_URL/auth",
 //            headers : {
 //                "Authorization" : auth
 //            }
@@ -428,7 +435,7 @@ app.get('/settings', function(req, res){
 
 app.get('/logout', function(req, res){
     req.logOut();
-//    var url = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000/auth/logout";
+//    var url = "API_SERVER_URL/auth/logout";
 //    var method = 'GET'
 //    request(
 //        {
@@ -509,7 +516,7 @@ io.sockets.on('connection', function (socket) {
         request(
             {
                 method: 'POST'
-                , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(data.url,auth.auth_header)
+                , uri: API_SERVER_URL+cleanUri(data.url,auth.auth_header)
                 , json: data.body
             }
             , function (error, response, body) {
@@ -546,7 +553,7 @@ io.sockets.on('connection', function (socket) {
             request(
                 {
                     method: 'PUT'
-                    , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(data.url,auth.auth_header)
+                    , uri: API_SERVER_URL+cleanUri(data.url,auth.auth_header)
                     , json: data.body
                 }
                 , function (error, response, body) {
@@ -583,10 +590,10 @@ io.sockets.on('connection', function (socket) {
     socket.on('read', function (data) {
         data = JSON.parse(data);
 //        console.log('hihi'+auth.auth_header);
-//        console.log("http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(data.url,auth.auth_header));
+//        console.log(API_SERVER_URL+cleanUri(data.url,auth.auth_header));
         request(
             { method: 'GET'
-                , uri: "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000"+cleanUri(data.url,auth.auth_header)//'?username=ubuntu&api_key=f9746a2eac5bf4e1&')
+                , uri: API_SERVER_URL+cleanUri(data.url,auth.auth_header)//'?username=ubuntu&api_key=f9746a2eac5bf4e1&')
 //                , json: data.body
             }
             , function (error, response, body) {

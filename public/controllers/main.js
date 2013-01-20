@@ -7,8 +7,10 @@ app.container = new Backbone.Marionette.Region({
 });
 app.addInitializer(function(){
     //setup fb
-    FB.init({appId: "375972762439949", status: true, cookie: true});
-    app.vent.bind('social:fbPost', app.control_helper.postToFB);
+    if(typeof FB !== 'undefined'){
+        FB.init({appId: "375972762439949", status: true, cookie: true});
+        app.vent.bind('social:fbPost', app.control_helper.postToFB);
+    }
 
     app.mainApp = new A.view.App();
     app.container.show(app.mainApp);
@@ -368,7 +370,7 @@ app.controller = {
         var layout = new A.view.static.newSnapshot({model:snapshot});
         app.mainApp.modal_box.show(layout);
 //        type = $(this).attr('data-type');
-        var path = window.location.pathname+'/details'+'?p='+window.location.pathname;
+//        var path = window.location.pathname+'/details'+'?p='+window.location.pathname;
         app.router.navigate(path);
     },
     newIdea: function(idea){

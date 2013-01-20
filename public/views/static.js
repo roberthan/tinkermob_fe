@@ -107,7 +107,7 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
             formData.append('id',image_id);
             snapshot.set('image',image_id);
             $.ajax({
-                url: 'http://ec2-107-22-76-107.compute-1.amazonaws.com:8000'+IMG_Path+'?userid='+USER+'&authkey='+AUTHKEY,  //server script to process data
+                url: IMG_URL+'?userid='+USER+'&authkey='+AUTHKEY,  //server script to process data
                 type: 'POST',
                 xhr: function() {  // custom xhr
                     myXhr = $.ajaxSettings.xhr();
@@ -321,7 +321,7 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             formData.append('id',image_id);
             this.model.set('image', image_id,{ silent: true });
             $.ajax({
-                url: 'http://ec2-107-22-76-107.compute-1.amazonaws.com:8000'+IMG_Path+'?userid='+USER+'&authkey='+AUTHKEY,  //server script to process data
+                url: IMG_URL+'?userid='+USER+'&authkey='+AUTHKEY,  //server script to process data
                 type: 'POST',
 //                xhr: function() {  // custom xhr
 //                    myXhr = $.ajaxSettings.xhr();
