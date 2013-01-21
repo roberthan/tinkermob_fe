@@ -2,6 +2,7 @@
 html(lang="en")
 head
     title Tinkermob Login
+    link(rel="shortcut icon", href="/img/icon.png" )
     link(rel='stylesheet', href='/css/login.css')
     script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js")
     script(type = "text/javascript", src = "/js/lib/underscore-min.js")
@@ -9,14 +10,13 @@ head
     script(type = "text/javascript", src = "/views/helpers.js")
 body
     div.content
-        img.logo_img(height='160px', width='360px')
+        img.logo_img(src="#{img_path}/logo_horz.png",height='250px')
         div.text_warning
         div.other_options
             div.row
                 span#btn_fb_auth.btn.left Facebook Login
                     img(src="#{img_path}/fb_icon.png",width='24px', height='24px')
-                span#btn_twitter_auth.btn.right Twitter Login
-                    img(src="#{img_path}/twitter_icon.png",width='24px', height='24px')
+                //span#btn_twitter_auth.btn.right Twitter Login img(src="#{img_path}/twitter_icon.png",width='24px', height='24px')
         hr
         form#form_login.auth_form(action='/login', method='post')
             div.row

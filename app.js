@@ -10,28 +10,35 @@ var express = require('express'),
     , passport = require('passport')
     , LocalStrategy = require('passport-local').Strategy
     , FacebookStrategy = require('passport-facebook').Strategy
+    , TwitterStrategy = require('passport-twitter').Strategy
     ,MemoryStore = express.session.MemoryStore
     ,sessionStore = new MemoryStore()
     ,redis = require("redis")
     ,pubClient = redis.createClient()
     ,http = require('http')
     ,fs = require('fs')
-    ,stylus = require('stylus')
+    ,stylus = require('stylus');
 //    ,models = require('./models/models')
-;
 
 var parseCookie = require('connect').utils.parseCookie;
-var FACEBOOK_APP_ID = "375972762439949"
-var FACEBOOK_APP_SECRET = "e8c0ba9548d4bb0e78d8e0e1679768e0";
+
 if(process.env.TINKERMOB_FE_PROD==='TRUE'){
     var API_SERVER_URL = "http://api.tinkermob.com";
     var MEDIA_URL = "http://api.tinkermob.com";
+    var FACEBOOK_APP_ID = "375972762439949"
+    var FACEBOOK_APP_SECRET = "e8c0ba9548d4bb0e78d8e0e1679768e0";
+    var TWITTER_CONSUMER_KEY = 'XAOPg5drghIZI6ozYvjFw'
+    var TWITTER_CONSUMER_SECRET = 'OhOwEUb0RpUyFOVyC8loskIEN5RU54WegtLeNVbSyQ'
 }
 else{
     var API_SERVER_URL = "http://api-beta.tinkermob.com";
     var MEDIA_URL = "http://api-beta.tinkermob.com";
+    var FACEBOOK_APP_ID = "105221302981836"
+    var FACEBOOK_APP_SECRET = "	74df4da7e3b75909b389b4441eed0075";
+    var TWITTER_CONSUMER_KEY = 'tgfVIuAAz3UKb47bqlQ'
+    var TWITTER_CONSUMER_SECRET = 'q6AwTEYIMLkWZxoUzDXeHa33S09O40KL09s2TePs'
 }
-var STATIC_MEDIA_URL = '/img';
+var STATIC_MEDIA_URL = 'https://s3-us-west-1.amazonaws.com/tinkermob-static-media';
 //var API_SERVER_URL = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000";
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -41,12 +48,12 @@ var STATIC_MEDIA_URL = '/img';
 //   have a database of user records, the complete Facebook profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-    console.log('serial: '+user);
+//    console.log('serial: '+user);
     done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-    console.log('deserial: '+obj);
+//    console.log('deserial: '+obj);
     var auth={};
     done(null, obj);
 });
@@ -61,7 +68,7 @@ passport.use(new FacebookStrategy({
         callbackURL: "/auth/facebook/callback",
         passReqToCallback:true
     },
-    function(req,accessToken, refreshToken, profile, done) {
+    function(req, accessToken, refreshToken, profile, done) {
         var auth={};
         auth.auth_header='?';
         if (req.user){
@@ -76,19 +83,54 @@ passport.use(new FacebookStrategy({
                 , json: profile
             }
             , function (error, response, body) {
-                console.log(response.statusCode);
                 if(typeof response==='undefined'){
                     return done(null, false, { message: 'Server Error' });
                 }
                 if(response.statusCode === 200 || response.statusCode === 201 || response.statusCode === 202){
-                    console.log(body)
                     return done(null, body);
                 } else {
-                    console.log(body);
                     return done(null, false, { message: 'Unknown user' });
                 }
             }
         );
+    }
+));
+
+passport.use(new TwitterStrategy({
+        consumerKey: TWITTER_CONSUMER_KEY,
+        consumerSecret: TWITTER_CONSUMER_SECRET,
+        callbackURL: "http://beta.tinkermob.com/auth/twitter/callback",//"/auth/twitter/callback",
+        passReqToCallback:true
+    },
+    function(req, token, tokenSecret, profile, done) {
+        var auth={};
+        auth.auth_header='?';
+        if (req.user){
+            auth.user=req.user.user;
+            auth.api_key=req.user.api_key;
+            auth.auth_header = '?userid='+auth.user+'&api_key='+auth.api_key+'&';
+        }
+        request(
+            {
+                method: 'POST'
+                , uri: API_SERVER_URL+"/api/v1/social/"+auth.auth_header
+                , json: profile
+            }
+            , function (error, response, body) {
+                if(typeof response==='undefined'){
+                    return done(null, false, { message: 'Server Error' });
+                }
+                if(response.statusCode === 200 || response.statusCode === 201 || response.statusCode === 202){
+                    return done(null, body);
+                } else {
+                    return done(null, false, { message: 'Unknown user' });
+                }
+            }
+        );
+//        console.log(JSON.stringify(profile));
+//        User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+//            return done(err, user);
+//        });
     }
 ));
 
@@ -164,6 +206,7 @@ app.configure(function(){
         compile: function(str, path) {
             return stylus(str)
                 .set('filename', path)
+                .define('STATIC_MEDIA_URL', STATIC_MEDIA_URL)
                 .set('warn', true)
                 .set('compress', true);
         }
@@ -190,6 +233,7 @@ app.set('view options', {layout: false});
 // Facebook will redirect the user back to the application at
 // /auth/facebook/callback
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:['email']}));
+app.get('/auth/twitter', passport.authenticate('twitter'));
 
 // Facebook will redirect the user to this URL after approval.  Finish the
 // authentication process by attempting to obtain an access token.  If
@@ -197,6 +241,10 @@ app.get('/auth/facebook', passport.authenticate('facebook',{scope:['email']}));
 // authentication has failed.
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { successRedirect: '/',
+        failureRedirect: '/login#fail' }));
+
+app.get('/auth/twitter/callback',
+    passport.authenticate('twitter', { successRedirect: '/',
         failureRedirect: '/login#fail' }));
 
 app.get('/login', function(req, res){

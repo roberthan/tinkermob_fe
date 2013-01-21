@@ -270,13 +270,13 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         this.toggleSwitch(this.$el.find('#toggle_newsletter'),this.model.get('newsletter_setting'));
         if(this.model.get('facebook_auth')!==0&&this.model.has('facebook_auth')){
             this.toggleSwitch(this.$el.find('#toggle_fb'),true);
-            $('#toggle_selection_fb').text('On');
         }
-        this.toggleSwitch(this.$el.find('#toggle_twitter'),this.model.has('twitter_auth'));
+        if(this.model.get('twitter_auth')!==0&&this.model.has('twitter_auth')){
+            this.toggleSwitch(this.$el.find('#toggle_twitter'),true);
+        }
         //set dropdown setting
         this.$el.find("#dropdown_notify_on option[value='"+this.model.get('notify_setting')+"']").attr('selected', 'selected');
         this.$el.find("#dropdown_twitter_push option[value='"+this.model.get('twitter_push')+"']").attr('selected', 'selected');
-
 //        this.$el.find("#dropdown_fb_push option[value='"+this.model.get('fb_push')+"']").attr('selected', 'selected');
     },
     validateFile : function(e){
@@ -353,8 +353,8 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
                 processData: false
             });
         }
-        this.model.set('fb_push', this.$el.find('#dropdown_fb_push option:selected').val(),{ silent: true });
-        this.model.set('twitter_push', this.$el.find('#dropdown_twitter_push option:selected').val(),{ silent: true });
+//        this.model.set('fb_push', this.$el.find('#dropdown_fb_push option:selected').val(),{ silent: true });
+//        this.model.set('twitter_push', this.$el.find('#dropdown_twitter_push option:selected').val(),{ silent: true });
         this.model.set('notify_setting', this.$el.find('#dropdown_notify_on option:selected').val(),{ silent: true });
         this.model.save();
         self.model.unset('password',{ silent: true });
@@ -368,19 +368,26 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         if(this.model.get('facebook_auth')!==0&&this.model.has('facebook_auth')){
             this.toggleSwitch(obj,false);
             $('#toggle_selection_fb').text('Off');
-            this.model.set('facebook_auth',0)
+            this.model.set('facebook_auth',0, {slient:true})
         }
         else{
-            //TODO open fb
             this.toggleSwitch(obj,true);
             $('#toggle_selection_fb').text('On');
+            window.location ='/auth/facebook';
         }
     },
     twitterAuth: function(e){
         var obj=this.$el.find('#toggle_twitter');
-        this.toggleSwitch(obj,true);
-        $('#toggle_selection_twitter').text('On');
-        //TODO Twitter
+        if(this.model.get('twitter_auth')!==0&&this.model.has('twitter_auth')){
+            this.toggleSwitch(obj,false);
+            $('#toggle_selection_twitter').text('Off');
+            this.model.set('twitter_auth',0, {slient:true})
+        }
+        else{
+            this.toggleSwitch(obj,true);
+            $('#toggle_selection_twitter').text('On');
+            window.location ='/auth/twitter';
+        }
     },
     newsletter: function(e){
         var temp_val = this.model.get('newsletter_setting');

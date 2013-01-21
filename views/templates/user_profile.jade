@@ -65,19 +65,13 @@ script#settings_template(type="text/template")
                         div.toggle_label Facebook
                         div.toggle
                             img.button(src='#{img_path}/on_off.png', height='32px')
-                        div.toggle_selection_label#toggle_selection_fb Off
+                        div.toggle_selection_label#toggle_selection_fb <% if(typeof facebook_auth !== 'undefined' && facebook_auth !== 0){ %>On<% } else{ %>Off<% } %>
                     hr
                     div#toggle_twitter.toggle_container
                         div.toggle_label Twitter
                         div.toggle
                             img.button(src='#{img_path}/on_off.png', height='32px')
-                        div.toggle_selection_label#toggle_selection_twitter Off
-                    div#toggle_twitter_push.toggle_container
-                        div.toggle_label Share on Twitter
-                        select#dropdown_twitter_push.dropdown(name='twitter_push')
-                            option(value='2') Ideas and Snapshots
-                            option(value='1') Ideas
-                            option(value='0') Nothing
+                        div.toggle_selection_label#toggle_selection_twitter  <% if(typeof twitter_auth !== 'undefined' && twitter_auth !== 0){ %>On<% } else{ %>Off<% } %>
                     hr
                     div#toggle_newsletter.toggle_container
                         div.toggle_label Weekly Newsletter

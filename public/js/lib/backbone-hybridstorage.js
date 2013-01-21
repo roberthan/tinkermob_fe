@@ -423,7 +423,7 @@ var vent = _.extend({}, Backbone.Events);
         Backbone.socket.on('polo', function(data){
             if(data===test_data){
                 console.log('upgrade to');
-//                Backbone.sync_connection='socket_io';
+                Backbone.sync_connection='socket_io';
             }
         });
         return Backbone.socket;

@@ -3,9 +3,14 @@ body{
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 400;
     height: auto;
-    /*background-image:url('/img/background_tile_2.jpg');*/
-    background-image:url('/img/128x128_tile2.jpg');
+    /*background-image:url(STATIC_MEDIA_URL + "/background_tile_2.jpg');*/
+    background-image:url(STATIC_MEDIA_URL + '/128x128_tile2.jpg');
 }
+
+a, a:visited { color: #d3d3d3; text-decoration: underline; outline: 0; }
+a:hover, a:focus { color: #a9a9a9; }
+p a, p a:visited { line-height: inherit; }
+
 #body{
     padding: 0px;
     margin: 0px;
@@ -13,7 +18,7 @@ body{
 
 .btn{
     margin: 8px;
-    background-image: url("/img/btn_submit.png");
+    background-image: url(STATIC_MEDIA_URL + "/btn_submit.png");
     width: 160px;
     height: 18px;
     padding: 11px 0;
