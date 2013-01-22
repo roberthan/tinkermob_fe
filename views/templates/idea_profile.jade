@@ -78,5 +78,8 @@ script#share_panel_template(type="text/template")
                         img(src="http://www.reddit.com/static/spreddit5.gif",alt="submit to reddit", border="0")
                         span Share on Reddit
                 li.share_btn.share_fb Share on Facebook
-                li.share_btn.share_twitter Share on Twitter
-                li.share_btn.share_pinterest Share on Pinterest
+                li.share_btn.share_twitter
+                    a.twitter-hashtag-button(href!="https://twitter.com/intent/tweet?button_hashtag=tinkermob&text=<%= tag_line %>",data-related="tinkermob", data-url!="<%= window.location.href %>")
+                    script
+                        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                //li.share_btn.share_pinterest Share on Pinterest

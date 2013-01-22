@@ -371,7 +371,7 @@ app.controller = {
         app.mainApp.modal_box.show(layout);
 //        type = $(this).attr('data-type');
 //        var path = window.location.pathname+'/details'+'?p='+window.location.pathname;
-        app.router.navigate(path);
+//        app.router.navigate(path);
     },
     newIdea: function(idea){
         var layout = new A.view.static.newIdea({model:idea});

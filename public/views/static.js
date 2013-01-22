@@ -295,7 +295,11 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             this.model.set('password',this.$el.find('.txt_password1').val(),{ silent: true });
         }
         var self = this;
+        var change_username= false;
         var formData = new FormData(this.$el.find('.settings_form')[0]);
+        if(this.model.get('username')!==this.$el.find('.txt_username').val()){
+            change_username= true;
+        }
         this.model.set('display_name',this.$el.find('.txt_name').val(),{ silent: true });
         this.model.set('location_text',this.$el.find('.txt_location').val(),{ silent: true });
         this.model.set('website',this.$el.find('.txt_website').val(),{ silent: true });
@@ -343,6 +347,9 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
                         }
                     }
                     self.closeModal();
+                    if(change_username){
+                        window.location='/logout?next=/login'
+                    }
                 },
 //                error: errorHandler,
                 // Form data
@@ -361,6 +368,9 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         self.model.save({},{noAjax:true});
         if(this.imageUploadAttmpt===false){
             this.closeModal()
+            if(change_username){
+                setTimeout(window.location='/logout?next=/login', 2000);
+            }
         }
     },
     fbAuth: function(e){

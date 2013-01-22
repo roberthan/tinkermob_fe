@@ -33,11 +33,15 @@ if(process.env.TINKERMOB_FE_PROD==='TRUE'){
 else{
     var API_SERVER_URL = "http://api-beta.tinkermob.com";
     var MEDIA_URL = "http://api-beta.tinkermob.com";
-    var FACEBOOK_APP_ID = "105221302981836"
-    var FACEBOOK_APP_SECRET = "	74df4da7e3b75909b389b4441eed0075";
+    var FACEBOOK_APP_ID = "375972762439949"
+    var FACEBOOK_APP_SECRET = "e8c0ba9548d4bb0e78d8e0e1679768e0";
+//    var FACEBOOK_APP_ID = "105221302981836"
+//    var FACEBOOK_APP_SECRET = "	74df4da7e3b75909b389b4441eed0075";
     var TWITTER_CONSUMER_KEY = 'tgfVIuAAz3UKb47bqlQ'
     var TWITTER_CONSUMER_SECRET = 'q6AwTEYIMLkWZxoUzDXeHa33S09O40KL09s2TePs'
 }
+
+console.log(API_SERVER_URL);
 var STATIC_MEDIA_URL = 'https://s3-us-west-1.amazonaws.com/tinkermob-static-media';
 //var API_SERVER_URL = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000";
 // Passport session setup.
@@ -65,7 +69,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new FacebookStrategy({
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: "/auth/facebook/callback",
+        callbackURL: "http://beta.tinkermob.com/auth/facebook/callback",
         passReqToCallback:true
     },
     function(req, accessToken, refreshToken, profile, done) {
@@ -240,8 +244,11 @@ app.get('/auth/twitter', passport.authenticate('twitter'));
 // access was granted, the user will be logged in.  Otherwise,
 // authentication has failed.
 app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { successRedirect: '/',
-        failureRedirect: '/login#fail' }));
+    passport.authenticate('facebook', { //successRedirect: '/',
+        failureRedirect: '/login#fail' }),
+    function(req, res) {
+        res.redirect('/');
+    });
 
 app.get('/auth/twitter/callback',
     passport.authenticate('twitter', { successRedirect: '/',
@@ -394,7 +401,7 @@ app.get('/auth/*', function(req, res){
 app.post('/auth/reset', function(req, res){
     request(
         { method: 'POST'
-            , uri: "API_SERVER_URL/password/reset/",
+            , uri: API_SERVER_URL+"/password/reset/",
             form: {email:req.body.email}
         }
         , function (error, response, body) {
@@ -502,7 +509,12 @@ app.get('/logout', function(req, res){
 //            res.send(response);
 //        }
 //    );
-    res.redirect('/');
+    if(typeof req.query.next !=='undefined'){
+        res.redirect(req.query.next);
+    }
+    else{
+        res.redirect('/');
+    }
 });
 
 //function ensureAuthenticated(req, res, next) {
