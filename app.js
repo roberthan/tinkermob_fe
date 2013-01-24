@@ -198,7 +198,7 @@ app.configure(function(){
     //    app.use(express.errorHandler());
     //}
     app.use(express.cookieParser());
-    app.use(express.session({ secret: "keyboard cat", key: 'express.sid', store: sessionStore }));
+    app.use(express.session({ secret: "keyboarcatz", key: 'express.sid', store: sessionStore }));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
