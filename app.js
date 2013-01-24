@@ -41,7 +41,6 @@ else{
     var TWITTER_CONSUMER_SECRET = 'q6AwTEYIMLkWZxoUzDXeHa33S09O40KL09s2TePs'
 }
 
-console.log(API_SERVER_URL);
 var STATIC_MEDIA_URL = 'https://s3-us-west-1.amazonaws.com/tinkermob-static-media';
 //var API_SERVER_URL = "http://ec2-107-22-76-107.compute-1.amazonaws.com:8000";
 // Passport session setup.
@@ -522,7 +521,7 @@ app.get('/logout', function(req, res){
 //    res.redirect('/login')
 //}
 
-app.listen(80);
+app.listen(8080);
 
 io.set('authorization', function (data, accept) {
     if (data.headers.cookie) {
