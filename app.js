@@ -68,7 +68,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new FacebookStrategy({
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: "http://beta.tinkermob.com/auth/facebook/callback",
+        callbackURL: "/auth/facebook/callback",
         passReqToCallback:true
     },
     function(req, accessToken, refreshToken, profile, done) {

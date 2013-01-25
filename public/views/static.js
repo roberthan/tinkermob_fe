@@ -248,6 +248,8 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
     initialize: function(){
         this.imageValid = false;
         this.imageUploadAttmpt = false;
+        this.change_email= false;
+        this.change_username= false;
     },
     events:{
         'change .upload_file': 'validateFile',
@@ -256,7 +258,9 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         'click #toggle_newsletter': 'newsletter',
         'click .btn_save': 'submitForm',
         'click .btn_cancel': 'closeModal',
-        'change .upload_file': 'validateFile'
+        'change .upload_file': 'validateFile',
+        'change .txt_email': 'validateEmail',
+        'change .txt_username': 'validateUsername'
     },
     onRender: function(){
         this.model.bind('change', this.render,this);
@@ -284,6 +288,62 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         this.imageValid =A.view.helper.validateFile(e);
         this.imageUploadAttmpt = true;
     },
+    validateUsername : function(e){
+        var username_input = this.$el.find('.txt_username');
+        var warning = this.$el.find('.text_warning');
+        var current_username = this.model.get('username');
+        var warning_text = 'This username is already in use';
+        $.ajax({
+            url: '/auth/is_unique?username='+username_input.val(),
+            success: function(data, textStatus, jqXHR){
+                var res_data = JSON.parse(data)[0];
+                if(_.isObject(res_data)){
+                    if(res_data.username===false && current_username!==username_input.val()){
+                        username_input.addClass('warning_placeholder').focus().blur();
+                        warning.text(warning_text);
+                    }
+                    else{
+                        username_input.removeClass('warning_placeholder').focus().blur();
+                        if (warning.text()===warning_text){
+                            warning.text('');
+                        }
+                    }
+                }
+//                return false;
+            }
+        });
+        if(current_username!==username_input.val()){
+            this.change_username= true;
+        }
+    },
+    validateEmail : function(e){
+        var email_input = this.$el.find('.txt_email');
+        var warning = this.$el.find('.text_warning');
+        var current_email = this.model.get('email');
+        var warning_text = 'That email address is already in use or not valid';
+        $.ajax({
+            url: '/auth/is_unique?email='+email_input.val(),
+            success: function(data, textStatus, jqXHR){
+                var res_data = JSON.parse(data)[0];
+                if(_.isObject(res_data)){
+                    if(res_data.email===false && current_email!==email_input.val()){
+                        email_input.addClass('warning_placeholder').focus().blur();
+                        warning.text(warning_text);
+                    }
+                    else{
+                        email_input.removeClass('warning_placeholder').focus().blur();
+                        if (warning.text()===warning_text){
+                            warning.text('');
+                        }
+                    }
+                }
+//                return false;
+            }
+        });
+        if(current_email!==email_input.val()){
+            this.change_email= true;
+        }
+    },
     submitForm: function(e){
         if(this.$el.find('.txt_password1').val()!==this.$el.find('.txt_password2').val()){
             this.$el.find('.txt_password2').addClass('warning_placeholder').focus().blur();
@@ -295,11 +355,7 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             this.model.set('password',this.$el.find('.txt_password1').val(),{ silent: true });
         }
         var self = this;
-        var change_username= false;
         var formData = new FormData(this.$el.find('.settings_form')[0]);
-        if(this.model.get('username')!==this.$el.find('.txt_username').val()){
-            change_username= true;
-        }
         this.model.set('display_name',this.$el.find('.txt_name').val(),{ silent: true });
         this.model.set('location_text',this.$el.find('.txt_location').val(),{ silent: true });
         this.model.set('website',this.$el.find('.txt_website').val(),{ silent: true });
@@ -347,7 +403,7 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
                         }
                     }
                     self.closeModal();
-                    if(change_username){
+                    if(this.change_username){
                         window.location='/logout?next=/login'
                     }
                 },

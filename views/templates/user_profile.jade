@@ -40,7 +40,6 @@ script#user_profile_template(type="text/template")
             div.follower_count.user_profile_stats_tile
                 div.user_profile_stats_tile_count <%= count_followers %>
                 div.text Followers
-
     div#user_ideas
 
 script#settings_template(type="text/template")
@@ -83,7 +82,7 @@ script#settings_template(type="text/template")
                         select#dropdown_notify_on.dropdown(name='notify_on')
                             option(value='1') When Ideas Gets Updated
                             option(value='0') Never
-            //progress.upload_progress
-            div.btn-container
-                span.btn.btn_save.left Save
-                span.btn.btn_cancel.right Cancel
+                //progress.upload_progress
+                div.btn-container
+                    span.btn.btn_save.left Save
+                    span.btn.btn_cancel.right Cancel
