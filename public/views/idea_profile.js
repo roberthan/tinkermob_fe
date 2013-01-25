@@ -27,6 +27,7 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         'click .btn_dnd_order': 'dndOrder',
         'change .snapshot_sort': 'sortSnapshots',
         'change .question_sort': 'sortQuestions',
+        'click .btn_back': 'historyBack',
         'click .link_tag': 'navigateTag'
 //        ,'click #toggle_edit_mode': 'editMode'
     },
@@ -56,6 +57,9 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         if(typeof this.questions.currentView !== 'undefined'){
             this.questions.currentView.$el.trigger('sort_collection', this.$el.find('.question_sort :selected').val());
         }
+    },
+    historyBack: function(){
+        history.back();
     },
     onRender:function(){
             var btn_support = this.model.get('is_supporter') || false;

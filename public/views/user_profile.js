@@ -18,7 +18,8 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
         'click .btn_add_idea': 'addIdea',
         'change .idea_sort': 'sortIdeas',
         'click .user_profile_pg_btn_follow': 'follow',
-        'click .user_profile_pg_btn_follow_pressed': 'unFollow'
+        'click .user_profile_pg_btn_follow_pressed': 'unFollow',
+        'click .btn_back': 'historyBack'
     },
     initialize: function(options){
         if(typeof options.ideas_col !== 'undefined'){
@@ -75,6 +76,9 @@ A.view.userProfile.Layout = Backbone.Marionette.Layout.extend({
 //                self.unSetFixed();
 //            }
 //        });
+    },
+    historyBack: function(){
+        history.back();
     },
     follow: function(){
         this.$el.find('.user_profile_pg_btn_follow').removeClass('user_profile_pg_btn_follow').addClass('user_profile_pg_btn_follow_pressed');
