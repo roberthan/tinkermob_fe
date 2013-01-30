@@ -119,7 +119,7 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
                 //Ajax events
 //                beforeSend: beforeSendHandler,
                 success: function(req, status, jqXHR){
-//                    console.log(jqXHR.responseText);
+                    console.log(jqXHR.responseText);
                     if(status==='success'){
                         var data = JSON.parse(jqXHR.responseText)[0];
                         if(_.has(data,'original_image')){
@@ -383,13 +383,13 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             $.ajax({
                 url: IMG_URL+'?userid='+USER+'&authkey='+AUTHKEY,  //server script to process data
                 type: 'POST',
-//                xhr: function() {  // custom xhr
-//                    myXhr = $.ajaxSettings.xhr();
-//                    if(myXhr.upload){ // check if upload property exists
-//                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
-//                    }
-//                    return myXhr;
-//                },
+                xhr: function() {  // custom xhr
+                    myXhr = $.ajaxSettings.xhr();
+                    if(myXhr.upload){ // check if upload property exists
+                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // for handling the progress of the upload
+                    }
+                    return myXhr;
+                },
                 //Ajax events
 //                beforeSend: beforeSendHandler,
                 success: function(req, status, jqXHR){

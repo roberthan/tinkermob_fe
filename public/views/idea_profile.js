@@ -276,7 +276,7 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
         e.stopPropagation();
     },
     onRender: function(){
-        if(this.model.has("original_image")=== false){
+        if(this.model.has("original_image")=== false || this.model.has("image")=== false){
             this.$el.addClass('no_image');
         }
         var img = this.$el.find('.snapshot_tile');
@@ -576,8 +576,6 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             }
             else{
                 collectionView.$el.find("li:nth-child("+index+")").after(itemView.el);
-                console.log(index + itemView.el)
-                console.log(itemView.$el.text())
                 if(this.masonry_enabled){
                     this.$el.masonry('reload');
                 }
@@ -800,8 +798,6 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
         var model = new Backbone.Model();
         model.set('idea', idea);
         model.set('created_on',new Date());
-//        debugger;
-//        console.log('newi')
         this.addItemView(model, this.addNewItemView,-1);
     },
     appendHtml: function(collectionView, itemView, index){

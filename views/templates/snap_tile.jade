@@ -7,7 +7,6 @@ script#snapshot_tile_template(type="text/template")
             div.snapshot_tile_resize_text resize
         div.snapshot_tile_profile
             div.pg_btn.pg_btn_profile.left
-            div.snapshot_tile_profile_text Idea Pic
         <% } %>
         img.snapshot_tile_pic(style!="background-image:url('<%= tile_image %>')")
         //img.snapshot_tile_pic(src!="<%= tile_image %>")
@@ -38,7 +37,7 @@ script#new_snapshot_template(type="text/template")
                         img.button(src='#{img_path}/on_off.png', height='32px')
                     div.toggle_selection_label.toggle_selection_delete
                 <% } %>
-            //progress.upload_progress
+            progress.img_upload_progress
             div.btn-container
                 span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>
                 span.btn.btn_cancel.right Cancel
