@@ -37,7 +37,7 @@ script#new_snapshot_template(type="text/template")
                         img.button(src='#{img_path}/on_off.png', height='32px')
                     div.toggle_selection_label.toggle_selection_delete
                 <% } %>
-            progress.img_upload_progress
+            progress.upload_progress
             div.btn-container
                 span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>
                 span.btn.btn_cancel.right Cancel
