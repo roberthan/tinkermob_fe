@@ -276,7 +276,7 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
         e.stopPropagation();
     },
     onRender: function(){
-        if(this.model.has("original_image")=== false || this.model.has("image")=== false){
+        if(this.model.has("original_image")=== false && this.model.has("image")=== false){
             this.$el.addClass('no_image');
         }
         var img = this.$el.find('.snapshot_tile');
@@ -596,7 +596,8 @@ A.view.ideaProfile.QuestionView = Backbone.Marionette.Layout.extend({
           'click .down_rank': 'downRank',
           'click .up_rank_pressed': 'upRankPressed',
           'click .down_rank_pressed': 'downRankPressed',
-          'click .qa_show_more': 'showMore'
+          'click .qa_show_more': 'showMore',
+          'click .qa_profile_pic_container': 'navigateUser'
     },
     regions: {
         answers_region: ".qa_answers"
@@ -646,9 +647,14 @@ A.view.ideaProfile.QuestionView = Backbone.Marionette.Layout.extend({
             this.showMore();
         }
     },
+    navigateUser: function(e){
+        app.vent.trigger('navigate:userProfile', this.model.get('username'));
+        e.preventDefault();
+    },
     showMore: function(){
         this.ans.filtrate({filter:{'question':this.model.id}});
         this.$el.find('.new_answer').show();
+//        debugger;
 //        app.vent.trigger('question:showAnswers', this);
         this.$el.find('.qa_show_more').hide();
         this.model.set('show_more',1);
@@ -715,7 +721,8 @@ A.view.ideaProfile.addQuestionView = Backbone.Marionette.ItemView.extend({
     className: 'question',
     events: {
         'click .pg_btn_add': 'newQuestion'
-        ,'keypress .textarea_question': 'createOnEnter'
+        ,'keypress .textarea_question': 'createOnEnter',
+        'click .qa_profile_pic_container': 'navigateUser'
     },
     initialize: function(options){
 //        this.model.bind('change', this.render, this);
@@ -739,6 +746,10 @@ A.view.ideaProfile.addQuestionView = Backbone.Marionette.ItemView.extend({
             question.save();
             this.$el.find('.textarea_question').val('');
         }
+    },
+    navigateUser: function(e){
+        app.vent.trigger('navigate:userProfile', this.model.get('username'));
+        e.preventDefault();
     },
     createOnEnter: function(e){
         if((e.keyCode || e.which) == 13){
@@ -798,6 +809,8 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
         var model = new Backbone.Model();
         model.set('idea', idea);
         model.set('created_on',new Date());
+        model.set('user_icon_image',app.tinker.owner.get('profile_image'));
+        model.set('username',app.tinker.owner.get('username'));
         this.addItemView(model, this.addNewItemView,-1);
     },
     appendHtml: function(collectionView, itemView, index){
@@ -821,10 +834,15 @@ A.view.ideaProfile.AnswerView = Backbone.Marionette.ItemView.extend({
         'click .up_rank': 'upRank',
         'click .down_rank': 'downRank',
         'click .up_rank_pressed': 'upRankPressed',
-        'click .down_rank_pressed': 'downRankPressed'
+        'click .down_rank_pressed': 'downRankPressed',
+        'click .qa_profile_pic_container': 'navigateUser'
     },
     initialize: function(){
         this.model.bind('change', this.render, this);
+    },
+    navigateUser: function(e){
+        app.vent.trigger('navigate:userProfile', this.model.get('username'));
+        e.preventDefault();
     },
     onRender: function(){
         var btn_rank = this.model.get('is_ranked') || 0;
@@ -902,7 +920,8 @@ A.view.ideaProfile.addAnswerView = Backbone.Marionette.ItemView.extend({
     className: 'answer new_answer',
     events: {
         'click .pg_btn_add': 'newAnswer'
-        ,'keypress .textarea_question': 'createOnEnter'
+        ,'keypress .textarea_question': 'createOnEnter',
+        'click .qa_profile_pic_container': 'navigateUser'
     },
     initialize: function(options){
     },
@@ -918,6 +937,10 @@ A.view.ideaProfile.addAnswerView = Backbone.Marionette.ItemView.extend({
             this.model.save();
             this.$el.find('.textarea_question').val('');
         }
+    },
+    navigateUser: function(e){
+        app.vent.trigger('navigate:userProfile', this.model.get('username'));
+        e.preventDefault();
     },
     createOnEnter: function(e){
         if((e.keyCode || e.which) == 13){
@@ -943,6 +966,8 @@ A.view.ideaProfile.AnsListView = Backbone.Marionette.CollectionView.extend({
         else{
             model.set('is_owner',0,{silent: true});
         }
+        model.set('user_icon_image',app.tinker.owner.get('profile_image'));
+        model.set('username',app.tinker.owner.get('username'));
         model.ans = this.collection;
         this.addItemView(model, this.addNewItemView, -1);
     },

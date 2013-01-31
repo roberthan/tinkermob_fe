@@ -17,6 +17,7 @@ A.view = A.view || {};
             text: "empty text...",
             count_answers: 0,
             rank: 0,
+            user_icon_image: '/img/lightblub.png',//this.collection.nextOrder(),
             created_on: new Date().getTime(),
             modified_on: new Date().getTime(),
             isSynced: 1,

@@ -1,6 +1,6 @@
 script#question_template(type="text/template")
-    div.qa_profile_pic_container
-        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    a.qa_profile_pic_container(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
+        img.qa_profile_pic(src="#{img_path}/user_icon_frame.png")
     <% if(USER){ %>
     div.qa_rank_vote
         div.btn_rank.up_rank
@@ -29,8 +29,8 @@ script#question_template(type="text/template")
     <% } %>
 
 script#answer_template(type="text/template")
-    div.qa_profile_pic_container
-        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    a.qa_profile_pic_container(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
+        img.qa_profile_pic(src="#{img_path}/user_icon_frame.png")
     <% if(USER){ %>
     div.qa_rank_vote
         div.btn_rank.up_rank
@@ -49,16 +49,16 @@ script#answer_template(type="text/template")
         p.qa_text <%=  text %>
 
 script#add_question_template(type="text/template")
-    div.qa_profile_pic_container
-        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    a.qa_profile_pic_container(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
+        img.qa_profile_pic(src="#{img_path}/user_icon_frame.png")
     div.qa_meta_container
         form.new_question_form.input_form
             textarea.textarea_input.textarea_question(placeholder = 'Ask a question')
             span.pg_btn.pg_btn_add.right
 
 script#add_answer_template(type="text/template")
-    div.qa_profile_pic_container
-        img.qa_profile_pic(src="#{img_path}/user_button.png",width='48px', height='48px')
+    a.qa_profile_pic_container(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
+            img.qa_profile_pic(src="#{img_path}/user_icon_frame.png")
     div.qa_meta_container
         form.new_question_form.input_form
             textarea.textarea_input.textarea_question(placeholder = 'Answer?')

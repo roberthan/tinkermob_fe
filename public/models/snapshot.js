@@ -13,7 +13,7 @@ A.view = A.view || {};
         defaults: {
             text: "",
             tile_image: '/img/cog.png',
-//            original_image: '/img/cog.png',
+            original_image: '/img/cog.png',
             ordering: 0,
             horizontal_size:1,
             vertical_size: 1,

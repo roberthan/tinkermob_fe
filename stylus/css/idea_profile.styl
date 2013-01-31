@@ -109,28 +109,29 @@ arrow_size = 18px
     float: left;
     padding: tile_padding;
 }
-#idea_profile_snapshots .x_scale1 img{
+#idea_profile_snapshots .x_scale1 .snapshot_tile_pic{
     width:tile_width;
 }
-#idea_profile_snapshots .x_scale2 img{
+#idea_profile_snapshots .x_scale2 .snapshot_tile_pic{
     width:tile_width*2+2*tile_padding;
 }
-#idea_profile_snapshots .x_scale3 img{
+#idea_profile_snapshots .x_scale3 .snapshot_tile_pic{
     width:tile_width*3+4*tile_padding;
 }
-#idea_profile_snapshots .y_scale1 img{
+#idea_profile_snapshots .y_scale1 .snapshot_tile_pic{
     height:tile_height;
 }
-#idea_profile_snapshots .y_scale2 img{
+#idea_profile_snapshots .y_scale2 .snapshot_tile_pic{
     height:tile_height*2+2*tile_padding;
 }
-#idea_profile_snapshots .y_scale3 img{
+#idea_profile_snapshots .y_scale3 .snapshot_tile_pic{
     height:tile_height*3+4*tile_padding;
 }
 .snapshot_tile{
     cursor: pointer;
     position: relative;
     padding: 0px;
+    overflow: hidden;
 }
 .snapshot_tile_infobar{
     background-color: #3a3431;
@@ -331,9 +332,16 @@ arrow_size = 18px
 
 .qa_profile_pic_container{
     float: left;
-    height: 48px;
-    width: 48px;
-    padding: byte;
+    width: 48px
+    height 48px
+    margin 8px 12px
+    border-radius: 50%;
+    background-size: 100%;
+}
+.qa_profile_pic{
+    margin: -8px 0 0 -8px;
+    width:64px;
+    height:64px;
 }
 
 .qa_meta_container{

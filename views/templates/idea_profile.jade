@@ -41,7 +41,7 @@ script#idea_profile_template(type="text/template")
 
 script#idea_details_template(type="text/template")
     div.idea_profile_img_container
-        img.idea_profile_img_container_pic(style!="background-image:url('<%= tile_image %>')")
+        div.idea_profile_img_container_pic(style!="background-image:url('<%= tile_image %>')")
     div.idea_profile_text_container
         <% if(user===USER){ %>
         div.pg_btn.idea_profile_pg_btn_edit.right
