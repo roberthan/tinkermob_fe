@@ -33,15 +33,15 @@ A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
         'click .close': 'closeModal'
     },
     onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
+        this.$el.find('.modal_background_container').fadeIn(function() {
 //        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
+                $('.modal_foreground_container').addClass('window-container-visible');
             }, 100);
         });
     },
     closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
         this.close();
     }
 });

@@ -43,8 +43,20 @@ script#new_snapshot_template(type="text/template")
                 span.btn.btn_cancel.right Cancel
 
 script#snap_detail_template(type="text/template")
-    div.overlay-container
-        div.window-container.zoomin
-            img.pic(src!="<%= original_image %>")
+    div.modal_background_container
+        div.modal_foreground_container
+            <% if(original_image !== (IMG_PATH+"/cog.png")){ %>
+            table.modal_table
+                tbody
+                    tr
+                        td.modal_pic_container
+                            img.modal_pic(src!="<%= original_image %>")
             div.infobar <%= text %>
+            <% } else{ %>
+            table.modal_table.modal_no_image
+                tbody
+                    tr
+                        td.modal_pic_container
+                            div.modal_txt_body <%= text %>
+            <% } %>
             span.close Close me

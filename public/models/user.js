@@ -17,7 +17,7 @@ A.view = A.view || {};
             return (temp_url.charAt(temp_url.length - 1) == '/' ? temp_url : temp_url+'/');
         },
         defaults: {
-            profile_image: '/img/lightblub.jpg',
+            profile_image: IMG_PATH+'/lightblub.jpg',
             display_name: 'loading',
             location_text: '',
             website: '',

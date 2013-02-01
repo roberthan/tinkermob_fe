@@ -12,8 +12,8 @@ A.view = A.view || {};
         },
         defaults: {
             text: "",
-            tile_image: '/img/cog.png',
-            original_image: '/img/cog.png',
+            tile_image: IMG_PATH+'/cog.png',
+            original_image: IMG_PATH+'/cog.png',
             ordering: 0,
             horizontal_size:1,
             vertical_size: 1,

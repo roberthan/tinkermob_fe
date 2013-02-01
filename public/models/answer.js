@@ -17,7 +17,7 @@ A.view = A.view || {};
             is_owner: 0,
             text: "empty text...",
             rank: 0,
-            user_icon_image: '/img/lightblub.png',//this.collection.nextOrder(),
+            user_icon_image: IMG_PATH+'/lightblub.png',//this.collection.nextOrder(),
             created_on: new Date().getTime(),
             modified_on: new Date().getTime(),
             isSynced: 1,

@@ -276,7 +276,7 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
         e.stopPropagation();
     },
     onRender: function(){
-        if(this.model.has("original_image")=== false && this.model.has("image")=== false){
+        if(this.model.get("original_image")=== IMG_PATH+'/cog.png' && this.model.has("image")=== false){
             this.$el.addClass('no_image');
         }
         var img = this.$el.find('.snapshot_tile');
@@ -470,9 +470,6 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
         this.collection.sort();
     },
     onDomRefresh: function(){
-//        console.log('reload')
-//        console.log(this.collection)
-//        debugger
         if(this.masonry_enabled){
             this.$el.masonry('reload');
         }
@@ -480,7 +477,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
     addSnapshot: function(){
         var model = new A.model.Snapshot;
             model.set('text','',{silent: true});
-            model.set('img_tile_src','/img/new_idea.png',{silent: true});
+            model.set('img_tile_src',IMG_PATH+'/new_idea.png',{silent: true});
             model.set('idea',this.collection.idea.id,{silent: true});
             model.set('user',USER,{silent: true});
         model.set('snaps_col',this.collection,{silent: true});
@@ -491,7 +488,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             var model = new A.model.Snapshot;
             model.set('text','',{silent: true});
             model.set('ordering',-1,{silent: true});
-            model.set('img_tile_src','/img/new_idea.png',{silent: true});
+            model.set('img_tile_src',IMG_PATH+'/new_idea.png',{silent: true});
             model.set('idea',idea_id,{silent: true});
             model.set('user',USER,{silent: true});
 //            console.log(JSON.stringify(model));
@@ -545,7 +542,6 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
 //                    self.$el.find('li').each(function(index, item){
 //                        $(this).trigger('dnd_refresh', index);
 //                    });
-////                    debugger;
 //                    $(ui.item).trigger('dnd_save');
 //                    self.collection.sort();
 //                    self.render();
@@ -631,7 +627,9 @@ A.view.ideaProfile.QuestionView = Backbone.Marionette.Layout.extend({
         });
         answerView.off("render");
         answerView.on("render", function(){
+            if(self.model.get('show_more')){
                 this.showAddItemView(self.model);
+            }
         });
 
         this.answers_region.show(answerView);
@@ -652,12 +650,11 @@ A.view.ideaProfile.QuestionView = Backbone.Marionette.Layout.extend({
         e.preventDefault();
     },
     showMore: function(){
+//        this.$el.find('.new_answer').show();
         this.ans.filtrate({filter:{'question':this.model.id}});
-        this.$el.find('.new_answer').show();
-//        debugger;
-//        app.vent.trigger('question:showAnswers', this);
+        app.vent.trigger('question:showAnswers', this);
         this.$el.find('.qa_show_more').hide();
-        this.model.set('show_more',1);
+        this.model.set('show_more',1,{silent: true});
     },
     setRankQuestion: function(is_active, up_rank){
         if(typeof is_active === 'undefined'){
@@ -806,11 +803,14 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
         return this.addItemView(item, ItemView, index);
     },
     showAddItemView: function(idea){
-        var model = new Backbone.Model();
+        var model = new A.model.Question();;
+//        var model = new Backbone.Model();
         model.set('idea', idea);
         model.set('created_on',new Date());
-        model.set('user_icon_image',app.tinker.owner.get('profile_image'));
-        model.set('username',app.tinker.owner.get('username'));
+        if(USERNAME){
+            model.set('user_icon_image',app.tinker.owner.get('profile_image'));
+        }
+        model.set('username',USERNAME);
         this.addItemView(model, this.addNewItemView,-1);
     },
     appendHtml: function(collectionView, itemView, index){
@@ -954,6 +954,7 @@ A.view.ideaProfile.AnsListView = Backbone.Marionette.CollectionView.extend({
     itemView : A.view.ideaProfile.AnswerView,
     addNewItemView:A.view.ideaProfile.addAnswerView,
     onRender: function(){
+//        this.$el.find('.new_answer').show();
     },
     initialize: function(){
     },
@@ -966,8 +967,10 @@ A.view.ideaProfile.AnsListView = Backbone.Marionette.CollectionView.extend({
         else{
             model.set('is_owner',0,{silent: true});
         }
-        model.set('user_icon_image',app.tinker.owner.get('profile_image'));
-        model.set('username',app.tinker.owner.get('username'));
+        if(USERNAME){
+            model.set('user_icon_image',app.tinker.owner.get('profile_image'));
+        }
+        model.set('username',USERNAME);
         model.ans = this.collection;
         this.addItemView(model, this.addNewItemView, -1);
     },

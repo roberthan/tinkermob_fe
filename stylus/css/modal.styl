@@ -26,6 +26,64 @@
     color: white;
 }
 
+.modal_background_container {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background: radial-gradient(center, ellipse cover,  rgba(127,127,127,0) 0%,rgba(127,127,127,0.9) 100%);
+    z-index: 1000;
+}
+.modal_foreground_container {
+    display: block;
+    position: absolute;
+    background: #696969;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: 0px 0px 30px rgba(0,0,0,0.2);
+    transition: 0.4s ease-out;
+    text-align: center;
+    color: #ffffff;
+}
+.modal_pic_container{
+    width: 100%;
+    height: 100%;
+    display:table-cell;
+    vertical-align:middle
+}
+.modal_table{
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+}
+
+.modal_pic{
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+}
+.modal_no_image tbody{
+    background-color: #3a3431;
+    opacity:0.6
+}
+.modal_no_image{
+    background-image: url(STATIC_MEDIA_URL + "/cog.png");
+    background-repeat:no-repeat;
+    background-size:auto;
+    background-position: center center;
+}
+
+.modal_txt_body{
+    font-size: 42px;
+    overflow: auto;
+    opacity:1;
+    font-weight:bold;
+}
+
 #input_modal .window-container {
     background: #fcfcfc;
     color: #808080;
