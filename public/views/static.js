@@ -10,26 +10,8 @@ A.view.static.Layout = Backbone.Marionette.Layout.extend({
 //        ,supporters: "#supporters"
     },
     events:{
-        'click .close': 'closeModal'
-    },
-    onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-            }, 100);
-        });
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        A.view.helper.setPrevURL(app.router);
-        this.close();
-    }
-});
-
-A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
-    template: "#snap_detail_template",
-    events:{
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal',
         'click .close': 'closeModal'
     },
     onRender: function(){
@@ -37,11 +19,42 @@ A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
 //        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.modal_foreground_container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
     },
     closeModal: function(){
         this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
+        $('#body').removeClass('modal_blur');
+        A.view.helper.setPrevURL(app.router);
+        this.close();
+    },
+    stopCloseModal: function(e){
+        e.stopPropagation();
+    }
+});
+
+A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
+    template: "#snap_detail_template",
+    events:{
+        'click .close': 'closeModal',
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal'
+    },
+    onRender: function(){
+        this.$el.find('.modal_background_container').fadeIn(function() {
+            window.setTimeout(function(){
+                $('.modal_foreground_container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
+            }, 100);
+        });
+    },
+    stopCloseModal: function(e){
+        e.stopPropagation();
+    },
+    closeModal: function(e){
+        this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
+        $('#body').removeClass('modal_blur');
         this.close();
     }
 });
@@ -82,6 +95,7 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
         this.$el.find('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.window-container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
     },
@@ -182,6 +196,7 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        $('#body').removeClass('modal_blur');
         this.close();
     }
 });
@@ -202,6 +217,7 @@ A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
         this.$el.find('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.window-container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
     },
@@ -238,6 +254,7 @@ A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        $('#body').removeClass('modal_blur');
         this.close();
     }
 });
@@ -265,9 +282,9 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
     onRender: function(){
         this.model.bind('change', this.render,this);
         this.$el.find('.overlay-container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.window-container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
         //set newsletter settings
@@ -483,39 +500,41 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+        $('#body').removeClass('modal_blur');
         A.view.helper.setPrevURL(app.router);
         this.close();
     }
 });
 
-A.view.static.follow = Backbone.Marionette.Layout.extend({
-    template: "#follow_template",
-    regions: {
-        follows: "#follow_items"
-//        ,supporters: "#supporters"
-    },
-    events:{
-        'click .btn_cancel': 'closeModal'
-    },
-    initialize: function(options){
-        this.follows_col = options.follows_col;
-    },
-    onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-            }, 100);
-        });
-        var list_view = new A.view.static.UserListView({collection:this.follows_col});
-        this.follows.show(list_view);
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        A.view.helper.setPrevURL(app.router);
-        this.close();
-    }
-});
+//A.view.static.follow = Backbone.Marionette.Layout.extend({
+//    template: "#follow_template",
+//    regions: {
+//        follows: "#follow_items"
+////        ,supporters: "#supporters"
+//    },
+//    events:{
+//        'click .btn_cancel': 'closeModal'
+//    },
+//    initialize: function(options){
+//        this.follows_col = options.follows_col;
+//    },
+//    onRender: function(){
+//        this.$el.find('.overlay-container').fadeIn(function() {
+//            $('#body').addClass('modal_blur');
+//            window.setTimeout(function(){
+//                $('.window-container').addClass('window-container-visible');
+//            }, 100);
+//        });
+//        var list_view = new A.view.static.UserListView({collection:this.follows_col});
+//        this.follows.show(list_view);
+//    },
+//    closeModal: function(){
+//        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
+//        $('#body').removeClass('modal_blur');
+////        A.view.helper.setPrevURL(app.router);
+//        this.close();
+//    }
+//});
 
 A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
@@ -578,9 +597,9 @@ A.view.static.follow = Backbone.Marionette.Layout.extend({
     },
     onRender: function(){
         this.$el.find('.overlay-container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.window-container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
         var list_view = new A.view.static.UserListView({collection:this.follows_col});
@@ -588,7 +607,7 @@ A.view.static.follow = Backbone.Marionette.Layout.extend({
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-//        A.view.helper.setPrevURL(app.router);
+        $('#body').removeClass('modal_blur');
         this.close();
     }
 });
@@ -659,9 +678,9 @@ A.view.static.dndOrder = Backbone.Marionette.Layout.extend({
     },
     onRender: function(){
         this.$el.find('.overlay-container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.window-container').addClass('window-container-visible');
+                $('#body').addClass('modal_blur');
             }, 100);
         });
         var list_view = new A.view.static.OrderSnapListView({collection:this.col});
@@ -671,6 +690,7 @@ A.view.static.dndOrder = Backbone.Marionette.Layout.extend({
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
         this.col.trigger('re_order');
 //        A.view.helper.setPrevURL(app.router);
+        $('#body').removeClass('modal_blur');
         this.close();
     }
 });

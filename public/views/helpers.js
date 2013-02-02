@@ -38,7 +38,7 @@ A.view.helper = {
             var value = temp_list[i];
             if(value.split('')[0]=='#'){
                 value=value.substring(1,value.length);
-                var new_value='<span href="/tag/'+value+'" class="link_tag">#'+value+'</span>';
+                var new_value='<div href="/tag/'+value+'" class="link_tag">#'+value+'</div>';
                 temp_list[i]=new_value;
             }
         }

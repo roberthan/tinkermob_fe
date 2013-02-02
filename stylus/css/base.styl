@@ -8,9 +8,31 @@ body{
     background-attachment:fixed;
     overflow-x: hidden;
 }
-a, a:visited { color: #333; text-decoration: underline; outline: 0; }
-a:hover, a:focus { color: #000; }
+a, a:visited, .link_tag, .link_tag:visited { color: #d3d3d3; text-decoration: underline; outline: 0; }
+a:hover, a:focus, .link_tag:hover, .link_tag:focus { color: #a9a9a9; }
+
+.dark_link a, a:visited { color: #696969; text-decoration: underline; outline: 0; }
+.dark_link a:hover, a:focus { color: #454545; }
+
+.user_profile a,
+.user_profile a:visited{
+    color: #ffdabf;
+    text-decoration: underline;
+    outline: 0;
+}
+
+.user_profile a:focus,
+.user_profile a:hover{
+    color: #ccae99;
+}
+
 p a, p a:visited { line-height: inherit; }
+
+
+.link_tag{
+    display: inline;
+}
+
 #body{
     padding: 0px;
     margin: 0px;

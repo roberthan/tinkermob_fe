@@ -52,7 +52,7 @@ username_color = #ffdabf
     width:tile_width;
     left:0
 }
-
+.idea_tile_body:hover .idea_tile_body_infobar,
 .no_image .idea_tile_body_infobar{
     height: tile_height - info_height - 12;
     margin-top: - tile_height + info_height + 12;
@@ -74,7 +74,9 @@ username_color = #ffdabf
 }
 
 .no_image .idea_tile_body_infobar_tagline,
-.no_image .my_idea_tile_body_infobar_tagline{
+.no_image .my_idea_tile_body_infobar_tagline,
+.idea_tile_body:hover .idea_tile_body_infobar_tagline,
+.idea_tile_body:hover .my_idea_tile_body_infobar_tagline{
     font-size: 28px;
     white-space: normal;
     padding: 24px 36px;
@@ -163,7 +165,8 @@ username_color = #ffdabf
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
-.no_image .my_idea_tile_body_infobar_tagline{
+.no_image .my_idea_tile_body_infobar_tagline,
+.idea_tile_body:hover .my_idea_tile_body_infobar_tagline{
     /*padding: 24px 48px 24px 18px;*/
     width:176px;
 }
@@ -192,7 +195,7 @@ username_color = #ffdabf
     float: right;
     width: 160px;
     color: #ffffff;
-    font-size: 18px;
+    font-size: 14px;
     right: 7%;
     padding-top: 16px;
 }
