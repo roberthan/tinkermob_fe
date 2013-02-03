@@ -4,7 +4,7 @@ script#idea_tile_template(type="text/template")
         div.idea_tile_body_infobar
             div.idea_tile_body_infobar_tagline <%= A.view.helper.parseTagLine2(tag_line) %>
             div.idea_tile_body_infobar_snapshots <%= count_snapshots %>
-    div.idea_tile_details
+    div.idea_tile_details.user_profile
         a.idea_tile_details_profile(style!="background-image:url('<%= user_icon_image %>')",href!='/user/<%= username %>')
             img.idea_tile_details_profile_pic(src="#{img_path}/user_icon_frame.png")
         a.idea_tile_details_owner(href!='/user/<%= username %>')

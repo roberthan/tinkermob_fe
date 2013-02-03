@@ -61,7 +61,10 @@ A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
 
 A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
     template: "#new_snapshot_template",
+    className:"modal_add_snapshot",
     events:{
+        'click .zoomin': 'stopCloseModal',
+        'click #input_modal': 'closeModal',
         'click .btn_add': 'createSnapshot',
         'keypress .textarea_details': 'createOnEnter',
         'change .upload_file': 'validateFile',
@@ -104,6 +107,10 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
             this.createSnapshot();
             e.preventDefault();
         }
+    },
+    stopCloseModal: function(e){
+        console.log('stop reached');
+        e.stopPropagation();
     },
     createSnapshot: function(e){
         var self = this;
@@ -204,6 +211,8 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
 A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
     template: "#new_idea_template",
     events:{
+        'click .zoomin': 'stopCloseModal',
+        'click #input_modal': 'closeModal',
         'click .btn_add': 'createIdea',
         'keypress .textarea_tag_line': 'createOnEnter',
         'click .btn_cancel': 'closeModal'
@@ -252,6 +261,9 @@ A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
             text_field.addClass('warning_placeholder').focus();
         }
     },
+    stopCloseModal: function(e){
+        e.stopPropagation();
+    },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
         $('#body').removeClass('modal_blur');
@@ -269,6 +281,8 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
         this.change_username= false;
     },
     events:{
+        'click .zoomin': 'stopCloseModal',
+        'click #input_modal': 'closeModal',
         'change .upload_file': 'validateFile',
         'click #toggle_fb': 'fbAuth',
         'click #toggle_twitter': 'twitterAuth',
@@ -497,6 +511,9 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             toggle.css('-webkit-animation','animate_toggle_rev .75s');
             toggle.css('-webkit-animation-fill-mode','forwards');
         }
+    },
+    stopCloseModal: function(e){
+        e.stopPropagation();
     },
     closeModal: function(){
         this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');

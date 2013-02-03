@@ -67,7 +67,7 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
                 this.$el.find('.btn_support').removeClass('btn_support').addClass('btn_support_pressed');
             }
         this.ideaDetails.show(new A.view.ideaProfile.ideaDetailsView({model:this.model}));
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         var self = this;
 //        $(window).bind('scroll', function(){
 //            var y_scroll_pos = $(window).scrollTop();//window.pageYOffset;
@@ -126,8 +126,9 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         }
         if(typeof this.snapshots.currentView !== 'undefined'){
             this.snapshots.currentView.$el.show();
+            $('.btn_page_control').show();
         }
-        this.$el.find('#show_more_questions').hide();
+//        this.$el.find('#show_more_questions').hide();
     },
     showQuestions: function(){
         this.$el.find('.idea_profile_snapshots_settings_container').hide();
@@ -139,8 +140,9 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
         }
         if(typeof this.questions.currentView !== 'undefined'){
             this.questions.currentView.$el.show();
+            $('.btn_page_control').hide();
         }
-        this.$el.find('#show_more_questions').show();
+//        this.$el.find('#show_more_questions').show();
     },
     setFixed: function(){
         if(!this.$el.find('.idea_profile_btn_container').hasClass('fixed')){
@@ -157,7 +159,6 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     onClose: function(){
         app.vent.off('page:set_fixed', null, this);
         app.vent.off('page:unset_fixed', null, this);
-//        $(window).unbind('scroll');
     }
 });
 
@@ -761,7 +762,7 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
     addNewItemView:A.view.ideaProfile.addQuestionView,
     className:"content_list",
     initialize: function(){
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         app.vent.bind('page:onBottom',this.onBottom, this);
     },
     events: {
@@ -783,13 +784,12 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
         this.collection.sort();
     },
     onRender: function(){
+//        console.log($('.btn_page_control'))
     },
     onBottom: function(){
         if(this.collection.nextPage()===false){
             app.vent.unbind('page:onBottom');
         }
-    },
-    onItemAdded: function(){
     },
     addChildView: function(item, collection, options){
         this.closeEmptyView();
@@ -803,8 +803,7 @@ A.view.ideaProfile.QuestListView = Backbone.Marionette.CollectionView.extend({
         return this.addItemView(item, ItemView, index);
     },
     showAddItemView: function(idea){
-        var model = new A.model.Question();;
-//        var model = new Backbone.Model();
+        var model = new A.model.Question();
         model.set('idea', idea);
         model.set('created_on',new Date());
         if(USERNAME){
@@ -927,12 +926,10 @@ A.view.ideaProfile.addAnswerView = Backbone.Marionette.ItemView.extend({
     },
     newAnswer: function(){
         var text = this.$el.find('.textarea_question').val();
-//        console.log(this.obj);
         if(text){
             this.model.set('text',text,{silent: true});
             this.model.set('user',USER,{silent: true});
             this.model.set('username',USERNAME,{silent: true});
-//            console.log('new input');
             this.model.ans.add(this.model,{index: 0});
             this.model.save();
             this.$el.find('.textarea_question').val('');
@@ -954,7 +951,6 @@ A.view.ideaProfile.AnsListView = Backbone.Marionette.CollectionView.extend({
     itemView : A.view.ideaProfile.AnswerView,
     addNewItemView:A.view.ideaProfile.addAnswerView,
     onRender: function(){
-//        this.$el.find('.new_answer').show();
     },
     initialize: function(){
     },
@@ -997,17 +993,3 @@ A.view.ideaProfile.AnsListView = Backbone.Marionette.CollectionView.extend({
         }
     }
 });
-//
-//A.view.ideaProfile.UserDetailView = Backbone.Marionette.ItemView.extend({
-//    tagName: 'div',
-//    className: 'user_detail',
-//    template: '#user_detail_template',
-//    initialize: function(){
-//        this.model.bind('change', this.render, this);
-//    },
-//
-//});
-
-//A.view.ideaProfile.UserListView =  Backbone.Marionette.CollectionView.extend({
-//    itemView : A.view.ideaProfile.UserDetailView
-//});

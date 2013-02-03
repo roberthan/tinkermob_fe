@@ -57,7 +57,7 @@ script#idea_details_template(type="text/template")
 
 script#new_idea_template(type="text/template")
     div#input_modal.overlay-container
-        div.window-container.zoomin
+        div.window-container.zoomin.medium_long
             h3.header  <% if(typeof revision !== 'undefined'){ %> Edit Idea <% } else{ %> New Idea <% } %>
             form.new_idea_form.input_form
                 textarea.textarea_input.textarea_tag_line(placeholder='Tagline') <%= tag_line %>

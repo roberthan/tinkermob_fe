@@ -24,7 +24,7 @@ script#add_snapshot_tile_template(type="text/template")
 
 script#new_snapshot_template(type="text/template")
      div#input_modal.overlay-container
-        div.window-container.zoomin
+        div.window-container.medium_long.zoomin
             h3.header <% if(typeof revision !== 'undefined'){ %> Edit Snapshot <% } else{ %> New Snapshot <% } %>
             form(enctype="multipart/form-data").new_snapshot_form.input_form
                 input(name='file', type='file').upload_file

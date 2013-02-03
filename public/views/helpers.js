@@ -112,5 +112,9 @@ A.view.helper = {
     unbindNextPrev: function(){
         app.vent.unbind('navigate:Next');
         app.vent.unbind('navigate:Prev');
+    },
+    unbindScroll:function(){
+//        $('.btn_page_control').show();
+        app.vent.unbind('page:onBottom');
     }
 }

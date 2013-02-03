@@ -166,7 +166,7 @@ app.control_helper = {
 
 app.controller = {
     ideaProfile: function(idea){
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         var i_col;
         if(typeof idea === 'string' ){
             if(app.STATE !== 'my_ideas'){
@@ -237,7 +237,7 @@ app.controller = {
         });
     },
     userProfile: function(username){
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         if(USERNAME===username){
             app.vent.trigger('navigate:my_ideas',{reset:true});
         }
@@ -261,7 +261,7 @@ app.controller = {
     },
     ideasNavi: function(options){
         options = options || {};
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         if(typeof app.mainApp.my_ideas.currentView !== 'undefined' && app.STATE === 'my_ideas'){
             app.mainApp.my_ideas.url = window.location.pathname;
             app.control_helper.slideToBrowse();
@@ -296,7 +296,7 @@ app.controller = {
         app.router.navigate(path);
     },
     tag: function(hashtag){
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         var ideas = new A.model.Ideas();
         ideas.filtrate({
             filter:{
@@ -320,7 +320,7 @@ app.controller = {
     },
     myIdeasNavi: function(options){
         options = options || {};
-        app.vent.unbind('page:onBottom');
+        A.view.helper.unbindScroll();
         if(!USER){
             app.vent.trigger('navigate:browse',{reset:true});
             return 0;
