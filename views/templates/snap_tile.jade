@@ -9,8 +9,6 @@ script#snapshot_tile_template(type="text/template")
             div.pg_btn.pg_btn_profile.left
         <% } %>
         div.snapshot_tile_pic(style!="background-image:url('<%= tile_image %>')")
-        //img.snapshot_tile_pic(src!="<%= tile_image %>")
-        //, width='290px', height='228px'
         div.snapshot_tile_infobar
             div.snapshot_tile_infobar_text <%= text %>
             <% if(user===USER){ %>
@@ -23,8 +21,8 @@ script#add_snapshot_tile_template(type="text/template")
         img.snapshot_tile_pic(src!="/img/new_idea.png", width='290px', height='230px')
 
 script#new_snapshot_template(type="text/template")
-     div#input_modal.overlay-container
-        div.window-container.medium_long.zoomin
+     div#input_modal.modal_background_container
+        div.modal_foreground_container.medium_long.modal_absolute_sizing.zoomin
             h3.header <% if(typeof revision !== 'undefined'){ %> Edit Snapshot <% } else{ %> New Snapshot <% } %>
             form(enctype="multipart/form-data").new_snapshot_form.input_form
                 input(name='file', type='file').upload_file
@@ -44,7 +42,7 @@ script#new_snapshot_template(type="text/template")
 
 script#snap_detail_template(type="text/template")
     div.modal_background_container
-        div.modal_foreground_container
+        div.modal_foreground_container.modal_relative_sizing
             <% if(original_image !== (IMG_PATH+"/cog.png")){ %>
             table.modal_table
                 tbody

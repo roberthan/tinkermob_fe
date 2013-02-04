@@ -3,11 +3,8 @@ A.model = A.model || {};
 A.view = A.view || {};
 A.view.static = A.view.static || {};
 
-A.view.static.Layout = Backbone.Marionette.Layout.extend({
-    template: "#static_template",
+A.view.static.Modal_Layout = Backbone.Marionette.Layout.extend({
     regions: {
-//        ideas: "#ideas"
-//        ,supporters: "#supporters"
     },
     events:{
         'click .modal_foreground_container': 'stopCloseModal',
@@ -15,51 +12,48 @@ A.view.static.Layout = Backbone.Marionette.Layout.extend({
         'click .close': 'closeModal'
     },
     onRender: function(){
+        this.showModal();
+    },
+    showModal:function(){
         this.$el.find('.modal_background_container').fadeIn(function() {
-//        $('.overlay-container').fadeIn(function() {
             window.setTimeout(function(){
                 $('.modal_foreground_container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
+//                $('#body').addClass('modal_blur');
             }, 100);
         });
     },
     closeModal: function(){
         this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        A.view.helper.setPrevURL(app.router);
+//        $('#body').removeClass('modal_blur');
+        this.urlPath();
+//        A.view.helper.setPrevURL(app.router);
         this.close();
+    },
+    urlPath: function(){
+
     },
     stopCloseModal: function(e){
         e.stopPropagation();
     }
 });
 
-A.view.static.snapDetail = Backbone.Marionette.ItemView.extend({
-    template: "#snap_detail_template",
+A.view.static.Layout = A.view.static.Modal_Layout.extend({
+    template: "#static_template",
     events:{
-        'click .close': 'closeModal',
         'click .modal_foreground_container': 'stopCloseModal',
-        'click .modal_background_container': 'closeModal'
+        'click .modal_background_container': 'closeModal',
+        'click .close': 'closeModal'
     },
-    onRender: function(){
-        this.$el.find('.modal_background_container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.modal_foreground_container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
-    },
-    stopCloseModal: function(e){
-        e.stopPropagation();
-    },
-    closeModal: function(e){
-        this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        this.close();
+    urlPath: function(){
+        A.view.helper.setPrevURL(app.router);
     }
 });
 
-A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
+A.view.static.snapDetail = A.view.static.Modal_Layout.extend({
+    template: "#snap_detail_template"
+});
+
+A.view.static.newSnapshot = A.view.static.Modal_Layout.extend({
     template: "#new_snapshot_template",
     className:"modal_add_snapshot",
     events:{
@@ -94,23 +88,11 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
 //            alert('file too big');
 //        }
     },
-    onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
-    },
     createOnEnter: function(e){
         if((e.keyCode || e.which) == 13){
             this.createSnapshot();
             e.preventDefault();
         }
-    },
-    stopCloseModal: function(e){
-        console.log('stop reached');
-        e.stopPropagation();
     },
     createSnapshot: function(e){
         var self = this;
@@ -200,15 +182,10 @@ A.view.static.newSnapshot = Backbone.Marionette.ItemView.extend({
             toggle.css('-webkit-animation','animate_toggle_rev .75s');
             toggle.css('-webkit-animation-fill-mode','forwards');
         }
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        this.close();
     }
 });
 
-A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
+A.view.static.newIdea = A.view.static.Modal_Layout.extend({
     template: "#new_idea_template",
     events:{
         'click .zoomin': 'stopCloseModal',
@@ -221,14 +198,6 @@ A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
         if(typeof this.model === 'undefined'){
             this.model = new A.model.Idea;
         }
-    },
-    onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
     },
     createOnEnter: function(e){
         var l = this.$el.find('.textarea_tag_line').val().length;
@@ -260,20 +229,11 @@ A.view.static.newIdea = Backbone.Marionette.ItemView.extend({
         else{
             text_field.addClass('warning_placeholder').focus();
         }
-    },
-    stopCloseModal: function(e){
-        e.stopPropagation();
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        this.close();
     }
 });
 
-A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
+A.view.static.settingsView = A.view.static.Modal_Layout.extend({
     template: "#settings_template",
-    regions: {},
     initialize: function(){
         this.imageValid = false;
         this.imageUploadAttmpt = false;
@@ -295,12 +255,7 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
     },
     onRender: function(){
         this.model.bind('change', this.render,this);
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
+        this.showModal();
         //set newsletter settings
         this.toggleSwitch(this.$el.find('#toggle_newsletter'),this.model.get('newsletter_setting'));
         if(this.model.get('facebook_auth')!==0&&this.model.has('facebook_auth')){
@@ -511,121 +466,26 @@ A.view.static.settingsView = Backbone.Marionette.ItemView.extend({
             toggle.css('-webkit-animation','animate_toggle_rev .75s');
             toggle.css('-webkit-animation-fill-mode','forwards');
         }
-    },
-    stopCloseModal: function(e){
-        e.stopPropagation();
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        A.view.helper.setPrevURL(app.router);
-        this.close();
     }
 });
 
-//A.view.static.follow = Backbone.Marionette.Layout.extend({
-//    template: "#follow_template",
-//    regions: {
-//        follows: "#follow_items"
-////        ,supporters: "#supporters"
-//    },
-//    events:{
-//        'click .btn_cancel': 'closeModal'
-//    },
-//    initialize: function(options){
-//        this.follows_col = options.follows_col;
-//    },
-//    onRender: function(){
-//        this.$el.find('.overlay-container').fadeIn(function() {
-//            $('#body').addClass('modal_blur');
-//            window.setTimeout(function(){
-//                $('.window-container').addClass('window-container-visible');
-//            }, 100);
-//        });
-//        var list_view = new A.view.static.UserListView({collection:this.follows_col});
-//        this.follows.show(list_view);
-//    },
-//    closeModal: function(){
-//        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-//        $('#body').removeClass('modal_blur');
-////        A.view.helper.setPrevURL(app.router);
-//        this.close();
-//    }
-//});
-
-A.view.static.userDetailView = Backbone.Marionette.ItemView.extend({
-    tagName: 'div',
-//    className: 'user_detail',
-    template: '#user_list_template',
-    events:{
-        'click .btn_follow': 'follow',
-        'click .btn_follow_pressed': 'unFollow'
-    },
-    initialize: function(){
-        this.model.bind('change', this.render, this);
-    },
-    follow: function(){
-        this.$el.find('.btn_follow').removeClass('btn_follow').addClass('btn_follow_pressed');
-        A.view.helper.setFollow(1,this.model).save();
-    },
-    unFollow: function(){
-        this.$el.find('.btn_follow_pressed').removeClass('btn_follow_pressed').addClass('btn_follow');
-        A.view.helper.setFollow(0,this.model).save();
-    }
-    //moved to helper
-//    setFollow: function(is_active){
-//        if(typeof is_active === 'undefined'){
-//            is_active = 1;
-//        }
-//        var following = new A.model.supportFollowing();
-//        following.set('user', this.model.get('user'));
-//        following.set('is_active', is_active);
-//        this.model.set('is_following',is_active,{silent: true});
-//        app.follows_col.add(following ,{silent: true});
-//        var temp = app.tinker.owner.get('count_followings');
-//        if(is_active === 1){
-//           temp = temp +1;
-//        }
-//        else{
-//            temp = temp - 1;
-//        }
-//        app.tinker.owner.set('count_followings', temp);
-//        //TODO delete itself on save
-//        return following
-//    }
-});
-
-A.view.static.UserListView =  Backbone.Marionette.CollectionView.extend({
-    id: 'user_list',
-    itemView : A.view.static.userDetailView
-});
-
-A.view.static.follow = Backbone.Marionette.Layout.extend({
+A.view.static.follow = A.view.static.Modal_Layout.extend({
     template: "#follow_template",
     regions: {
         follows: "#follow_items"
-//        ,supporters: "#supporters"
     },
     events:{
-        'click .btn_cancel': 'closeModal'
+        'click .btn_cancel': 'closeModal',
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal'
     },
     initialize: function(options){
         this.follows_col = options.follows_col;
     },
     onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
+        this.showModal();
         var list_view = new A.view.static.UserListView({collection:this.follows_col});
         this.follows.show(list_view);
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        $('#body').removeClass('modal_blur');
-        this.close();
     }
 });
 
@@ -682,33 +542,23 @@ A.view.static.UserListView =  Backbone.Marionette.CollectionView.extend({
     itemView : A.view.static.userDetailView
 });
 
-A.view.static.dndOrder = Backbone.Marionette.Layout.extend({
+A.view.static.dndOrder =  A.view.static.Modal_Layout.extend({
     template: "#dnd_order_snapshot_template",
     regions: {
         snapshots: "#dnd_snapshot_list_container"
     },
     events:{
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal',
         'click .btn_cancel': 'closeModal'
     },
     initialize: function(options){
         this.col = options.collection;
     },
     onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-                $('#body').addClass('modal_blur');
-            }, 100);
-        });
+        this.showModal();
         var list_view = new A.view.static.OrderSnapListView({collection:this.col});
         this.snapshots.show(list_view);
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        this.col.trigger('re_order');
-//        A.view.helper.setPrevURL(app.router);
-        $('#body').removeClass('modal_blur');
-        this.close();
     }
 });
 

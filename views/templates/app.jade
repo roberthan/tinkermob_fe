@@ -29,23 +29,23 @@ script#user_list_template(type="text/template")
 
 script#static_template(type="text/template")
     div.modal_background_container
-        div.modal_foreground_container.zoomin
+        div.modal_foreground_container.modal_relative_sizing.zoomin
             h3 Lorem ipsum dolor sit amet
             p consectetur adipiscing elit. Proin a est vitae nisl sollicitudin dignissim. Pellentesque consectetur justo ac leo sodales egestas fringilla sit amet eros. Aliquam ut ante lorem. Suspendisse potenti. Cras vulputate elementum nunc, tincidunt pellentesque lectus pulvinar a. Donec id dui odio. Nulla tincidunt, elit non lobortis ullamcorper, nisl sapien ultricies nulla, id hendrerit urna metus eu velit.
             br
             span.close Close me
 
 script#follow_template(type="text/template")
-    div#input_modal.overlay-container
-        div.window-container.zoomin
+    div#input_modal.modal_background_container
+        div.modal_foreground_container.modal_absolute_sizing.zoomin
             h3.header  <% if(1){ %> Followers <% } else{ %> Followers <% } %>
             #follow_items
             div.btn-container
                 span.btn.btn_cancel Cancel
 
 script#dnd_order_snapshot_template(type="text/template")
-    div#input_modal.overlay-container
-        div.window-container.zoomin
+    div#input_modal.modal_background_container
+        div.modal_foreground_container.modal_absolute_sizing.zoomin
             h3.header  Snapshots
             #dnd_snapshot_list_container
             div.btn-container

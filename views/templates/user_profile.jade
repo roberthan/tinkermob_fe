@@ -44,8 +44,8 @@ script#user_profile_template(type="text/template")
     div#user_ideas
 
 script#settings_template(type="text/template")
-    div#input_modal.overlay-container
-        div.window-container.extra_long.zoomin
+    div#input_modal.modal_background_container
+        div.modal_foreground_container.modal_absolute_sizing.extra_long.zoomin
             h3.header Settings
             div.text_warning
             form(enctype="multipart/form-data").settings_form.input_form
@@ -87,3 +87,17 @@ script#settings_template(type="text/template")
                 div.btn-container
                     span.btn.btn_save.left Save
                     span.btn.btn_cancel.right Cancel
+
+script#new_idea_template(type="text/template")
+    div#input_modal.modal_background_container
+        div.modal_foreground_container.zoomin.medium_long.modal_absolute_sizing
+            h3.header  <% if(typeof revision !== 'undefined'){ %> Edit Idea <% } else{ %> New Idea <% } %>
+            form.new_idea_form.input_form
+                textarea.textarea_input.textarea_tag_line(placeholder='Tagline') <%= tag_line %>
+                br
+                div.char_count
+                    div.count <%= tag_line.length %>
+                    div.text  / 140 chars
+            div.btn-container
+                span.btn.btn_add.left <% if(typeof revision !== 'undefined'){ %> Save <% } else{ %> Add <% } %>
+                span.btn.btn_cancel.right Cancel
