@@ -43,12 +43,12 @@ script#new_snapshot_template(type="text/template")
 script#snap_detail_template(type="text/template")
     div.modal_background_container
         div.modal_foreground_container.modal_relative_sizing
-            <% if(original_image !== (IMG_PATH+"/cog.png")){ %>
+            <% if(display_image !== (IMG_PATH+"/cog.png")){ %>
             table.modal_table
                 tbody
                     tr
                         td.modal_pic_container
-                            img.modal_pic(src!="<%= original_image %>")
+                            img.modal_pic(src!="<%= display_image %>")
             div.infobar <%= text %>
             <% } else{ %>
             table.modal_table.modal_no_image
