@@ -64,14 +64,30 @@
     width: 32px
     background-image: url(STATIC_MEDIA_URL + "/user_button.png");
     border:0
-    float:right;
     margin-left:4px;
 }
+
+.menu_profile_pic_container{
+    float:left;
+    width: 32px;
+    height 32px;
+    margin: -2px 4px 0 4px;
+    border-radius: 50%;
+    background-size: 100%;
+}
+.menu_profile_pic{
+    margin: -6px 0 0 -7px;
+    width:40px;
+    height:40px;
+    background-repeat: no-repeat;
+}
+
 #selfProfile .header_container{
     height: 24px;
 }
 
-#selfProfile .user_name, #selfProfile .btn_login{
+#selfProfile .user_name,
+#selfProfile .btn_login{
     float:right;
     padding-left: 4px;
     padding-top: 6px;
@@ -81,6 +97,11 @@
     text-overflow: ellipsis;
     text-align: right;
 }
+
+#selfProfile .username{
+    display: inline;
+}
+
 
 #selfProfile ul{
     background:#fff; /* Adding a background makes the dropdown work properly in IE7+. Make this as close to your page's background as possible (i.e. white page == white background). */

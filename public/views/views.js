@@ -179,7 +179,7 @@ A.view.menu.SelfProfile = Backbone.Marionette.ItemView.extend({//Backbone.dragAn
 //        'click .permalink': 'navigate'
     },
     initialize: function(){
-//        this.model.bind('change', this.render, this);
+        this.model.bind('change', this.render, this);
     }
 //    ,
 //    navigate: function(e){

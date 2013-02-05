@@ -9,7 +9,6 @@ script#menu_web_template(type="text/template")
                 <% if(USER){ %>
                 div.header_container.btn_my_ideas()
                     div.arrow_down
-                    div.pic
                     div.user_name#selfprofile_user_name TESTINGTESTINGTESTINGT
                 ul
                     li.btn_my_ideas My Ideas
@@ -37,3 +36,5 @@ script#menu_web_template(type="text/template")
 
 script#menu_self_profile_template(type="text/template")
     div.username <%= username %>
+    a.menu_profile_pic_container(style!="background-image:url('<%= profile_image %>')",href!='/user/<%= username %>')
+        img.menu_profile_pic(src="#{img_path}/user_icon_frame.png")

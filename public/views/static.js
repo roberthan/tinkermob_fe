@@ -241,8 +241,8 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
         this.change_username= false;
     },
     events:{
-//        'click .zoomin': 'stopCloseModal',
-//        'click #input_modal': 'closeModal',
+        'click .zoomin': 'stopCloseModal',
+        'click #input_modal': 'closeModal',
         'change .upload_file': 'validateFile',
         'click #toggle_fb': 'fbAuth',
         'click #toggle_twitter': 'twitterAuth',
