@@ -57,10 +57,10 @@ A.view = A.view || {};
         },
         defaultComparator: function(item) {
 //            console.log('default called')
-            return item.get("-rank");
+            return (-1*item.get("rank"));
         },
         newestComparator: function(item) {
-            return item.get("-modified_on");
+            return (-1*item.get("modified_on"));
         },
         oldestComparator: function(item) {
             return item.get("modified_on");

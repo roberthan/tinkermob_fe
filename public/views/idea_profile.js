@@ -277,7 +277,7 @@ A.view.ideaProfile.SnapshotView = Backbone.Marionette.ItemView.extend({
         e.stopPropagation();
     },
     onRender: function(){
-        if(this.model.get("original_image")=== IMG_PATH+'/cog.png' && this.model.has("image")=== false){
+        if(this.model.get("display_image")=== IMG_PATH+'/cog.png' && this.model.has("image")=== false){
             this.$el.addClass('no_image');
         }
         var img = this.$el.find('.snapshot_tile');

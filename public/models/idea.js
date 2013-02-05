@@ -74,7 +74,7 @@ A.view = A.view || {};
             return (-1*item.get('count_supporters'));
         },
         newestComparator: function(item) {
-            return item.get("-modified_on");
+            return (-1*item.get("modified_on"));
         },
         oldestComparator: function(item) {
             return item.get("modified_on");

@@ -13,7 +13,7 @@ A.view = A.view || {};
         defaults: {
             text: "",
             tile_image: IMG_PATH+'/cog.png',
-            original_image: IMG_PATH+'/cog.png',
+            display_image: IMG_PATH+'/cog.png',
             ordering: 0,
             horizontal_size:1,
             vertical_size: 1,
@@ -71,7 +71,7 @@ A.view = A.view || {};
             return item.get("ordering");
         },
         newestComparator: function(item) {
-            return item.get("-modified_on");
+            return (-1*item.get("modified_on"));
         },
         oldestComparator: function(item) {
             return item.get("modified_on");

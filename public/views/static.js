@@ -241,8 +241,8 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
         this.change_username= false;
     },
     events:{
-        'click .zoomin': 'stopCloseModal',
-        'click #input_modal': 'closeModal',
+//        'click .zoomin': 'stopCloseModal',
+//        'click #input_modal': 'closeModal',
         'change .upload_file': 'validateFile',
         'click #toggle_fb': 'fbAuth',
         'click #toggle_twitter': 'twitterAuth',
@@ -270,7 +270,7 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
 //        this.$el.find("#dropdown_fb_push option[value='"+this.model.get('fb_push')+"']").attr('selected', 'selected');
     },
     validateFile : function(e){
-//        console.log(e.target.files);
+        console.log(A.view.helper.validateFile(e));
         this.imageValid =A.view.helper.validateFile(e);
         this.imageUploadAttmpt = true;
     },
@@ -356,11 +356,12 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
         else{
             this.model.set('newsletter_setting', true,{ silent: true });
         }
-//        function progressHandlingFunction(e){
-//            if(e.lengthComputable){
-//                self.$el.find('.upload_progress').attr({value:e.loaded,max:e.total});
-//            }
-//        }
+        function progressHandlingFunction(e){
+            if(e.lengthComputable){
+                self.$el.find('.text_warning').text("Image uploading, might take a minute or two");
+                self.$el.find('.upload_progress').attr({value:e.loaded,max:e.total});
+            }
+        }
         if(this.imageValid===true){
             var image_id = A.view.helper.guid();
             var self = this;
@@ -383,13 +384,14 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
                     if(status==='success'){
                         var data = JSON.parse(jqXHR.responseText)[0];
                         if(_.has(data,'original_image')){
-                            self.model.set('original_image',data.original_image);
-                            self.model.set('tile_image',data.tile_image);
+                            self.model.set('display_image',data.original_image,{ silent: true });
+                            self.model.set('original_image',data.original_image,{ silent: true });
+                            self.model.set('tile_image',data.tile_image,{ silent: true });
                             self.model.save({},{noAjax:true});
                         }
                     }
                     self.closeModal();
-                    if(this.change_username){
+                    if(self.change_username){
                         window.location='/logout?next=/login'
                     }
                 },
@@ -409,8 +411,8 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
         self.model.unset('password',{ silent: true });
         self.model.save({},{noAjax:true});
         if(this.imageUploadAttmpt===false){
-            this.closeModal()
-            if(change_username){
+            this.closeModal();
+            if(this.change_username){
                 setTimeout(window.location='/logout?next=/login', 2000);
             }
         }
@@ -466,6 +468,9 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
             toggle.css('-webkit-animation','animate_toggle_rev .75s');
             toggle.css('-webkit-animation-fill-mode','forwards');
         }
+    },
+    urlPath:function(){
+        A.view.helper.setPrevURL(app.router);
     }
 });
 
