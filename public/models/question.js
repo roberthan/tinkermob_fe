@@ -46,7 +46,7 @@ A.view = A.view || {};
         urlRoot: QUEST_URL,
         model: A.model.Question,
         comparator : function(model) {
-            return model.get('-rank');
+            return (-1*model.get('rank'));
         },
         localStorage: new Backbone.LocalStorage("Questions-backbone"),
         initialize: function(){

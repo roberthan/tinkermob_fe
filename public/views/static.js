@@ -3,41 +3,7 @@ A.model = A.model || {};
 A.view = A.view || {};
 A.view.static = A.view.static || {};
 
-A.view.static.Modal_Layout = Backbone.Marionette.Layout.extend({
-    regions: {
-    },
-    events:{
-        'click .modal_foreground_container': 'stopCloseModal',
-        'click .modal_background_container': 'closeModal',
-        'click .close': 'closeModal'
-    },
-    onRender: function(){
-        this.showModal();
-    },
-    showModal:function(){
-        this.$el.find('.modal_background_container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.modal_foreground_container').addClass('window-container-visible');
-//                $('#body').addClass('modal_blur');
-            }, 100);
-        });
-    },
-    closeModal: function(){
-        this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
-//        $('#body').removeClass('modal_blur');
-        this.urlPath();
-//        A.view.helper.setPrevURL(app.router);
-        this.close();
-    },
-    urlPath: function(){
-
-    },
-    stopCloseModal: function(e){
-        e.stopPropagation();
-    }
-});
-
-A.view.static.Layout = A.view.static.Modal_Layout.extend({
+A.view.static.Layout = A.view.Modal_Layout.extend({
     template: "#static_template",
     events:{
         'click .modal_foreground_container': 'stopCloseModal',
@@ -49,11 +15,26 @@ A.view.static.Layout = A.view.static.Modal_Layout.extend({
     }
 });
 
-A.view.static.snapDetail = A.view.static.Modal_Layout.extend({
-    template: "#snap_detail_template"
+A.view.static.snapDetail = A.view.Modal_Layout.extend({
+    template: "#snap_detail_template",
+    events:{
+        'click .btn_modal_show_more': 'showMore',
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal',
+        'click .close': 'closeModal'
+    },
+    showMore: function(e){
+        this.$el.find('.modal_foreground_container').toggleClass('modal_show_more');
+        if(this.$el.find('.modal_foreground_container').hasClass('modal_show_more')){
+            this.$el.find('.btn_modal_show_more').text('Hide text');
+        }
+        else{
+            this.$el.find('.btn_modal_show_more').text('Show more');
+        };
+    }
 });
 
-A.view.static.newSnapshot = A.view.static.Modal_Layout.extend({
+A.view.static.newSnapshot = A.view.Modal_Layout.extend({
     template: "#new_snapshot_template",
     className:"modal_add_snapshot",
     events:{
@@ -185,7 +166,7 @@ A.view.static.newSnapshot = A.view.static.Modal_Layout.extend({
     }
 });
 
-A.view.static.newIdea = A.view.static.Modal_Layout.extend({
+A.view.static.newIdea = A.view.Modal_Layout.extend({
     template: "#new_idea_template",
     events:{
         'click .zoomin': 'stopCloseModal',
@@ -232,7 +213,7 @@ A.view.static.newIdea = A.view.static.Modal_Layout.extend({
     }
 });
 
-A.view.static.settingsView = A.view.static.Modal_Layout.extend({
+A.view.static.settingsView = A.view.Modal_Layout.extend({
     template: "#settings_template",
     initialize: function(){
         this.imageValid = false;
@@ -474,7 +455,7 @@ A.view.static.settingsView = A.view.static.Modal_Layout.extend({
     }
 });
 
-A.view.static.follow = A.view.static.Modal_Layout.extend({
+A.view.static.follow = A.view.Modal_Layout.extend({
     template: "#follow_template",
     regions: {
         follows: "#follow_items"
@@ -547,7 +528,7 @@ A.view.static.UserListView =  Backbone.Marionette.CollectionView.extend({
     itemView : A.view.static.userDetailView
 });
 
-A.view.static.dndOrder =  A.view.static.Modal_Layout.extend({
+A.view.static.dndOrder =  A.view.Modal_Layout.extend({
     template: "#dnd_order_snapshot_template",
     regions: {
         snapshots: "#dnd_snapshot_list_container"

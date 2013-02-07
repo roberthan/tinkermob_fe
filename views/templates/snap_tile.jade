@@ -41,19 +41,17 @@ script#new_snapshot_template(type="text/template")
 
 script#snap_detail_template(type="text/template")
     div.modal_background_container
+        <% if(display_image !== (IMG_PATH+"/cog.png")){ %>
         div.modal_foreground_container.modal_relative_sizing
-            <% if(display_image !== (IMG_PATH+"/cog.png")){ %>
-            table.modal_table
-                tbody
-                    tr
-                        td.modal_pic_container
-                            img.modal_pic(src!="<%= display_image %>")
-            div.infobar <%= text %>
-            <% } else{ %>
-            table.modal_table.modal_no_image
-                tbody
-                    tr
-                        td.modal_pic_container
-                            div.modal_txt_body <%= text %>
-            <% } %>
+            div.modal_pic(style!="background-image:url('<%= display_image %>')")
+            div.btn_modal_show_more Show more
+            div.modal_infobar_container
+                div.modal_infobar <%= text %>
             span.close Close me
+        <% } else{ %>
+        div.modal_foreground_container.modal_relative_sizing.modal_no_image
+            div.modal_pic(style!="background-image:url('<%= display_image %>')")
+            div.modal_infobar_container
+                div.modal_infobar <%= text %>
+            span.close Close me
+        <% } %>

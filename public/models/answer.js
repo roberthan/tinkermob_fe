@@ -32,7 +32,7 @@ A.view = A.view || {};
         urlRoot: ANS_URL,
         model: A.model.Answer,
         comparator : function(model) {
-            return (-1*item.get("rank"));
+            return (-1*model.get("rank"));
         },
         localStorage: new Backbone.LocalStorage("Answers-backbone"),
         initialize: function(){

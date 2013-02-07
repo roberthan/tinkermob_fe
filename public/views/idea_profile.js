@@ -162,13 +162,13 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     }
 });
 
-A.view.ideaProfile.sharePanel = Backbone.Marionette.ItemView.extend({
+A.view.ideaProfile.sharePanel = A.view.Modal_Layout.extend({
     template: "#share_panel_template",
     events:{
         'click .share_reddit': 'shareReddit',
         'click .share_fb': 'shareFb',
-        'click .window-container': 'stopPropagation',
-        'click .overlay-container': 'closeModal'
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal'
     },
     initialize: function(){
         reddit_url = "http://www.reddit.com/buttons";
@@ -178,9 +178,6 @@ A.view.ideaProfile.sharePanel = Backbone.Marionette.ItemView.extend({
     },
     shareReddit: function(){
 
-    },
-    stopPropagation: function(e){
-        e.stopPropagation();
     },
     shareFb: function(e){
         var obj = {
@@ -193,17 +190,6 @@ A.view.ideaProfile.sharePanel = Backbone.Marionette.ItemView.extend({
             description: this.model.get('text')
         };
         app.vent.trigger('social:fbPost', obj);
-    },
-    onRender: function(){
-        this.$el.find('.overlay-container').fadeIn(function() {
-            window.setTimeout(function(){
-                $('.window-container').addClass('window-container-visible');
-            }, 100);
-        });
-    },
-    closeModal: function(){
-        this.$el.find('.overlay-container').fadeOut().end().find('.window-container').removeClass('window-container-visible');
-        this.close();
     }
 });
 

@@ -188,6 +188,42 @@ A.view.menu.SelfProfile = Backbone.Marionette.ItemView.extend({//Backbone.dragAn
 //    }
 });
 
+
+A.view.Modal_Layout = Backbone.Marionette.Layout.extend({
+    regions: {
+    },
+    events:{
+        'click .modal_foreground_container': 'stopCloseModal',
+        'click .modal_background_container': 'closeModal',
+        'click .close': 'closeModal'
+    },
+    onRender: function(){
+        this.showModal();
+    },
+    showModal:function(){
+        this.$el.find('.modal_background_container').fadeIn(function() {
+            window.setTimeout(function(){
+                $('.modal_foreground_container').addClass('window-container-visible');
+//                $('#body').addClass('modal_blur');
+            }, 100);
+        });
+    },
+    closeModal: function(){
+        this.$el.find('.modal_background_container').fadeOut().end().find('.modal_foreground_container').removeClass('window-container-visible');
+//        $('#body').removeClass('modal_blur');
+        this.urlPath();
+//        A.view.helper.setPrevURL(app.router);
+        this.close();
+    },
+    urlPath: function(){
+
+    },
+    stopCloseModal: function(e){
+        e.stopPropagation();
+    }
+});
+
+
 Backbone.Marionette.PaginatedCollectionView =  Backbone.Marionette.CollectionView.extend({
     initializePaginated: function(){
         var self= this;

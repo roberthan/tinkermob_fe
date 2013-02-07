@@ -60,7 +60,7 @@ A.view = A.view || {};
         urlRoot: IDEA_URL,
         model: A.model.Idea,
         comparator : function(model) {
-            return -1*model.get('count_supporters')*model.get('created_on');
+            return -1*model.get('count_supporters');
         },
         localStorage: new Backbone.LocalStorage("Ideas-backbone"),
         initialize: function(){
