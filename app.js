@@ -57,7 +57,6 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(obj, done) {
 //    console.log('deserial: '+obj);
-    var auth={};
     done(null, obj);
 });
 
@@ -198,7 +197,7 @@ app.configure(function(){
     //    app.use(express.errorHandler());
     //}
     app.use(express.cookieParser());
-    app.use(express.session({ secret: "keyboarcatz", key: 'express.sid', store: sessionStore }));
+    app.use(express.session({ secret: "keyboarcatz", key: 'express.sid', store: sessionStore,cookie: {maxAge: (14 * 24 * 3600 * 1000)} }));
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -291,6 +290,21 @@ app.post('/login',
         failureFlash: true })
 );
 
+app.post('/auth',
+    passport.authenticate('local', { successRedirect: '/auth/token',
+        failureRedirect: '/auth/token',
+        failureFlash: true })
+);
+
+app.get('/auth/token', function(req, res){
+    var obj = {};
+    req.user = req.user || {};
+    obj.user = req.user.user || '';
+    obj.username = req.user.username || '';
+    obj.auth_key = req.user.auth_key || '';
+    res.send(JSON.stringify(obj));
+});
+
 app.get('/password/*',
     passport.authenticate('local', { successRedirect: '/settings',
         failureRedirect: '/login#failrest',
@@ -330,7 +344,6 @@ app.get('/api/*', function(req, res){
             }
             else {
                 res.send(body);
-//                console.log('oops: '+response.statusCode)
                 console.log(error)
             }
         }
@@ -383,7 +396,6 @@ app.get('/auth/*', function(req, res){
     request(
         { method: 'GET'
             , uri: API_SERVER_URL+req.url
-      //      , json: data.body
         }
         , function (error, response, body) {
 //            var resData = body||{};
@@ -488,7 +500,7 @@ app.get('/my-ideas', function(req, res){
 
 app.get('/settings', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
+        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL, media_url:MEDIA_URL});
     }
     else{
         res.render('index', { user: req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
@@ -497,17 +509,6 @@ app.get('/settings', function(req, res){
 
 app.get('/logout', function(req, res){
     req.logOut();
-//    var url = "API_SERVER_URL/auth/logout";
-//    var method = 'GET'
-//    request(
-//        {
-//            method: method,
-//            uri: url
-//        }
-//        , function (error, response, body) {
-//            res.send(response);
-//        }
-//    );
     if(typeof req.query.next !=='undefined'){
         res.redirect(req.query.next);
     }
@@ -685,7 +686,6 @@ io.sockets.on('connection', function (socket) {
                 }
                 else {
                     socket.emit('success', body);
-//                    console.log(error)
                 }
             }
         );
