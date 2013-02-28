@@ -1,7 +1,29 @@
 tile_width=290px
 tile_height=290px
 info_height = 48px
+padding_height = 24px
 detail_height = 64px
+
+hdpi_tile_width=208px
+hdpi_tile_height=208px
+hdpi_padding_height = 8px
+
+
+/* Smaller than standard 960 (devices and browsers) */
+@media only screen and (max-width: 959px) {}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 959px) {}
+
+/* All Mobile Sizes (devices and browser) */
+@media only screen and (max-width: 767px) {}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {}
+
 #ideas{
     margin-top: 80px;
     padding-top: 16px;
@@ -15,20 +37,26 @@ detail_height = 64px
     float: left;
     width:tile_width;
     height: tile_height;
-    padding: 24px;
+    padding: padding_height;
     list-style-type: none;
 }
 .my_idea_tile{
     float: left;
     width:tile_width;
     height: tile_height - info_height ;
-    padding: 24px 24px 0 24px;
+    padding: padding_height padding_height 0 padding_height;
     list-style-type: none;
  }
 
 .idea_tile_body{
     position: relative;
     padding: 0px;
+    width: 100%;
+    display: block;
+}
+
+.idea_tile .idea_tile_body{
+    height: 75%;
 }
 
 .idea_tile_body_pic{
@@ -36,51 +64,53 @@ detail_height = 64px
     background-position:center center;
     background-color: #756963;
     background-size: auto;
-    width: 290px;
-    height: 228px;
+    width: 100%;
+    height: 100%;
 /*(src!="<%= tile_image %>", width='290px', height='228px')*/
 }
 
 .idea_tile_body_infobar{
     /*background-color: #3a3431;*/
     background-color: #000000;
-    height: info_height;
+    height: 25%;
     position: absolute;
-    margin-top: - info_height;
+    margin-top: -25%;
     opacity:0.7;
-    width:tile_width;
+    width:100%;
     left:0
 }
-.idea_tile_body:hover .idea_tile_body_infobar,
+.desktop .idea_tile_body:hover .idea_tile_body_infobar,
 .no_image .idea_tile_body_infobar{
-    height: tile_height - info_height - 12;
-    margin-top: - tile_height + info_height + 12;
+    height: 100%;
+    margin-top: -100%;
     opacity:0.6;
 }
 
 .idea_tile_body_infobar_tagline,
 .my_idea_tile_body_infobar_tagline{
-    padding: 12px 8px;
+    padding: 4% 2%;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
     float: left;
-    width: (4 * tile_width / 5) - 2 * 8px;
-    font-size: 20px;
+    width: 96%;
+    font-size: 120%;
     opacity:1;
     color: #ffffff;
-    height: 20px;
+    height: 25%;
 }
 
 .no_image .idea_tile_body_infobar_tagline,
 .no_image .my_idea_tile_body_infobar_tagline,
-.idea_tile_body:hover .idea_tile_body_infobar_tagline,
-.idea_tile_body:hover .my_idea_tile_body_infobar_tagline{
-    font-size: 28px;
+.desktop .idea_tile_body:hover .idea_tile_body_infobar_tagline ,
+.desktop .idea_tile_body:hover .my_idea_tile_body_infobar_tagline {
+    font-size: 150%;
     white-space: normal;
-    padding: 24px 36px;
+    padding: 10% 15%;
+        /*24px 36px;*/
     /*height: tile_height - info_height - 12;*/
-    height: 152px;
+    height: 80%;
+    width: 70%;
 }
 .idea_tile_body_infobar_snapshots{
     /*margin: 10px 4px;*/
@@ -88,8 +118,9 @@ detail_height = 64px
     /*float: right;*/
     position: absolute;
     right: 8px;
-    bottom: 12px;
-    width: (tile_width / 5)- 2 * 7px;
+    /*height: 28px;*/
+    bottom: 8px;
+    width: 16%;
     font-size: 20px;
     background-color: #615d5a;
     text-align: center;
@@ -103,43 +134,65 @@ detail_height = 64px
 .idea_tile_details{
     background-image:url(STATIC_MEDIA_URL + '/shadow.png');
     background-repeat:no-repeat;
-    height detail_height
+    height 25%;
+    background-size: contain;
     /*padding: 8px;*/
 }
 .idea_tile_details_profile{
     float: left
     width: detail_height - 16
     height detail_height - 16
-    margin 8px 12px
+    margin 5% 12px
     border-radius: 50%;
     background-size: 100%;
 }
-
 .idea_tile_details_profile_pic{
     margin: -8px 0 0 -8px;
     width:64px;
     height:64px;
 }
-
+@media screen and (min-width: 480px) and (max-width: 767px)  {
+    .idea_tile{
+        width:hdpi_tile_width;
+        height: hdpi_tile_height;
+        padding: hdpi_padding_height;
+    }
+    .my_idea_tile{
+        width:hdpi_tile_width;
+        height: hdpi_tile_height - info_height ;
+        padding: hdpi_padding_height hdpi_padding_height 0 hdpi_padding_height;
+    }
+    .idea_tile_details_profile{
+        width: 40px
+        height 40px
+        margin 8px 12px
+    }
+    .idea_tile_details_profile_pic{
+        margin: -8px 0 0 -8px;
+        width:56px;
+        height:56px;
+    }
+}
 .idea_tile_details_owner{
-    width: (tile_width * 3/ 4)
-    height (detail_height/2)
+    width: 65%
+    height 50%
     float: left;
 }
 .idea_tile_details_owner_text{
-    padding: 8px 0;
-    font-size: 14px;
+    padding: 10px 0 0 8px;
+    font-size: 120%;
     font-weight: 500;
 }
 .idea_tile_details_stats{
-    width: (tile_width * 3/ 4)
+    width: 65%;
     float: left;
-    height (detail_height/2)
+    height 50%
 }
 
 .idea_tile_details_stats_item{
-    width: (tile_width / 4)
-    height (detail_height/2)
+    width: 50%;
+    height 95%
+    margin-top: 5%
     float: left;
 }
 .idea_tile_details_stats_pic{
@@ -156,7 +209,7 @@ detail_height = 64px
     position: absolute;
     z-index: 10;
     right:8px;
-    top:-208px;
+    top: 8px;
     background-color: #000000;
     opacity:0.7;
     padding: 8px;
@@ -164,16 +217,17 @@ detail_height = 64px
     border-radius: 8px;
 }
 .no_image .my_idea_tile_body_infobar_tagline,
-.idea_tile_body:hover .my_idea_tile_body_infobar_tagline{
+.desktop  .idea_tile_body:hover .my_idea_tile_body_infobar_tagline {
     /*padding: 24px 48px 24px 18px;*/
     width:176px;
 }
 
 .idea_tile_shadow{
-    width: tile_width
-    height: 24px;
+    width: 100%
+    height: 25%;
     background-image:url(STATIC_MEDIA_URL + '/shadow.png');
     background-repeat:no-repeat;
+    background-size: contain;
 }
 
 .ideas_settings_container{
@@ -187,6 +241,9 @@ detail_height = 64px
     position: fixed;
     top: 48px;
     z-index: 100;
+}
+.android .ideas_settings_container{
+    top: 0;
 }
 .ideas_settings{
     /*position: fixed;*/

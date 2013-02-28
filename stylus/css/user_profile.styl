@@ -1,8 +1,12 @@
 username_color = #ffdabf
 #user_profile_view{
-    margin-top: 80px;
+    margin-top:8px;
     width: 100%;
     color:white;
+}
+
+.desktop #user_profile_view{
+    margin-top: 80px;
 }
 
 #user_ideas{
@@ -139,9 +143,13 @@ username_color = #ffdabf
     background-image: url(STATIC_MEDIA_URL + "/btn_unfollow.png");
 }
 .user_profile_stats_container .btn_back{
+    display: none;
+}
+.desktop .user_profile_stats_container .btn_back{
     position: absolute;
     left: 0;
     width: 16px;
     padding: 16px 4px;
     cursor: pointer;
+    display: block;
 }

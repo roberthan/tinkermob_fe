@@ -501,10 +501,20 @@ app.get('/user/*', function(req, res){
 
 app.get('/my-ideas', function(req, res){
     if(_.isUndefined(req.user)){
-        res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
+        if(req.headers['user-agent'] === "Tinkermob - App"){
+            res.render('android/index',{ user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
+        }
+        else{
+            res.render('index', { user:'', auth_key:'', img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL});
+        }
     }
     else{
-        res.render('index', { user: req.user.user, username:req.user.username,auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
+        if(req.headers['user-agent'] === "Tinkermob - App"){
+            res.render('android/index', { user:req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
+        }
+        else{
+            res.render('index', { user:req.user.user, username:req.user.username, auth_key: req.user.auth_key, img_path:STATIC_MEDIA_URL,media_url:MEDIA_URL });
+        }
     }
 });
 

@@ -50,10 +50,6 @@ app.addInitializer(function(){
             },
             useCache:true
         });
-//        app.tinker.ideas = new A.model.Ideas();
-//        app.tinker.ideas.filtrate({'user':app.tinker.owner.get('username')});
-        var self_profile = new A.view.menu.SelfProfile({model:app.tinker.owner});
-//        menu_web.selfProfile.show(self_profile);
         app.vent.bind('navigate:my_ideas', app.controller.myIdeasNavi);
         app.vent.bind('navigate:logout', app.controller.logout);
         app.vent.bind('navigate:settings', app.controller.settings);
@@ -63,7 +59,6 @@ app.addInitializer(function(){
         Backbone.startSocket();
     }
     else{
-        app.vent.bind('navigate:login', app.controller.login);
         app.vent.bind('navigate:join', app.controller.join);
         window.localStorage.clear()//clears local storage data
     }
@@ -76,25 +71,12 @@ app.addInitializer(function(){
     app.vent.bind('navigate:home', app.controller.home);
     app.vent.bind('navigate:following', app.controller.follow);
     app.vent.bind('navigate:follower', app.controller.follow);
-
-//    $(window).bind('scroll', function(){
-//        var y_scroll_pos = $(window).scrollTop();//window.pageYOffset;
-//        var scroll_pos_test = 190;             // set to whatever you want it to be
-//        if(y_scroll_pos > scroll_pos_test) {
-//            app.vent.trigger('page:set_fixed');
-//        }
-//        else if(y_scroll_pos <= scroll_pos_test) {
-//            app.vent.trigger('page:unset_fixed');
-//        }
-//    });
-//    A.timer = new Backbone.syncTimer();
 });
 
 app.control_helper = {
     viewToBrowse: function(view){
         if(app.STATE !=='browse'){
             if(typeof app.mainApp.my_ideas.currentView !== 'undefined'){
-//                app.mainApp.my_ideas.currentView.$el.hide();
                 app.mainApp.my_ideas.url = window.location.pathname;
             }
             this.slideToBrowse();
@@ -148,7 +130,6 @@ app.control_helper = {
     },
     postToFB: function(obj){
         function callback(response) {
-            console.log(response['post_id']);
         }
         FB.ui(obj, callback);
     }
@@ -316,13 +297,10 @@ app.controller = {
             return 0;
         }
         if(typeof app.mainApp.browse.currentView !== 'undefined' && app.STATE === 'browse'){
-//            app.control_helper.unSetInfiniteScroll(app.mainApp.browse.currentView);
-//            app.mainApp.browse.currentView.$el.hide('slow');
             app.mainApp.browse.url = window.location.pathname;
             app.control_helper.slideToMyIdeas();
         }
         if(typeof app.mainApp.my_ideas.currentView !== 'undefined'  && app.STATE !== 'my_ideas'){
-//            app.mainApp.my_ideas.currentView.$el.show('slow');
             app.vent.trigger('toggle:section');
             if(typeof app.mainApp.my_ideas.currentView.ideas !== 'undefined'){
                 if(typeof app.mainApp.my_ideas.currentView.ideas.currentView !== 'undefined'){
