@@ -170,7 +170,8 @@ app.controller = {
                     this.model.set('snapshots',snapshots);
                     this.model.set('questions',questions);
                     var snapshotView = new A.view.ideaProfile.SnapListView({
-                        collection: this.model.get('snapshots')
+                        collection: this.model.get('snapshots'),
+                        column_width: 224
                     });
                     snapshots.filtrate({filter:{'idea':this.model.id},
                         success: function(snapshots,res){
@@ -202,7 +203,7 @@ app.controller = {
 //                    app.mainApp.my_ideas.show(ideaView);
                     app.control_helper.viewToMyIdeas(ideaView);
                 }
-                var path = ('/idea/' + model.get('id')) || '';
+                var path = ('/idea/' + model.get('id')) || '/';
                 app.router.navigate(path);
             }
         });
@@ -249,9 +250,9 @@ app.controller = {
             if(app.STATE === 'browse' && options.reset===true){
                 app.mainApp.browse.currentView.close();
             }
-            else if(app.STATE === 'browse'){
-                return;
-            }
+//            else if(app.STATE === 'browse'){
+//                return;
+//            }
             var ideasView = new A.view.ideasNavi.Layout()
             var list =new A.view.ideasNavi.IdeasView({
                 collection: app.ideas_col
@@ -260,11 +261,14 @@ app.controller = {
             });
             app.mainApp.browse.show(ideasView);
             ideasView.ideas.show(list);
-            app.mainApp.browse.url = '';
+            app.mainApp.browse.url = '/';
         }
         app.STATE = 'browse';
-        var path = app.mainApp.browse.url || '';
-        app.router.navigate(path);
+        var path = app.mainApp.browse.url || '/';
+//        if(window.location.pathname!=='/'){
+            console.log('path set');
+            app.router.navigate(path);
+//        }
     },
     tag: function(hashtag){
         A.view.helper.unbindScroll();

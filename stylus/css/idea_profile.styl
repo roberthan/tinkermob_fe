@@ -1,7 +1,9 @@
 byte = 8px
 
-#idea_profile_view{
+.desktop #idea_profile_view{
     margin-top: 64px;
+}
+#idea_profile_view{
     width: 100%;
 }
 
@@ -11,7 +13,7 @@ margin-bottom: 72px;;
 
 .idea_profile_main{
     margin: 0 auto;
-    width: 512px;
+    max-width: 512px;
     /*height: 148px;*/
     padding: 16px;
 }
@@ -24,7 +26,7 @@ margin-bottom: 72px;;
     min-height: 64px;
     padding: 0 16px;
     cursor: pointer;
-    width: 580px;
+    max-width: 580px;
     margin: 8px auto 0 auto;
 }
 
@@ -35,7 +37,7 @@ margin-bottom: 72px;;
     display: inline-block;
 }
 .idea_profile_tab_selector_container{
-    float: left;
+    /*float: left;*/
 }
 
 .idea_profile_mode_selector_container .btn_questions{
@@ -127,6 +129,32 @@ arrow_size = 18px
 #idea_profile_snapshots .y_scale3 .snapshot_tile_pic{
     height:tile_height*3+4*tile_padding;
 }
+hdpi_tile_width=208px
+hdpi_tile_height=128px
+@media screen and (min-width: 480px) and (max-width: 767px)  {
+    #idea_profile_snapshots .snap_tile{
+        float: left;
+        padding: tile_padding;
+    }
+    #idea_profile_snapshots .x_scale1 .snapshot_tile_pic{
+        width:hdpi_tile_width;
+    }
+    #idea_profile_snapshots .x_scale2 .snapshot_tile_pic{
+        width:hdpi_tile_width*2+2*tile_padding;
+    }
+    #idea_profile_snapshots .x_scale3 .snapshot_hdpi_til_pic{
+        width:hdpi_tile_width*3+4*tile_padding;
+    }
+    #idea_profile_snapshots .y_scale1 .snapshot_hdpi_til_pic{
+        height:hdpi_tile_height;
+    }
+    #idea_profile_snapshots .y_scale2 .snapshot_hdpi_til_pic{
+        height:hdpi_tile_height*2+2*tile_padding;
+    }
+    #idea_profile_snapshots .y_scale3 .snapshot_hdpi_til_pic{
+        height:hdpi_tile_height*3+4*tile_padding;
+    }
+}
 .snapshot_tile{
     cursor: pointer;
     position: relative;
@@ -142,7 +170,7 @@ arrow_size = 18px
     color: #ffffff;
 }
 
-.snapshot_tile:hover .snapshot_tile_infobar,
+.desktop .snapshot_tile:hover .snapshot_tile_infobar,
 .no_image .snapshot_tile_infobar{
     height: 100%;
     margin-top: - 100%;
@@ -158,7 +186,7 @@ arrow_size = 18px
     font-size: 24px;
 }
 
-.snapshot_tile:hover .snapshot_tile_infobar_text,
+.desktop .snapshot_tile:hover .snapshot_tile_infobar_text,
 .no_image .snapshot_tile_infobar_text{
     font-size: 28px;
     white-space: normal;
@@ -173,8 +201,9 @@ arrow_size = 18px
     box-sizing: border-box;
 }
 
-#idea_profile_questions, #idea_profile_snapshots{
-    margin: 0 64px;
+#idea_profile_questions,
+#idea_profile_snapshots{
+    margin: 0 32px;
 }
 /*snapshot tiles resize*/
 .edit_mode .snapshot_tile_resize{
@@ -260,7 +289,7 @@ arrow_size = 18px
     top: 0px;
 }
 
-.snapshot_tile:hover .snapshot_tile_profile,
+.desktop .snapshot_tile:hover .snapshot_tile_profile,
 .no_image .snapshot_tile_profile{
     bottom: 4px;
 }
@@ -445,7 +474,8 @@ arrow_size = 18px
 .idea_profile_btn_container{
     width: 90%;
     padding: 0 5%;
-    background-image: url(STATIC_MEDIA_URL + "/bg_sub_header.jpg");
+    /*background-image: url(STATIC_MEDIA_URL + "/bg_sub_header.jpg");*/
+    background-color: #ffffff;
     background-repeat:no-repeat;
     background-size: 100%;
     text-align:center;
@@ -516,7 +546,7 @@ arrow_size = 18px
 
 #add_question .textarea_question{
     height: 36px;
-    width: 424px;
+    max-width: 424px;
 }
 
 .answer .textarea_question{
@@ -554,10 +584,6 @@ arrow_size = 18px
     margin:6px;
 }
 
-.pg_btn_add:hover{
-
-}
-
 #idea_profile_snapshots .pg_btn_edit{
     position: absolute;
     right: 0;
@@ -583,8 +609,19 @@ arrow_size = 18px
     /*display: none;*/
 }
 
+.desktop .idea_profile_snapshots_settings_container{
+    display: block;
+}
+.qa_view .idea_profile_snapshots_settings_container{
+    display: none;
+}
+.desktop .qa_view .idea_profile_questions_settings_container{
+    display: block;
+}
+
 .idea_profile_snapshots_settings_container,
 .idea_profile_questions_settings_container{
+    display: none;
     height: 24px;
     width: 176px;
     /*margin: 0 auto;*/
@@ -628,6 +665,10 @@ arrow_size = 18px
     -ms-transition-property: left, right, top;
     -o-transition-property: left, right, top;
     transition-property: left, right, top;
+}
+
+.android .idea_profile_btn_container .btn_back{
+    display: none;
 }
 
 .idea_profile_btn_container .btn_back{

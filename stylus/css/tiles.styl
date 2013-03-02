@@ -24,8 +24,10 @@ hdpi_padding_height = 8px
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {}
 
-#ideas{
+.desktop #ideas{
     margin-top: 80px;
+}
+#ideas{
     padding-top: 16px;
 }
 
@@ -44,7 +46,7 @@ hdpi_padding_height = 8px
     float: left;
     width:tile_width;
     height: tile_height - info_height ;
-    padding: padding_height padding_height 0 padding_height;
+    padding: padding_height;
     list-style-type: none;
  }
 
@@ -235,7 +237,7 @@ hdpi_padding_height = 8px
     clear: both;
     width: 90%;
     padding: 0 5%;
-    background-image: url(STATIC_MEDIA_URL + "/bg_sub_header.jpg");
+    /*background-image: url(STATIC_MEDIA_URL + "/bg_sub_header.jpg");*/
     background-repeat:no-repeat;
     background-size: 100%;
     position: fixed;
@@ -245,12 +247,16 @@ hdpi_padding_height = 8px
 .android .ideas_settings_container{
     top: 0;
 }
+.desktop .ideas_settings{
+    display: block;
+}
 .ideas_settings{
+    display: none;
     /*position: fixed;*/
     float: right;
     width: 160px;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
     right: 7%;
     padding-top: 16px;
 }
@@ -258,5 +264,5 @@ hdpi_padding_height = 8px
 .ideas_settings_container_text{
     padding-right: 4px;
     float: left;
-    color: #000000;
+    color: #FFFFFF;
 }

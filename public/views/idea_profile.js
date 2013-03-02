@@ -119,8 +119,9 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
     showSnapshots: function(){
         this.$el.find('.btn_questions').removeClass('btn_pressed').addClass('btn_tab');
         this.$el.find('.btn_snapshots').removeClass('btn_tab').addClass('btn_pressed');
-        this.$el.find('.idea_profile_snapshots_settings_container').show();
-        this.$el.find('.idea_profile_questions_settings_container').hide();
+        this.$el.removeClass('qa_view');
+//        this.$el.find('.idea_profile_snapshots_settings_container').show();
+//        this.$el.find('.idea_profile_questions_settings_container').hide();
         if(typeof this.questions.currentView !== 'undefined'){
             this.questions.currentView.$el.hide();
         }
@@ -131,8 +132,9 @@ A.view.ideaProfile.DetailApp = Backbone.Marionette.Layout.extend({
 //        this.$el.find('#show_more_questions').hide();
     },
     showQuestions: function(){
-        this.$el.find('.idea_profile_snapshots_settings_container').hide();
-        this.$el.find('.idea_profile_questions_settings_container').show();
+//        this.$el.find('.idea_profile_snapshots_settings_container').hide();
+//        this.$el.find('.idea_profile_questions_settings_container').show();
+        this.$el.addClass('qa_view');
         this.$el.find('.btn_snapshots').removeClass('btn_pressed').addClass('btn_tab');
         this.$el.find('.btn_questions').removeClass('btn_tab').addClass('btn_pressed');
         if(typeof this.snapshots.currentView !== 'undefined'){
@@ -366,8 +368,9 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
 //            $('#snap_list').addClass('animated');
 //        }
     },
-    initialize: function(){
+    initialize: function(obj){
         this.masonry_enabled = false;
+        this.column_width = obj.column_width || 306;
         var self = this;
         this.on("item:removed", function(viewInstance){
             if(this.masonry_enabled && this.$el.find('.content_tile').length>0){
@@ -496,7 +499,7 @@ A.view.ideaProfile.SnapListView = Backbone.Marionette.PaginatedCollectionView.ex
             var self = this;
         this.$el.masonry({
                 itemSelector : '.snap_tile',
-                columnWidth : 306
+                columnWidth : self.column_width
             });
             self.masonry_enabled = true;
 //        this.$el.sortable({
