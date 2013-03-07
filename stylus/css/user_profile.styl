@@ -66,6 +66,9 @@ username_color = #ffdabf
     background-size: 100%;
 }
 
+.android .user_profile_stats_container_inner{
+    max-width: 420px;
+}
 .user_profile_stats_container_inner{
     max-width: 520px;
     margin: 0 auto;
@@ -117,12 +120,15 @@ username_color = #ffdabf
     padding-top: 16px;
     cursor: pointer;
 }
-
 .user_profile_add_idea_pic{
+    display: none;
+}
+.desktop .user_profile_add_idea_pic{
     background-image: url(STATIC_MEDIA_URL + "/btn_add.png");
     background-repeat: no-repeat;
     width: 56px;
     height: 56px;
+    display: block;
 }
 
 .user_profile_add_idea_pic:active{
@@ -143,10 +149,10 @@ username_color = #ffdabf
 .user_profile_pg_btn_follow_pressed{
     background-image: url(STATIC_MEDIA_URL + "/btn_unfollow.png");
 }
-.user_profile_stats_container .btn_back{
+.android .user_profile_stats_container .btn_back{
     display: none;
 }
-.desktop .user_profile_stats_container .btn_back{
+.user_profile_stats_container .btn_back{
     position: absolute;
     left: 0;
     width: 16px;

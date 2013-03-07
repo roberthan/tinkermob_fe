@@ -109,24 +109,12 @@ app.control_helper = {
         }
     },
     slideToMyIdeas: function(){
-        var main = $('#my_ideas, #browse');
-        if(main.hasClass('main_toggle_rev')||main.hasClass('main_toggle_my_ideas')){
-        }
-        else{
-            main.addClass('main_toggle_rev').removeClass('main_toggle animation_done main_toggle_my_ideas main_toggle_browse').one('animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd', function(e){
-                $(this).addClass('animation_done');
-            });
-        }
+        $('#browse').hide();
+        $('#my_ideas').show();
     },
     slideToBrowse: function(){
-        var main = $('#my_ideas, #browse');
-        if(main.hasClass('main_toggle')||main.hasClass('main_toggle_browse')){
-        }
-        else{
-            main.addClass('main_toggle').removeClass('main_toggle_rev animation_done main_toggle_my_ideas main_toggle_browse').one('animationend webkitAnimationEnd MSAnimationEnd oAnimationEnd', function(e){
-                $(this).addClass('animation_done');
-            });
-        }
+        $('#browse').show();
+        $('#my_ideas').hide();
     },
     postToFB: function(obj){
         function callback(response) {
@@ -265,10 +253,7 @@ app.controller = {
         }
         app.STATE = 'browse';
         var path = app.mainApp.browse.url || '/';
-//        if(window.location.pathname!=='/'){
-            console.log('path set');
             app.router.navigate(path);
-//        }
     },
     tag: function(hashtag){
         A.view.helper.unbindScroll();
@@ -297,6 +282,7 @@ app.controller = {
         options = options || {};
         A.view.helper.unbindScroll();
         if(!USER){
+            console.log(USER)
             app.vent.trigger('navigate:browse',{reset:true});
             return 0;
         }

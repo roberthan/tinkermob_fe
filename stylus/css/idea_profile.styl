@@ -365,6 +365,11 @@ hdpi_tile_height=128px
     background-size: contain;
 }
 
+.android .qa_profile_pic_container{
+    margin 4px 12px
+    width: 40px
+    height 40px
+}
 .qa_profile_pic_container{
     float: left;
     width: 48px
@@ -377,6 +382,10 @@ hdpi_tile_height=128px
     margin: -8px 0 0 -8px;
     width:64px;
     height:64px;
+}
+.android .qa_profile_pic{
+    width:56px;
+    height:56px;
 }
 
 .qa_meta_container{
@@ -487,6 +496,9 @@ hdpi_tile_height=128px
     top: 48px;
 }
 
+.android .idea_profile_add_snapshot{
+    display: none;
+}
 .idea_profile_add_snapshot{
     float: left;
     color: white;
@@ -547,6 +559,7 @@ hdpi_tile_height=128px
 #add_question .textarea_question{
     height: 36px;
     max-width: 424px;
+    min-width: 55%;
 }
 
 .answer .textarea_question{
@@ -554,12 +567,18 @@ hdpi_tile_height=128px
     width: 374px;
 }
 
+.android .pg_btn_add{
+    width: 48px;
+    height: 48px;
+    margin-top:0;
+}
 .pg_btn_add{
     width: 56px;
     height: 56px;
     background-image: url(STATIC_MEDIA_URL + "/btn_add.png");
     cursor: pointer
     margin-top:8px;
+    background-size: contain;
 }
 
 .pg_btn_add:active{
